@@ -447,3 +447,65 @@ button { font-family: inherit; cursor: pointer; }
   .hero__actions .btn { flex: 1; }
   .footer__bottom { flex-direction: column; }
 }
+
+/* ---------- 16. 플로팅 후원 버튼 (우상단 고정) ---------- */
+.donate-float {
+  position: fixed;
+  top: calc(var(--header-h) + 16px);
+  right: 20px;
+  z-index: 95;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  text-decoration: none;
+  font-weight: 800;
+  box-shadow: 0 8px 22px rgba(255, 122, 89, 0.5);
+  animation: donate-pulse 2.4s ease-in-out infinite;
+  transition: transform 0.15s, background 0.15s;
+}
+.donate-float:hover { transform: scale(1.08); background: var(--color-secondary-dark); }
+.donate-float__icon { font-size: 1.45rem; line-height: 1; }
+.donate-float__label { font-size: 0.72rem; line-height: 1; }
+@keyframes donate-pulse {
+  0%, 100% { box-shadow: 0 8px 22px rgba(255, 122, 89, 0.45); }
+  50% { box-shadow: 0 10px 30px rgba(255, 122, 89, 0.8); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .donate-float { animation: none; }
+}
+@media (max-width: 767px) {
+  .donate-float { width: 58px; height: 58px; right: 14px; }
+}
+
+/* ---------- 17. 후원 로그인 수단 버튼 ---------- */
+.provider-grid { display: grid; gap: 8px; }
+.provider-btn {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.12s, box-shadow 0.12s, filter 0.12s;
+}
+.provider-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); filter: brightness(0.98); }
+.provider-btn .p-mark { font-weight: 900; }
+.p-google { background: #fff; border-color: #dadce0; color: #3c4043; }
+.p-google .p-mark { color: #4285f4; }
+.p-kakao { background: #fee500; border-color: #fee500; color: #191600; }
+.p-apple { background: #000; border-color: #000; color: #fff; }
+.p-phone { background: var(--color-primary-light); border-color: var(--color-primary-light); color: var(--color-primary-dark); }
+.p-email { background: var(--color-bg-soft); border-color: var(--color-line); color: var(--color-ink); }

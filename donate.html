@@ -78,6 +78,31 @@
             </div>
           </fieldset>
 
+          <!-- 후원 방식: 무기명 / 기명(로그인) -->
+          <fieldset style="border:0; padding:0; margin:0 0 16px">
+            <legend style="font-weight:700; margin-bottom:8px">후원 방식</legend>
+            <div class="toggle-group" role="radiogroup">
+              <input type="radio" name="mode" id="modeAnon" value="anon" checked />
+              <label for="modeAnon">무기명 후원</label>
+              <input type="radio" name="mode" id="modeNamed" value="named" />
+              <label for="modeNamed">로그인하고 후원</label>
+            </div>
+            <p class="hint" id="modeHint" style="margin-top:8px">무기명 후원은 로그인 없이 후원하실 수 있어요. (기부금영수증 발급은 어렵습니다.)</p>
+          </fieldset>
+
+          <!-- 로그인 수단 (기명 선택 시 노출) -->
+          <fieldset id="loginProviders" hidden style="border:0; padding:0; margin:0 0 20px">
+            <legend style="font-weight:700; margin-bottom:8px">로그인 방법 선택</legend>
+            <div class="provider-grid">
+              <button type="button" class="provider-btn p-google" data-provider="구글"><span class="p-mark" aria-hidden="true">G</span> 구글로 로그인</button>
+              <button type="button" class="provider-btn p-kakao" data-provider="카카오"><span class="p-mark" aria-hidden="true">💬</span> 카카오로 로그인</button>
+              <button type="button" class="provider-btn p-apple" data-provider="애플"><span class="p-mark" aria-hidden="true"></span> 애플로 로그인</button>
+              <button type="button" class="provider-btn p-phone" data-provider="휴대폰 번호"><span class="p-mark" aria-hidden="true">📱</span> 휴대폰 번호로 로그인</button>
+              <button type="button" class="provider-btn p-email" data-provider="이메일"><span class="p-mark" aria-hidden="true">✉️</span> 이메일로 로그인</button>
+            </div>
+            <p class="hint">로그인하면 후원 내역 관리와 기부금영수증 발급이 가능합니다.</p>
+          </fieldset>
+
           <!-- 금액 -->
           <fieldset style="border:0; padding:0; margin:0">
             <legend style="font-weight:700; margin-bottom:8px">후원 금액</legend>
@@ -96,20 +121,21 @@
           </fieldset>
 
           <div class="field">
-            <label for="donorName">이름</label>
-            <input type="text" id="donorName" name="donorName" autocomplete="name" required />
+            <label for="donorName">이름 <span style="font-weight:400; color:var(--color-ink-soft)">(무기명 후원 시 생략 가능)</span></label>
+            <input type="text" id="donorName" name="donorName" autocomplete="name" />
           </div>
           <div class="field">
-            <label for="donorPhone">연락처</label>
-            <input type="tel" id="donorPhone" name="donorPhone" autocomplete="tel" placeholder="010-0000-0000" required />
+            <label for="donorPhone">연락처 <span style="font-weight:400; color:var(--color-ink-soft)">(선택)</span></label>
+            <input type="tel" id="donorPhone" name="donorPhone" autocomplete="tel" placeholder="010-0000-0000" />
             <p class="hint">후원 안내 및 기부금영수증 발급을 위해 사용됩니다.</p>
           </div>
-          <div class="field">
+          <div class="field" id="receiptField" hidden>
             <label for="receipt">기부금영수증 발급</label>
             <select id="receipt" name="receipt">
               <option value="no">신청 안 함</option>
               <option value="yes">신청함 (연말정산용)</option>
             </select>
+            <p class="hint">기부금영수증은 로그인(기명) 후원 시 발급할 수 있습니다.</p>
           </div>
 
           <div class="field check-row">
@@ -175,6 +201,12 @@
       </div>
     </div>
   </footer>
+
+  <!-- 플로팅 후원 버튼 (스크롤·이동 시에도 우상단 고정) -->
+  <a href="#donateForm" class="donate-float" aria-label="후원 신청 폼으로 이동">
+    <span class="donate-float__icon" aria-hidden="true">♥</span>
+    <span class="donate-float__label">후원</span>
+  </a>
 
   <script src="assets/js/main.js"></script>
 </body>

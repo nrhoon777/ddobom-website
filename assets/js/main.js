@@ -60,4 +60,43 @@
       alert("※ 1차 초안 데모입니다.\n실제 결제(PG) 연동은 개발 단계에서 적용됩니다.");
     });
   }
+
+  /* ---------- 후원 방식: 무기명 / 기명(로그인) ---------- */
+  var modeRadios = document.querySelectorAll('input[name="mode"]');
+  var loginProviders = document.getElementById("loginProviders");
+  var modeHint = document.getElementById("modeHint");
+  var receiptField = document.getElementById("receiptField");
+
+  if (modeRadios.length && loginProviders) {
+    var applyMode = function (mode) {
+      var named = mode === "named";
+      loginProviders.hidden = !named;
+      if (modeHint) {
+        modeHint.textContent = named
+          ? "로그인하면 후원 내역 관리와 기부금영수증 발급이 가능합니다."
+          : "무기명 후원은 로그인 없이 후원하실 수 있어요. (기부금영수증 발급은 어렵습니다.)";
+      }
+      if (receiptField) receiptField.hidden = !named;
+    };
+    modeRadios.forEach(function (r) {
+      r.addEventListener("change", function () { applyMode(this.value); });
+    });
+    /* 초기 상태 반영 */
+    var checked = document.querySelector('input[name="mode"]:checked');
+    applyMode(checked ? checked.value : "anon");
+  }
+
+  /* ---------- 로그인 수단 버튼 (데모) ---------- */
+  var providerGrid = document.querySelector(".provider-grid");
+  if (providerGrid) {
+    providerGrid.addEventListener("click", function (e) {
+      var btn = e.target.closest(".provider-btn");
+      if (!btn) return;
+      alert(
+        '※ 1차 초안 데모입니다.\n"' +
+          btn.dataset.provider +
+          '" 로그인은 실제 인증 연동(백엔드/제공자 키) 적용 후 동작합니다.'
+      );
+    });
+  }
 })();
