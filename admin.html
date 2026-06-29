@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>관리자 콘솔 | 또봄 한국청년암협회</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="admin-body">
+  <a href="#admin-main" class="skip-link">본문 바로가기</a>
+
+  <!-- 상단바 -->
+  <header class="admin-topbar">
+    <a href="index.html" class="logo" aria-label="또봄 홈으로">
+      <img src="assets/img/logo.png" alt="또봄 한국청년암협회" class="logo__img" />
+    </a>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="admin-demo-badge">● 프로토타입 데모</span>
+      <span style="font-size:0.9rem; color:var(--color-ink-soft)">관리자 콘솔</span>
+      <a href="index.html" class="btn btn--ghost" style="min-height:40px; padding:8px 16px;">사이트로</a>
+    </div>
+  </header>
+
+  <div class="admin-shell">
+    <!-- 사이드 메뉴 -->
+    <nav class="admin-side" aria-label="관리자 메뉴">
+      <a href="#dash" class="active">📊 현황 보드</a>
+      <a href="#write">✍️ 게시글 작성</a>
+      <a href="#posts">📝 게시글 관리</a>
+      <a href="#members">👥 회원·권한 관리</a>
+      <a href="#donations">💛 후원 현황</a>
+    </nav>
+
+    <!-- 본문 -->
+    <main class="admin-main" id="admin-main">
+
+      <div class="admin-section" style="background:#fff8f3; border-color:#ffd9c4;">
+        <strong>ℹ️ 이 페이지는 1차 초안 프로토타입입니다.</strong>
+        <p style="color:var(--color-ink-soft); margin-top:6px; font-size:0.92rem;">
+          실제 로그인·권한·게시글 저장·통계는 백엔드 연동(예: Firebase Auth + Firestore)이 필요합니다.
+          아래는 완성 시의 화면 구성을 보여주는 데모이며, 입력·버튼은 실제로 저장되지 않습니다.
+        </p>
+      </div>
+
+      <!-- 현황 보드 -->
+      <section id="dash">
+        <h1>현황 보드</h1>
+        <p class="sub">또봄 운영 현황을 한눈에. <em>(※ 수치는 예시)</em></p>
+
+        <div class="kpi-grid">
+          <div class="kpi k1"><div class="kpi-label">총 후원자</div><div class="kpi-num" data-count="1284" data-suffix="명">0</div><div class="kpi-delta up">▲ 이번 달 +37</div></div>
+          <div class="kpi k2"><div class="kpi-label">이번 달 후원금</div><div class="kpi-num" data-count="8420000" data-suffix="원">0</div><div class="kpi-delta up">▲ 전월 대비 +12%</div></div>
+          <div class="kpi k3"><div class="kpi-label">정기 후원자</div><div class="kpi-num" data-count="612" data-suffix="명">0</div><div class="kpi-delta up">▲ +18</div></div>
+          <div class="kpi k4"><div class="kpi-label">신규 신청(주간)</div><div class="kpi-num" data-count="46" data-suffix="건">0</div><div class="kpi-delta down">▼ -3</div></div>
+        </div>
+
+        <div class="admin-section">
+          <h2>월별 후원금 추이</h2>
+          <div class="bar-chart" aria-hidden="true">
+            <div class="bar-col"><div class="bar" style="height:42%"></div><span>1월</span></div>
+            <div class="bar-col"><div class="bar" style="height:55%"></div><span>2월</span></div>
+            <div class="bar-col"><div class="bar" style="height:48%"></div><span>3월</span></div>
+            <div class="bar-col"><div class="bar" style="height:67%"></div><span>4월</span></div>
+            <div class="bar-col"><div class="bar" style="height:73%"></div><span>5월</span></div>
+            <div class="bar-col"><div class="bar" style="height:90%"></div><span>6월</span></div>
+          </div>
+          <p class="sub" style="margin:12px 0 0;">단위: 백만원 (예시 데이터)</p>
+        </div>
+
+        <div class="admin-section">
+          <h2>최근 활동</h2>
+          <table class="admin-table">
+            <thead><tr><th>시간</th><th>구분</th><th>내용</th><th>담당</th></tr></thead>
+            <tbody>
+              <tr><td>10:24</td><td>후원</td><td>정기후원 신규 등록 (3만원)</td><td>시스템</td></tr>
+              <tr><td>09:51</td><td>게시글</td><td>"또봄클래스 모집" 공지 발행</td><td>운영자A</td></tr>
+              <tr><td>어제</td><td>신청</td><td>자원봉사 신청 2건 접수</td><td>시스템</td></tr>
+              <tr><td>어제</td><td>회원</td><td>신규 환우 회원 가입 (닉네임)</td><td>시스템</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 게시글 작성 -->
+      <section id="write">
+        <div class="admin-section">
+          <h2>✍️ 게시글 작성</h2>
+          <form id="adminPostForm">
+            <div class="field">
+              <label for="postCat">분류</label>
+              <select id="postCat">
+                <option>공지사항</option><option>활동 소식</option><option>보도자료</option><option>후원 안내</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="postTitle">제목</label>
+              <input type="text" id="postTitle" placeholder="제목을 입력하세요" />
+            </div>
+            <div class="field">
+              <label for="postBody">내용</label>
+              <textarea id="postBody" rows="7" placeholder="내용을 입력하세요"></textarea>
+            </div>
+            <div class="field">
+              <label for="postFile">첨부파일</label>
+              <input type="file" id="postFile" />
+            </div>
+            <button type="submit" class="btn btn--primary">발행하기</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- 게시글 관리 -->
+      <section id="posts">
+        <div class="admin-section">
+          <h2>📝 게시글 관리</h2>
+          <table class="admin-table">
+            <thead><tr><th>제목</th><th>분류</th><th>작성자</th><th>발행일</th><th>상태</th></tr></thead>
+            <tbody>
+              <tr><td>2026 또봄클래스 모집 안내</td><td>공지사항</td><td>운영자A</td><td>2026.06.20</td><td><span class="status-dot on"></span>공개</td></tr>
+              <tr><td>Cheer UP 곧,봄 4회 후기</td><td>활동 소식</td><td>운영자B</td><td>2026.05.30</td><td><span class="status-dot on"></span>공개</td></tr>
+              <tr><td>여름 캠페인 기획(초안)</td><td>활동 소식</td><td>운영자A</td><td>—</td><td><span class="status-dot off"></span>임시저장</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 회원·권한 관리 -->
+      <section id="members">
+        <div class="admin-section">
+          <h2>👥 회원·권한 관리</h2>
+          <p class="sub" style="margin-bottom:16px;">다른 운영진에게 권한을 부여하면 게시글 작성과 현황 조회가 가능합니다.</p>
+          <table class="admin-table">
+            <thead><tr><th>이름</th><th>이메일</th><th>역할</th><th>상태</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td>이청훈</td><td>chlee@kyca.or.kr</td>
+                <td><span class="role-badge role-admin">최고관리자</span></td>
+                <td><span class="status-dot on"></span>활성</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>운영자 A</td><td>staff.a@kyca.or.kr</td>
+                <td>
+                  <select aria-label="운영자 A 역할">
+                    <option>콘텐츠 운영자</option><option>최고관리자</option><option>조회 전용</option>
+                  </select>
+                </td>
+                <td><span class="status-dot on"></span>활성</td>
+                <td><button type="button" class="btn btn--ghost role-save" style="min-height:38px; padding:6px 14px;">저장</button></td>
+              </tr>
+              <tr>
+                <td>운영자 B</td><td>staff.b@kyca.or.kr</td>
+                <td>
+                  <select aria-label="운영자 B 역할">
+                    <option>조회 전용</option><option>콘텐츠 운영자</option><option>최고관리자</option>
+                  </select>
+                </td>
+                <td><span class="status-dot on"></span>활성</td>
+                <td><button type="button" class="btn btn--ghost role-save" style="min-height:38px; padding:6px 14px;">저장</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+            <div class="field" style="margin:0; flex:1; min-width:220px;">
+              <label for="inviteEmail">새 운영진 초대 (이메일)</label>
+              <input type="email" id="inviteEmail" placeholder="invite@kyca.or.kr" />
+            </div>
+            <button type="button" class="btn btn--secondary role-save">초대 보내기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 후원 현황 -->
+      <section id="donations">
+        <div class="admin-section">
+          <h2>💛 후원 현황</h2>
+          <table class="admin-table">
+            <thead><tr><th>후원자</th><th>유형</th><th>금액</th><th>영수증</th><th>일자</th></tr></thead>
+            <tbody>
+              <tr><td>한○○</td><td>정기</td><td>30,000원</td><td>신청</td><td>2026.06.28</td></tr>
+              <tr><td>무기명</td><td>일시</td><td>50,000원</td><td>—</td><td>2026.06.27</td></tr>
+              <tr><td>정○○ (기업)</td><td>일시</td><td>1,000,000원</td><td>신청</td><td>2026.06.25</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    /* 데모 동작 */
+    document.getElementById("adminPostForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      alert("※ 프로토타입 데모입니다.\n실제 발행은 백엔드(예: Firebase Firestore) 연동 후 동작합니다.");
+    });
+    document.querySelectorAll(".role-save").forEach(function (b) {
+      b.addEventListener("click", function () {
+        alert("※ 프로토타입 데모입니다.\n권한 변경·초대는 백엔드(예: Firebase Auth) 연동 후 동작합니다.");
+      });
+    });
+    /* 사이드 메뉴 active 표시 */
+    document.querySelectorAll(".admin-side a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        document.querySelectorAll(".admin-side a").forEach(function (x) { x.classList.remove("active"); });
+        a.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

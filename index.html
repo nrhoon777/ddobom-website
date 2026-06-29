@@ -6,7 +6,7 @@
   <title>또봄 | 한국청년암협회 — 다시, 봄</title>
   <meta name="description" content="사단법인 한국청년암협회 또봄은 20·30대 청년 암 환자·경험자가 다시 일상으로 피어나도록 함께합니다. 정서적 지지, 프로그램, 인식 개선, 그리고 당신의 후원으로." />
   <meta property="og:title" content="또봄 | 한국청년암협회 — 다시, 봄" />
-  <meta property="og:description" content="청년 암 경험자의 곁에서 다시 봄을 만듭니다." />
+  <meta property="og:description" content="청년 암 경험자의 곁에서 다시 봄을 만듭니다. I SEE U AGAIN." />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
   <link rel="stylesheet" href="assets/css/style.css" />
@@ -20,7 +20,6 @@
       <a href="index.html" class="logo" aria-label="또봄 한국청년암협회 홈으로">
         <img src="assets/img/logo.png" alt="또봄 한국청년암협회" class="logo__img" />
       </a>
-
       <nav class="gnb" id="gnb" aria-label="주요 메뉴">
         <a href="about.html">또봄 소개</a>
         <a href="programs.html">사업·활동</a>
@@ -28,7 +27,6 @@
         <a href="index.html#news">알림·소식</a>
         <a href="donate.html">후원하기</a>
       </nav>
-
       <div class="header__cta">
         <a href="donate.html" class="btn btn--secondary btn--text-hide">♥ 후원하기</a>
         <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="gnb">
@@ -40,14 +38,19 @@
 
   <main id="main">
 
-    <!-- ===== Hero ===== -->
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__text">
-          <span class="hero__tag" aria-hidden="true">🌱 국내 최초 청년 암 경험자 지원 단체</span>
-          <h1 style="color:var(--brand-headline)">다시 청년의 봄을 피웁니다</h1>
+    <!-- ===== Hero (풀스크린) ===== -->
+    <section class="hero hero--full" aria-labelledby="hero-title">
+      <div class="hero__bg">
+        <img src="assets/img/hero-iseeu.jpg" alt="" aria-hidden="true" />
+      </div>
+      <div class="container">
+        <div class="hero__inner-full">
+          <span class="hero__eyebrow">
+            <b class="c1">I</b> <b class="c2">SEE</b> <b class="c3">U</b> <b class="c4">AGAIN</b>
+          </span>
+          <h1 id="hero-title">다시,<br />청년의 봄을 피웁니다</h1>
           <p class="lead">
-            가장 추운 겨울을 지나온 20·30대 청년 암 환자와 경험자.
+            가장 추운 겨울을 지나온 20·30대 청년 암 환자와 경험자.<br />
             또봄은 그들이 다시 일상으로, 다시 꿈으로 피어나도록 곁에서 함께합니다.
           </p>
           <div class="hero__actions">
@@ -55,61 +58,43 @@
             <a href="about.html" class="btn btn--ghost btn--lg">또봄 이야기 보기</a>
           </div>
         </div>
-        <div>
-          <div class="hero__visual">
-            <img src="assets/img/hero-iseeu.jpg" alt="우유니 소금사막에서 라이트페인팅으로 그린 'I SEE U AGAIN' 글자와 물 위에 비친 반영" loading="eager" />
-          </div>
-          <p class="hero__caption">I SEE U AGAIN · 다시 만나요, 청년의 봄</p>
-        </div>
       </div>
+      <a href="#mission" class="scroll-ind" aria-label="아래로 스크롤">
+        <span>SCROLL</span>
+        <span class="chev" aria-hidden="true"></span>
+      </a>
     </section>
 
-    <!-- ===== 미션 / 가치 ===== -->
-    <section class="section" aria-labelledby="mission-title">
+    <!-- ===== 미션 ===== -->
+    <section class="section" id="mission" aria-labelledby="mission-title">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <span class="eyebrow">OUR MISSION</span>
           <h2 id="mission-title">또봄이 하는 일</h2>
           <p>편견을 넘어, 청년 암 경험자가 치료에 집중하고 다시 사회로 돌아갈 수 있도록 네 가지 방향으로 함께합니다.</p>
         </div>
         <div class="values">
-          <div class="value">
-            <div class="ic" aria-hidden="true">🤝</div>
-            <h3>편견·인식 개선</h3>
-            <p>암 경험 청년에 대한 사회적 편견을 허물고 공감대를 넓힙니다.</p>
-          </div>
-          <div class="value">
-            <div class="ic" aria-hidden="true">💛</div>
-            <h3>정서적 지지</h3>
-            <p>같은 길을 걷는 또래와 연결되어 극복 의지를 함께 키웁니다.</p>
-          </div>
-          <div class="value">
-            <div class="ic" aria-hidden="true">🏥</div>
-            <h3>치료환경 개선</h3>
-            <p>청년 암 경험자를 위한 치료 환경 개선과 정책을 제안합니다.</p>
-          </div>
-          <div class="value">
-            <div class="ic" aria-hidden="true">🌷</div>
-            <h3>사회 복귀 지원</h3>
-            <p>치료 이후 다시 일상과 사회로 돌아가는 길을 돕습니다.</p>
-          </div>
+          <div class="value reveal"><div class="ic" aria-hidden="true">🤝</div><h3>편견·인식 개선</h3><p>암 경험 청년에 대한 사회적 편견을 허물고 공감대를 넓힙니다.</p></div>
+          <div class="value reveal d1"><div class="ic" aria-hidden="true">💛</div><h3>정서적 지지</h3><p>같은 길을 걷는 또래와 연결되어 극복 의지를 함께 키웁니다.</p></div>
+          <div class="value reveal d2"><div class="ic" aria-hidden="true">🏥</div><h3>치료환경 개선</h3><p>청년 암 경험자를 위한 치료 환경 개선과 정책을 제안합니다.</p></div>
+          <div class="value reveal d3"><div class="ic" aria-hidden="true">🌷</div><h3>사회 복귀 지원</h3><p>치료 이후 다시 일상과 사회로 돌아가는 길을 돕습니다.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- ===== 임팩트 통계 ===== -->
+    <!-- ===== 임팩트 (카운터) ===== -->
     <section class="section section--soft" aria-labelledby="impact-title">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <span class="eyebrow">IMPACT</span>
           <h2 id="impact-title">함께 만든 변화</h2>
           <p>2020년 봄, 작은 시작이 만들어 온 발자취입니다. <em>(※ 수치는 예시이며 실제 데이터로 교체 예정)</em></p>
         </div>
         <div class="stats">
-          <div class="stat"><div class="num">2020</div><div class="label">설립 연도</div></div>
-          <div class="stat"><div class="num">5+</div><div class="label">대표 프로그램</div></div>
-          <div class="stat"><div class="num">1,000+</div><div class="label">함께한 청년</div></div>
-          <div class="stat"><div class="num">100%</div><div class="label">후원금 투명 공개</div></div>
+          <div class="stat reveal"><div class="num" data-count="1000" data-suffix="+">0</div><div class="label">함께한 청년</div></div>
+          <div class="stat reveal d1"><div class="num" data-count="5" data-suffix="+">0</div><div class="label">대표 프로그램</div></div>
+          <div class="stat reveal d2"><div class="num" data-count="6" data-suffix="년">0</div><div class="label">함께한 시간</div></div>
+          <div class="stat reveal d3"><div class="num" data-count="100" data-suffix="%">0</div><div class="label">후원금 투명 공개</div></div>
         </div>
       </div>
     </section>
@@ -117,60 +102,34 @@
     <!-- ===== 사업·활동 ===== -->
     <section class="section" aria-labelledby="programs-title">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <span class="eyebrow">PROGRAMS</span>
           <h2 id="programs-title">또봄의 활동</h2>
           <p>재능을 나누고, 여행을 떠나고, 이야기를 나누며 — 청년의 봄을 다시 피웁니다.</p>
         </div>
         <div class="card-grid">
-          <article class="card">
-            <div class="card__media is-1" aria-hidden="true">🎨</div>
-            <div class="card__body">
-              <h3>또봄클래스</h3>
-              <p>캘리그래피·여행·식재료 등 환우들이 서로의 재능과 정보를 나누는 배움의 시간.</p>
-              <a class="card__more" href="programs.html#class">자세히 보기 →</a>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card__media is-2" aria-hidden="true">✈️</div>
-            <div class="card__body">
-              <h3>앎 캠페인</h3>
-              <p>완치 후 함께 떠나는 여행 버킷 챌린지. 다시 찾은 일상을 응원합니다.</p>
-              <a class="card__more" href="programs.html#aam">자세히 보기 →</a>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card__media is-3" aria-hidden="true">🎤</div>
-            <div class="card__body">
-              <h3>Cheer UP 곧, 봄</h3>
-              <p>청년 암 경험자의 이야기를 나누는 토크 콘서트. 위로와 용기를 전합니다.</p>
-              <a class="card__more" href="programs.html#cheerup">자세히 보기 →</a>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card__media is-4" aria-hidden="true">💙</div>
-            <div class="card__body">
-              <h3>위케어리셋 (WECARERESET)</h3>
-              <p>암 경험 청년의 돌봄을 위한 캠페인. 함께 돌보고, 함께 회복합니다.</p>
-              <a class="card__more" href="programs.html#wecare">자세히 보기 →</a>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card__media is-5" aria-hidden="true">▶️</div>
-            <div class="card__body">
-              <h3>또또봄TV</h3>
-              <p>인식 개선을 위한 유튜브 채널. 청년 암 경험자의 진짜 이야기를 전합니다.</p>
-              <a class="card__more" href="programs.html#tv">채널 보러가기 →</a>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card__media is-1" aria-hidden="true">🌿</div>
-            <div class="card__body">
-              <h3>함께하는 참여</h3>
-              <p>프로그램 신청, 자원봉사, 재능기부 — 다양한 방법으로 함께할 수 있어요.</p>
-              <a class="card__more" href="index.html#join">참여 방법 보기 →</a>
-            </div>
-          </article>
+          <article class="card reveal"><div class="card__media is-1" aria-hidden="true">🎨</div><div class="card__body"><h3>또봄클래스</h3><p>캘리그래피·여행·식재료 등 환우들이 서로의 재능과 정보를 나누는 배움의 시간.</p><a class="card__more" href="programs.html#class">자세히 보기 →</a></div></article>
+          <article class="card reveal d1"><div class="card__media is-2" aria-hidden="true">✈️</div><div class="card__body"><h3>앎 캠페인</h3><p>완치 후 함께 떠나는 여행 버킷 챌린지. 다시 찾은 일상을 응원합니다.</p><a class="card__more" href="programs.html#aam">자세히 보기 →</a></div></article>
+          <article class="card reveal d2"><div class="card__media is-3" aria-hidden="true">🎤</div><div class="card__body"><h3>Cheer UP 곧, 봄</h3><p>청년 암 경험자의 이야기를 나누는 토크 콘서트. 위로와 용기를 전합니다.</p><a class="card__more" href="programs.html#cheerup">자세히 보기 →</a></div></article>
+          <article class="card reveal"><div class="card__media is-4" aria-hidden="true">💙</div><div class="card__body"><h3>위케어리셋</h3><p>암 경험 청년의 돌봄을 위한 캠페인. 함께 돌보고, 함께 회복합니다.</p><a class="card__more" href="programs.html#wecare">자세히 보기 →</a></div></article>
+          <article class="card reveal d1"><div class="card__media is-5" aria-hidden="true">▶️</div><div class="card__body"><h3>또또봄TV</h3><p>인식 개선을 위한 유튜브 채널. 청년 암 경험자의 진짜 이야기를 전합니다.</p><a class="card__more" href="#channels">채널 보러가기 →</a></div></article>
+          <article class="card reveal d2"><div class="card__media is-1" aria-hidden="true">🌿</div><div class="card__body"><h3>함께하는 참여</h3><p>프로그램 신청, 자원봉사, 재능기부 — 다양한 방법으로 함께할 수 있어요.</p><a class="card__more" href="#join">참여 방법 보기 →</a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 영상 ===== -->
+    <section class="section section--soft" aria-labelledby="video-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">STORY</span>
+          <h2 id="video-title">영상으로 만나는 또봄</h2>
+          <p>또봄이 만들어 온 따뜻한 순간들을 영상으로 만나보세요.</p>
+        </div>
+        <div class="video-wrap reveal">
+          <video src="assets/video/ddobom-story.mp4" poster="assets/img/hero-iseeu.jpg" controls preload="none" playsinline>
+            영상을 재생할 수 없습니다.
+          </video>
         </div>
       </div>
     </section>
@@ -178,12 +137,9 @@
     <!-- ===== 후원 CTA ===== -->
     <section class="section" aria-labelledby="donate-title">
       <div class="container">
-        <div class="donate-cta">
+        <div class="donate-cta reveal">
           <h2 id="donate-title">당신의 후원이 청년의 봄이 됩니다</h2>
-          <p>
-            정기후원으로 청년 암 경험자의 곁을 지켜주세요.
-            모든 후원금의 사용 내역은 투명하게 공개되며, 기부금영수증을 발급해 드립니다.
-          </p>
+          <p>정기후원으로 청년 암 경험자의 곁을 지켜주세요. 모든 후원금의 사용 내역은 투명하게 공개되며, 기부금영수증을 발급해 드립니다.</p>
           <div class="hero__actions" style="justify-content:center">
             <a href="donate.html" class="btn btn--primary btn--lg">정기 후원 시작하기</a>
             <a href="donate.html#once" class="btn btn--ghost btn--lg">일시 후원하기</a>
@@ -192,61 +148,62 @@
       </div>
     </section>
 
-    <!-- ===== 소식 ===== -->
-    <section class="section section--soft" id="news" aria-labelledby="news-title">
+    <!-- ===== 채널 ===== -->
+    <section class="section section--soft" id="channels" aria-labelledby="channels-title">
       <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">NEWS</span>
-          <h2 id="news-title">또봄 소식</h2>
-          <p>또봄의 활동과 캠페인 소식을 전해드립니다.</p>
+        <div class="section-head reveal">
+          <span class="eyebrow">CHANNELS</span>
+          <h2 id="channels-title">또봄과 더 가까이</h2>
+          <p>일상 속 또봄의 소식을 채널에서 만나보세요.</p>
         </div>
-        <div class="news-list">
-          <a class="news-item" href="#">
-            <span class="tag">공지</span>
-            <h3>2026 또봄클래스 상반기 참가자 모집 안내</h3>
-            <time datetime="2026-06-20">2026.06.20</time>
+        <div class="channels-grid">
+          <a class="channel-card reveal" href="#" aria-label="또봄 인스타그램 (링크 연결 예정)">
+            <span class="ch-ic ch-insta" aria-hidden="true">📷</span>
+            <h3>인스타그램</h3>
+            <p>활동 사진과 일상 소식</p>
           </a>
-          <a class="news-item" href="#">
-            <span class="tag">캠페인</span>
-            <h3>'Cheer UP 곧, 봄' 네 번째 무대를 성황리에 마쳤습니다</h3>
-            <time datetime="2026-05-30">2026.05.30</time>
+          <a class="channel-card reveal d1" href="#" aria-label="또또봄TV 유튜브 (링크 연결 예정)">
+            <span class="ch-ic ch-youtube" aria-hidden="true">▶</span>
+            <h3>유튜브 · 또또봄TV</h3>
+            <p>청년 암 경험자의 이야기</p>
           </a>
-          <a class="news-item" href="#">
-            <span class="tag">보도</span>
-            <h3>[언론보도] 청년 암 경험자, 사회적 편견의 벽을 넘다</h3>
-            <time datetime="2026-05-12">2026.05.12</time>
+          <a class="channel-card reveal d2" href="#" aria-label="또봄 네이버 카페 (링크 연결 예정)">
+            <span class="ch-ic ch-cafe" aria-hidden="true">N</span>
+            <h3>네이버 카페</h3>
+            <p>환우 커뮤니티와 정보 공유</p>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- ===== 참여하기 ===== -->
-    <section class="section" id="join" aria-labelledby="join-title">
+    <!-- ===== 소식 ===== -->
+    <section class="section" id="news" aria-labelledby="news-title">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
+          <span class="eyebrow">NEWS</span>
+          <h2 id="news-title">또봄 소식</h2>
+          <p>또봄의 활동과 캠페인 소식을 전해드립니다.</p>
+        </div>
+        <div class="news-list">
+          <a class="news-item reveal" href="#"><span class="tag">공지</span><h3>2026 또봄클래스 상반기 참가자 모집 안내</h3><time datetime="2026-06-20">2026.06.20</time></a>
+          <a class="news-item reveal d1" href="#"><span class="tag">캠페인</span><h3>'Cheer UP 곧, 봄' 네 번째 무대를 성황리에 마쳤습니다</h3><time datetime="2026-05-30">2026.05.30</time></a>
+          <a class="news-item reveal d2" href="#"><span class="tag">보도</span><h3>[언론보도] 청년 암 경험자, 사회적 편견의 벽을 넘다</h3><time datetime="2026-05-12">2026.05.12</time></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 참여하기 ===== -->
+    <section class="section section--soft" id="join" aria-labelledby="join-title">
+      <div class="container">
+        <div class="section-head reveal">
           <span class="eyebrow">JOIN US</span>
           <h2 id="join-title">함께하는 방법</h2>
           <p>당신의 자리에서, 당신의 방식으로 또봄과 함께할 수 있습니다.</p>
         </div>
         <div class="join-grid">
-          <div class="join-card">
-            <div class="ic" aria-hidden="true">🌱</div>
-            <h3>환우 커뮤니티</h3>
-            <p>닉네임으로 안전하게. 같은 길을 걷는 또래와 마음을 나눠요.</p>
-            <a href="#" class="btn btn--ghost">커뮤니티 둘러보기</a>
-          </div>
-          <div class="join-card">
-            <div class="ic" aria-hidden="true">🙌</div>
-            <h3>자원봉사·재능기부</h3>
-            <p>재능과 시간을 나누어 또봄의 활동에 함께해 주세요.</p>
-            <a href="#" class="btn btn--ghost">봉사 신청하기</a>
-          </div>
-          <div class="join-card">
-            <div class="ic" aria-hidden="true">🏢</div>
-            <h3>기업·단체 후원</h3>
-            <p>기업의 사회공헌, 물품·제휴 후원으로 더 큰 변화를 만들어요.</p>
-            <a href="donate.html#corp" class="btn btn--ghost">제휴 문의하기</a>
-          </div>
+          <div class="join-card reveal"><div class="ic" aria-hidden="true">🌱</div><h3>환우 커뮤니티</h3><p>닉네임으로 안전하게. 같은 길을 걷는 또래와 마음을 나눠요.</p><a href="#channels" class="btn btn--ghost">커뮤니티 둘러보기</a></div>
+          <div class="join-card reveal d1"><div class="ic" aria-hidden="true">🙌</div><h3>자원봉사·재능기부</h3><p>재능과 시간을 나누어 또봄의 활동에 함께해 주세요.</p><a href="#" class="btn btn--ghost">봉사 신청하기</a></div>
+          <div class="join-card reveal d2"><div class="ic" aria-hidden="true">🏢</div><h3>기업·단체 후원</h3><p>기업의 사회공헌, 물품·제휴 후원으로 더 큰 변화를 만들어요.</p><a href="donate.html#corp" class="btn btn--ghost">제휴 문의하기</a></div>
         </div>
       </div>
     </section>
@@ -259,10 +216,7 @@
       <div class="footer__top">
         <div class="footer__brand">
           <span class="footer__logo"><img src="assets/img/logo.png" alt="또봄 한국청년암협회" /></span>
-          <p>
-            사단법인 한국청년암협회 또봄<br />
-            국내 최초 20·30대 청년 암 환자·경험자 지원 비영리단체 (2020년 설립)
-          </p>
+          <p>사단법인 한국청년암협회 또봄<br />국내 최초 20·30대 청년 암 환자·경험자 지원 비영리단체 (2020년 설립)</p>
           <div class="footer__account">
             <strong>후원 계좌</strong> ○○은행 000-000000-00-000 (예금주: 사단법인 한국청년암협회)<br />
             <span style="color:#9fb0a8">※ 실제 계좌·법인 정보로 교체 예정</span>
@@ -283,7 +237,7 @@
             <li><a href="#">개인정보처리방침</a></li>
             <li><a href="#">이용약관</a></li>
             <li><a href="#">후원금 사용내역·연차보고</a></li>
-            <li><a href="#">웹접근성 정책</a></li>
+            <li><a href="admin.html" class="footer__admin">관리자</a></li>
           </ul>
         </nav>
       </div>
@@ -294,9 +248,9 @@
           <span style="display:block; margin-top:6px;">© 2026 또봄 (한국청년암협회). All rights reserved.</span>
         </div>
         <div class="footer__sns">
-          <a href="#" aria-label="또또봄TV 유튜브">▶</a>
-          <a href="#" aria-label="또봄 인스타그램">📷</a>
-          <a href="#" aria-label="또봄 블로그">✎</a>
+          <a href="#" class="sns-insta" aria-label="또봄 인스타그램">📷</a>
+          <a href="#" class="sns-youtube" aria-label="또또봄TV 유튜브">▶</a>
+          <a href="#" class="sns-cafe" aria-label="또봄 네이버 카페">N</a>
         </div>
       </div>
     </div>

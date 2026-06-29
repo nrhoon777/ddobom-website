@@ -99,4 +99,61 @@
       );
     });
   }
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- 스크롤 리빌 ---------- */
+  var reveals = document.querySelectorAll(".reveal");
+  if (reveals.length) {
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      reveals.forEach(function (el) { el.classList.add("in"); });
+    } else {
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) {
+              en.target.classList.add("in");
+              io.unobserve(en.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      );
+      reveals.forEach(function (el) { io.observe(el); });
+    }
+  }
+
+  /* ---------- 숫자 카운터 ---------- */
+  var counters = document.querySelectorAll("[data-count]");
+  if (counters.length) {
+    var setVal = function (el, v) {
+      el.textContent = v.toLocaleString("ko-KR") + (el.dataset.suffix || "");
+    };
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      counters.forEach(function (el) { setVal(el, parseInt(el.dataset.count, 10)); });
+    } else {
+      var cio = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            var el = en.target;
+            cio.unobserve(el);
+            var target = parseInt(el.dataset.count, 10);
+            var dur = 1300, t0 = null;
+            var step = function (ts) {
+              if (!t0) t0 = ts;
+              var p = Math.min((ts - t0) / dur, 1);
+              var eased = 1 - Math.pow(1 - p, 3);
+              setVal(el, Math.floor(eased * target));
+              if (p < 1) requestAnimationFrame(step);
+              else setVal(el, target);
+            };
+            requestAnimationFrame(step);
+          });
+        },
+        { threshold: 0.5 }
+      );
+      counters.forEach(function (el) { cio.observe(el); });
+    }
+  }
 })();

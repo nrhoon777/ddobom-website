@@ -529,3 +529,170 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 767px) {
   .logo__img { height: 34px; }
 }
+
+/* ===================================================================
+   19. 풀스크린 히어로 (세이브더칠드런 스타일) + 트렌디 모션
+   =================================================================== */
+.hero--full {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+}
+.hero--full .hero__bg { position: absolute; inset: 0; z-index: 0; background: #07070f; }
+.hero--full .hero__bg img {
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scale(1.06);
+  animation: kenburns 20s ease-in-out infinite alternate;
+}
+.hero--full .hero__bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(7,7,15,0.45) 0%, rgba(7,7,15,0.55) 45%, rgba(7,7,15,0.82) 100%);
+}
+.hero--full .container { position: relative; z-index: 1; padding: 100px 20px 130px; }
+.hero--full .hero__inner-full { max-width: 760px; }
+.hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-weight: 800; letter-spacing: 0.18em; font-size: 0.82rem;
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(4px);
+  margin-bottom: var(--space-4);
+}
+.hero__eyebrow b { font-weight: 900; }
+.hero__eyebrow .c1 { color: #6fb6ff; } .hero__eyebrow .c2 { color: #ffb066; }
+.hero__eyebrow .c3 { color: #5fe0c6; } .hero__eyebrow .c4 { color: #c4a3ff; }
+.hero--full h1 {
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 1.14; letter-spacing: -0.02em; color: #fff;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.35);
+}
+.hero--full .lead {
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: rgba(255,255,255,0.92); margin: var(--space-5) 0 var(--space-6); max-width: 34em;
+}
+.hero--full .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.hero--full .btn--ghost { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.6); }
+.hero--full .btn--ghost:hover { background: rgba(255,255,255,0.18); }
+.scroll-ind {
+  position: absolute; left: 50%; bottom: 26px; z-index: 1;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: rgba(255,255,255,0.85); font-size: 0.72rem; letter-spacing: 0.1em;
+}
+.scroll-ind .chev { width: 22px; height: 22px; border-right: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(45deg); animation: bob 1.6s ease-in-out infinite; }
+@keyframes kenburns { from { transform: scale(1.06); } to { transform: scale(1.18); } }
+@keyframes bob { 0%,100% { transform: rotate(45deg) translate(0,0); } 50% { transform: rotate(45deg) translate(4px,4px); } }
+
+/* 스크롤 리빌 애니메이션 */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 0.08s; } .reveal.d2 { transition-delay: 0.16s; } .reveal.d3 { transition-delay: 0.24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero--full .hero__bg img { animation: none; transform: none; }
+  .scroll-ind .chev { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- 20. 영상 섹션 ---------- */
+.video-wrap {
+  position: relative; max-width: 940px; margin: 0 auto;
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-lg); background: #000; aspect-ratio: 16 / 9;
+}
+.video-wrap video, .video-wrap iframe { width: 100%; height: 100%; object-fit: cover; display: block; border: 0; }
+
+/* ---------- 21. 채널 (인스타/유튜브/네이버카페) ---------- */
+.channels-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+.channel-card {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: var(--space-7) var(--space-5); text-align: center;
+  background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); transition: transform 0.16s, box-shadow 0.16s;
+}
+.channel-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.channel-card h3 { font-size: var(--fs-h3); }
+.channel-card p { color: var(--color-ink-soft); font-size: var(--fs-small); }
+.ch-ic { width: 66px; height: 66px; border-radius: 20px; display: grid; place-items: center; font-size: 1.7rem; color: #fff; font-weight: 800; }
+.ch-insta { background: linear-gradient(45deg, #f09433, #e6683c 30%, #dc2743 50%, #cc2366 70%, #bc1888); }
+.ch-youtube { background: #ff0000; }
+.ch-cafe { background: #03c75a; }
+
+/* 푸터 SNS 브랜드 색 */
+.footer__sns .sns-insta:hover { background: #dc2743; }
+.footer__sns .sns-youtube:hover { background: #ff0000; }
+.footer__sns .sns-cafe:hover { background: #03c75a; }
+.footer__admin { color: #7e8c85; }
+
+@media (max-width: 767px) {
+  .channels-grid { grid-template-columns: 1fr; }
+  .hero--full { min-height: 88vh; }
+  .hero--full .container { padding: 80px 20px 100px; }
+}
+
+/* ===================================================================
+   22. 관리자 콘솔 (admin.html) — 프로토타입
+   =================================================================== */
+.admin-body { background: var(--color-bg-soft); }
+.admin-topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: #fff; border-bottom: 1px solid var(--color-line);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; gap: 16px;
+}
+.admin-topbar .logo__img { height: 34px; }
+.admin-demo-badge { background: #fff1ec; color: var(--color-secondary-dark); font-weight: 700; font-size: 0.78rem; padding: 5px 12px; border-radius: var(--radius-pill); }
+.admin-shell { display: grid; grid-template-columns: 232px 1fr; min-height: calc(100vh - 60px); }
+.admin-side { background: #fff; border-right: 1px solid var(--color-line); padding: 20px 12px; }
+.admin-side a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-weight: 600; color: var(--color-ink); margin-bottom: 4px;
+}
+.admin-side a:hover, .admin-side a.active { background: var(--color-primary-light); color: var(--color-primary-dark); }
+.admin-main { padding: 28px; max-width: 1100px; }
+.admin-main h1 { font-size: 1.6rem; margin-bottom: 4px; }
+.admin-main .sub { color: var(--color-ink-soft); margin-bottom: 24px; }
+.admin-section { background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius); padding: 22px; margin-bottom: 24px; }
+.admin-section h2 { font-size: 1.15rem; margin-bottom: 16px; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.kpi {
+  background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius);
+  padding: 18px 20px; position: relative; overflow: hidden;
+}
+.kpi .kpi-label { color: var(--color-ink-soft); font-size: 0.85rem; font-weight: 600; }
+.kpi .kpi-num { font-size: 1.9rem; font-weight: 800; color: var(--color-ink); margin-top: 6px; }
+.kpi .kpi-delta { font-size: 0.8rem; font-weight: 700; margin-top: 4px; }
+.kpi .up { color: var(--color-success); } .kpi .down { color: var(--color-error); }
+.kpi::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+.kpi.k1::before { background: var(--brand-green); } .kpi.k2::before { background: var(--brand-orange); }
+.kpi.k3::before { background: var(--brand-blue); } .kpi.k4::before { background: var(--brand-purple); }
+
+.bar-chart { display: flex; align-items: flex-end; gap: 14px; height: 200px; padding-top: 10px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+.bar { width: 100%; max-width: 46px; border-radius: 8px 8px 0 0; background: linear-gradient(180deg, var(--brand-green), #7fd9c6); transition: height 0.8s ease; }
+.bar-col span { font-size: 0.78rem; color: var(--color-ink-soft); }
+
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.admin-table th, .admin-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--color-line); }
+.admin-table th { color: var(--color-ink-soft); font-size: 0.82rem; }
+.admin-table select { padding: 7px 10px; border: 1px solid var(--color-line); border-radius: 8px; font-family: inherit; }
+.role-badge { display: inline-block; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.76rem; font-weight: 700; }
+.role-admin { background: #fde8e8; color: #b02525; }
+.role-editor { background: var(--color-primary-light); color: var(--color-primary-dark); }
+.role-viewer { background: #eef1f0; color: #5a6b63; }
+.status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.on { background: var(--color-success); } .off { background: #c9c9c9; }
+
+@media (max-width: 860px) {
+  .admin-shell { grid-template-columns: 1fr; }
+  .admin-side { display: flex; gap: 6px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--color-line); padding: 10px; }
+  .admin-side a { margin: 0; white-space: nowrap; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
