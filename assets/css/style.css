@@ -8,14 +8,21 @@
 
 /* ---------- 1. 디자인 토큰 ---------- */
 :root {
-  /* Brand — 봄(spring)의 희망 팔레트 */
-  --color-primary: #1f9d6b;        /* 새싹 그린 (희망·재생) */
-  --color-primary-dark: #15734e;   /* hover/강조 */
-  --color-primary-light: #e7f6ee;  /* 연한 배경 */
-  --color-secondary: #ff7a59;      /* 따뜻한 코랄 (생명·온기) */
-  --color-secondary-dark: #e8623f;
+  /* Brand — 또봄 로고 4색 팔레트 (파랑·주황·청록·보라) */
+  --color-primary: #17b39a;        /* 청록 (로고 '봄' 심볼) */
+  --color-primary-dark: #0f8a76;   /* hover/강조 */
+  --color-primary-light: #e3f6f2;  /* 연한 배경 */
+  --color-secondary: #f06f2c;      /* 또봄 오렌지 (생명·온기) */
+  --color-secondary-dark: #d85a1d;
   --color-accent: #ffc94d;         /* 봄 햇살 옐로 (CTA 보조) */
   --color-blossom: #ffd9e0;        /* 벚꽃 핑크 (포인트 배경) */
+
+  /* 로고 4색 (그라데이션·포인트용) */
+  --brand-blue: #3f8edc;
+  --brand-orange: #f06f2c;
+  --brand-green: #17b39a;
+  --brand-purple: #8455c9;
+  --brand-headline: #1d6fc4;       /* 히어로 헤드라인 블루 */
 
   /* Semantic */
   --color-success: #2e7d32;
@@ -179,6 +186,7 @@ button { font-family: inherit; cursor: pointer; }
   display: grid; place-items: center; color: #fff; font-size: 1rem;
 }
 .logo small { display: block; font-size: 0.7rem; font-weight: 600; color: var(--color-ink-soft); }
+.logo__img { height: 44px; width: auto; display: block; }
 
 .gnb { display: flex; align-items: center; gap: var(--space-2); }
 .gnb a {
@@ -228,15 +236,14 @@ button { font-family: inherit; cursor: pointer; }
 .hero p.lead { font-size: 1.15rem; color: var(--color-ink-soft); margin: var(--space-4) 0 var(--space-6); max-width: 30em; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 .hero__visual {
-  aspect-ratio: 4/3;
+  aspect-ratio: 3/2;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  overflow: hidden;
   box-shadow: var(--shadow-lg);
-  display: grid; place-items: center;
-  color: #fff; text-align: center; padding: var(--space-6);
+  background: #0b0b12;
 }
-.hero__visual .visual-emoji { font-size: 3.5rem; }
-.hero__visual p { font-weight: 700; font-size: 1.2rem; margin-top: var(--space-3); }
+.hero__visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero__caption { margin-top: var(--space-3); font-size: var(--fs-small); color: var(--color-ink-soft); text-align: center; }
 
 /* ---------- 7. 통계 / 임팩트 ---------- */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
@@ -509,3 +516,16 @@ button { font-family: inherit; cursor: pointer; }
 .p-apple { background: #000; border-color: #000; color: #fff; }
 .p-phone { background: var(--color-primary-light); border-color: var(--color-primary-light); color: var(--color-primary-dark); }
 .p-email { background: var(--color-bg-soft); border-color: var(--color-line); color: var(--color-ink); }
+
+/* ---------- 18. 로고 이미지 (푸터/모바일) ---------- */
+.footer__logo {
+  display: inline-block;
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+.footer__logo img { height: 38px; width: auto; display: block; }
+
+@media (max-width: 767px) {
+  .logo__img { height: 34px; }
+}
