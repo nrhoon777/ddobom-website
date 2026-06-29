@@ -696,3 +696,8 @@ button { font-family: inherit; cursor: pointer; }
   .admin-side a { margin: 0; white-space: nowrap; }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* 관리자 로그인/설정/권한없음 게이트 */
+.admin-gate { min-height: calc(100vh - 60px); display: grid; place-items: center; padding: 40px 20px; }
+.admin-gate .admin-section { width: 100%; }
+.admin-gate code { background: var(--color-bg-soft); padding: 2px 6px; border-radius: 6px; font-size: 0.9em; }
