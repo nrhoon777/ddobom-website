@@ -1,7 +1,7 @@
 // =============================================================
 // 또봄 관리자 콘솔 — Firebase Auth + Firestore
 // =============================================================
-import { firebaseConfig, isConfigured } from "./firebase-config.js";
+import { firebaseConfig, isConfigured } from "./firebase-config.js?v=2";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged,

@@ -1,6 +1,6 @@
 // 홈 "또봄 소식" 섹션을 Firestore의 발행된 게시글로 채웁니다.
 // Firebase 미설정 시 정적 소식이 그대로 유지됩니다.
-import { firebaseConfig, isConfigured } from "./firebase-config.js";
+import { firebaseConfig, isConfigured } from "./firebase-config.js?v=2";
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, (c) =>
