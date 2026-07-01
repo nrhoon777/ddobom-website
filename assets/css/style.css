@@ -775,3 +775,24 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .mission-card { min-height: 158px; padding: 16px; }
   .mission-card .mi { font-size: 1.8rem; }
 }
+
+/* ===================================================================
+   24. 시안(2507) 톤앤매너 — 청록/민트 (딥네이비 + Hope Blooms)
+   =================================================================== */
+:root { --brand-mint: #7fe3a8; }
+
+/* 플로팅 후원 버튼: 시안 청록/민트 톤 */
+.donate-float {
+  background: linear-gradient(135deg, #17b39a, #12c39a 55%, #7fe3a8);
+  box-shadow: 0 8px 24px rgba(23, 179, 154, 0.55);
+  animation: donate-pulse-teal 2.4s ease-in-out infinite;
+}
+.donate-float:hover { background: linear-gradient(135deg, #0f8a76, #17b39a); }
+@keyframes donate-pulse-teal {
+  0%, 100% { box-shadow: 0 8px 22px rgba(23, 179, 154, 0.45); }
+  50% { box-shadow: 0 10px 32px rgba(43, 224, 176, 0.85); }
+}
+@media (prefers-reduced-motion: reduce) { .donate-float { animation: none; } }
+
+/* 히어로 헤드라인 민트 강조 */
+.hero--full h1 .mint { color: var(--brand-mint); }
