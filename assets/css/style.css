@@ -3,8 +3,9 @@
    컨셉: "다시, 봄" — 희망 · 따뜻함 · 청년 · 신뢰
    ============================================================= */
 
-/* ---------- 0. Pretendard 웹폰트 ---------- */
+/* ---------- 0. 웹폰트 (Pretendard 본문 + 감성 헤드라인/포인트) ---------- */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Jua&family=Nanum+Pen+Script&display=swap");
 
 /* ---------- 1. 디자인 토큰 ---------- */
 :root {
@@ -40,6 +41,9 @@
   /* Typography */
   --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
     "Malgun Gothic", sans-serif;
+  --font-head: "Gowun Batang", "Pretendard", serif;   /* 감성 헤드라인(세리프) */
+  --font-point: "Jua", "Pretendard", sans-serif;        /* 포인트(둥근 고딕) */
+  --font-hand: "Nanum Pen Script", cursive;             /* 손글씨 악센트 */
   --fs-display: clamp(2.2rem, 5vw, 3.4rem);
   --fs-h1: clamp(1.8rem, 3.6vw, 2.6rem);
   --fs-h2: clamp(1.45rem, 2.8vw, 2rem);
@@ -86,6 +90,12 @@ body {
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3, h4, p { margin: 0; }
+.hero--full h1, .section-head h2, .page-hero h1, .donate-cta h2, .prose h2, .video-title {
+  font-family: var(--font-head);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.eyebrow, .hero__eyebrow { font-family: var(--font-point); letter-spacing: 0.06em; }
 ul { margin: 0; padding: 0; list-style: none; }
 button { font-family: inherit; cursor: pointer; }
 
@@ -701,3 +711,67 @@ button { font-family: inherit; cursor: pointer; }
 .admin-gate { min-height: calc(100vh - 60px); display: grid; place-items: center; padding: 40px 20px; }
 .admin-gate .admin-section { width: 100%; }
 .admin-gate code { background: var(--color-bg-soft); padding: 2px 6px; border-radius: 6px; font-size: 0.9em; }
+
+/* ===================================================================
+   23. 2026 리뉴얼 — 모바일 최적화·정렬·영상·채널·미션·연혁
+   =================================================================== */
+
+/* 히어로 배경 영상 */
+.hero--full .hero__bg video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* 히어로/후원 버튼 정렬 (모바일 줄바꿈 깨짐 수정) */
+.hero--full .hero__actions .btn { white-space: nowrap; }
+@media (max-width: 767px) {
+  .hero--full .hero__actions { flex-direction: column; align-items: stretch; }
+  .hero--full .hero__actions .btn { width: 100%; }
+  .donate-cta .hero__actions { flex-direction: column; align-items: stretch; }
+  .donate-cta .hero__actions .btn { width: 100%; }
+}
+
+/* 채널 한 줄 (아이콘 칩) */
+.channels-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
+.channel-chip {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 20px; border-radius: var(--radius-pill);
+  background: #fff; border: 1px solid var(--color-line);
+  font-weight: 700; color: var(--color-ink);
+  box-shadow: var(--shadow-sm); transition: transform 0.15s, box-shadow 0.15s;
+}
+.channel-chip:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.channel-chip .ci { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-weight: 900; }
+
+/* 영상 가로 스크롤 */
+.video-scroll { display: flex; gap: 18px; overflow-x: auto; padding: 6px 4px 18px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+.video-card { flex: 0 0 min(88%, 560px); scroll-snap-align: center; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: #000; aspect-ratio: 16 / 9; position: relative; }
+.video-card video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-card .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 14px; color: #fff; font-weight: 700; font-size: 0.9rem; background: linear-gradient(0deg, rgba(0,0,0,0.7), transparent); pointer-events: none; }
+a.video-more { display: grid; place-items: center; text-align: center; color: #fff; background: linear-gradient(135deg, var(--brand-green), var(--brand-blue)); font-weight: 800; gap: 8px; font-size: 1.05rem; }
+
+/* 미션 이미지화 카드 */
+.mission-visual { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.mission-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; min-height: 210px; padding: 24px; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; box-shadow: var(--shadow); }
+.mission-card .mi { position: absolute; top: 18px; right: 18px; font-size: 2.4rem; opacity: 0.92; }
+.mission-card h3 { font-family: var(--font-point); font-size: 1.25rem; margin-bottom: 6px; letter-spacing: 0; }
+.mission-card p { font-size: 0.9rem; opacity: 0.95; line-height: 1.6; }
+.mission-card.m1 { background: linear-gradient(150deg, #17b39a, #0f8a76); }
+.mission-card.m2 { background: linear-gradient(150deg, #f06f2c, #d85a1d); }
+.mission-card.m3 { background: linear-gradient(150deg, #3f8edc, #1d6fc4); }
+.mission-card.m4 { background: linear-gradient(150deg, #8455c9, #6b3fb0); }
+
+/* 연혁 타임라인 (최근순) */
+.timeline { max-width: 720px; margin: 0 auto; position: relative; padding-left: 8px; }
+.timeline::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--color-line); }
+.tl-item { position: relative; padding: 0 0 26px 30px; }
+.tl-item::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--color-primary); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--color-line); }
+.tl-year { font-family: var(--font-point); color: var(--color-primary-dark); font-size: 1.15rem; margin-bottom: 4px; }
+.tl-item li { color: var(--color-ink-soft); font-size: 0.95rem; margin-bottom: 3px; }
+
+/* 지난 클래스 태그 */
+.class-tags { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 24px; }
+.class-tags span { background: var(--color-primary-light); color: var(--color-primary-dark); font-weight: 700; padding: 8px 16px; border-radius: var(--radius-pill); }
+
+@media (max-width: 767px) {
+  .mission-visual { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mission-card { min-height: 158px; padding: 16px; }
+  .mission-card .mi { font-size: 1.8rem; }
+}
