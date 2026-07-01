@@ -781,16 +781,17 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
    =================================================================== */
 :root { --brand-mint: #7fe3a8; }
 
-/* 플로팅 후원 버튼: 시안 청록/민트 톤 */
+/* 플로팅 후원 버튼: 시안 포인트 컬러 #DCFF50 (라임) */
 .donate-float {
-  background: linear-gradient(135deg, #17b39a, #12c39a 55%, #7fe3a8);
-  box-shadow: 0 8px 24px rgba(23, 179, 154, 0.55);
-  animation: donate-pulse-teal 2.4s ease-in-out infinite;
+  background: #dcff50;
+  color: #16241a;               /* 밝은 배경 → 어두운 글씨(가독성) */
+  box-shadow: 0 8px 24px rgba(180, 220, 40, 0.6);
+  animation: donate-pulse-lime 2.4s ease-in-out infinite;
 }
-.donate-float:hover { background: linear-gradient(135deg, #0f8a76, #17b39a); }
-@keyframes donate-pulse-teal {
-  0%, 100% { box-shadow: 0 8px 22px rgba(23, 179, 154, 0.45); }
-  50% { box-shadow: 0 10px 32px rgba(43, 224, 176, 0.85); }
+.donate-float:hover { background: #cff23a; color: #16241a; }
+@keyframes donate-pulse-lime {
+  0%, 100% { box-shadow: 0 8px 22px rgba(180, 220, 40, 0.45); }
+  50% { box-shadow: 0 12px 34px rgba(220, 255, 80, 0.9); }
 }
 @media (prefers-reduced-motion: reduce) { .donate-float { animation: none; } }
 
