@@ -847,3 +847,30 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .check-row label { flex: 1 1 auto; min-width: 0; line-height: 1.6; font-size: 0.95rem; }
 .donate-box .field { margin-bottom: 18px; }
 .amount-grid button { min-height: 50px; }
+
+/* ===================================================================
+   27. 모바일 2×2 그리드 (세로 나열 개선) + 간격 정리
+   =================================================================== */
+@media (max-width: 767px) {
+  /* 신뢰/미션 아이콘 카드: 1열 → 2×2 */
+  .values { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .value { padding: 16px 10px; }
+  .value .ic { width: 60px; height: 60px; font-size: 1.7rem; margin-bottom: 10px; }
+  .value h3 { font-size: 1.08rem; }
+  .value p { font-size: 0.9rem; }
+
+  /* 사업·활동 카드: 1열 → 2열 */
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card__media { font-size: 2rem; }
+  .card__body { padding: 14px; }
+  .card__body h3 { font-size: 1.06rem; }
+  .card__body p { font-size: 0.9rem; }
+  .card__more { font-size: 0.9rem; margin-top: 12px; }
+
+  /* 참여 카드: 2×2(넓은 화면 대비 컴팩트) */
+  .join-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .join-card { padding: 20px 14px; }
+
+  /* 섹션 상하 간격 살짝 축소 */
+  .section { padding: 52px 0; }
+}
