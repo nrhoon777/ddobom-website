@@ -82,6 +82,8 @@ body {
   color: var(--color-ink);
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
+  word-break: keep-all;       /* 한글 단어 단위 줄바꿈 (됩니/다 방지) */
+  overflow-wrap: break-word;
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -835,3 +837,13 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .stat .num { font-size: 1.9rem; }
   .stat .label { font-size: 0.98rem; }
 }
+
+/* ===================================================================
+   26. 폼 체크박스/라디오 정렬 수정 (세로로 깨지던 동의 줄 수정)
+   =================================================================== */
+.field input[type="checkbox"], .field input[type="radio"] { width: auto; }
+.check-row { align-items: flex-start; gap: 12px; }
+.check-row input[type="checkbox"] { width: 22px; height: 22px; flex: 0 0 22px; margin-top: 2px; accent-color: var(--color-primary); }
+.check-row label { flex: 1 1 auto; min-width: 0; line-height: 1.6; font-size: 0.95rem; }
+.donate-box .field { margin-bottom: 18px; }
+.amount-grid button { min-height: 50px; }
