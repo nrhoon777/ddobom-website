@@ -41,13 +41,13 @@
   /* Typography */
   --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
     "Malgun Gothic", sans-serif;
-  --font-head: "Gowun Batang", "Pretendard", serif;   /* 감성 헤드라인(세리프) */
+  --font-head: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif; /* 헤드라인(클린 볼드) */
   --font-point: "Jua", "Pretendard", sans-serif;        /* 포인트(둥근 고딕) */
   --font-hand: "Nanum Pen Script", cursive;             /* 손글씨 악센트 */
-  --fs-display: clamp(2.2rem, 5vw, 3.4rem);
-  --fs-h1: clamp(1.8rem, 3.6vw, 2.6rem);
-  --fs-h2: clamp(1.45rem, 2.8vw, 2rem);
-  --fs-h3: 1.25rem;
+  --fs-display: clamp(2.4rem, 6vw, 3.6rem);
+  --fs-h1: clamp(2rem, 6vw, 2.8rem);
+  --fs-h2: clamp(1.6rem, 5vw, 2.2rem);
+  --fs-h3: 1.35rem;
   --fs-body: 1rem;       /* 16px 기준 */
   --fs-small: 0.875rem;
   --lh-body: 1.7;
@@ -92,8 +92,8 @@ a { color: inherit; text-decoration: none; }
 h1, h2, h3, h4, p { margin: 0; }
 .hero--full h1, .section-head h2, .page-hero h1, .donate-cta h2, .prose h2, .video-title {
   font-family: var(--font-head);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 .eyebrow, .hero__eyebrow { font-family: var(--font-point); letter-spacing: 0.06em; }
 ul { margin: 0; padding: 0; list-style: none; }
@@ -797,3 +797,41 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 
 /* 히어로 헤드라인 민트 강조 */
 .hero--full h1 .mint { color: var(--brand-mint); }
+
+/* ===================================================================
+   25. 후원 버튼 라임 통일 · 모바일 영상 · 프로그램 이미지 · 모바일 폰트 확대
+   =================================================================== */
+
+/* 후원 버튼(secondary) 라임 통일 — 플로팅 버튼과 동일 톤 */
+.btn--secondary { background: #dcff50; color: #16241a; }
+.btn--secondary:hover { background: #cff23a; color: #16241a; }
+
+/* 모바일: 히어로 배경 영상 잘리지 않게(전체 보이도록) */
+@media (max-width: 767px) {
+  .hero--full { min-height: 74vh; }
+  .hero--full .hero__bg { background: #0a1020; }
+  .hero--full .hero__bg video { object-fit: contain; object-position: center; }
+  .hero--full .container { padding: 70px 20px 90px; }
+}
+
+/* 프로그램 이미지 */
+.prog-img { width: 100%; max-width: 540px; border-radius: var(--radius-lg); box-shadow: var(--shadow); margin: 6px 0 20px; display: block; }
+.prog-img--poster { max-width: 400px; }
+
+/* 모바일 폰트 확대 (가독성) */
+@media (max-width: 767px) {
+  .section-head h2 { font-size: 1.72rem; }
+  .section-head p { font-size: 1.04rem; }
+  .value h3 { font-size: 1.22rem; }
+  .value p { font-size: 1rem; }
+  .value .ic { width: 74px; height: 74px; font-size: 2rem; }
+  .card__body h3 { font-size: 1.22rem; }
+  .card__body p { font-size: 1rem; }
+  .mission-card h3 { font-size: 1.18rem; }
+  .mission-card p { font-size: 0.94rem; }
+  .prose p { font-size: 1.04rem; }
+  .prose h2 { font-size: 1.6rem; }
+  .hero--full .lead { font-size: 1.08rem; }
+  .stat .num { font-size: 1.9rem; }
+  .stat .label { font-size: 0.98rem; }
+}
