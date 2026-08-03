@@ -49,15 +49,15 @@
       <div class="container">
 
         <!-- 임팩트 안내 -->
+        <!-- ⚠️ 원래 있던 "1만원 → 또봄클래스 1회 참여 지원" 등 금액별 효과 문구는
+             지침 16번(확인되지 않은 금액별 효과 임의 생성 금지)에 따라 삭제함.
+             실제 사업비 기준이 확정되면 이 자리에 검증된 수치로 다시 넣을 수 있음. -->
         <div class="section-head" style="margin-bottom:32px">
           <h2>후원은 이렇게 쓰입니다</h2>
-          <p><em>(※ 임팩트 환산 수치는 예시이며 실제 데이터로 교체 예정입니다.)</em></p>
+          <p><em>(※ 정기적으로 사용내역과 연차보고서를 공개합니다.)</em></p>
         </div>
         <div class="stats" style="margin-bottom:48px">
-          <div class="stat"><div class="num">1만원</div><div class="label">또봄클래스 1회 참여 지원</div></div>
-          <div class="stat"><div class="num">3만원</div><div class="label">정서지지 모임 1인 지원</div></div>
-          <div class="stat"><div class="num">5만원</div><div class="label">앎 캠페인 여행 기금</div></div>
-          <div class="stat"><div class="num">100%</div><div class="label">사용내역 투명 공개</div></div>
+          <div class="stat"><div class="num">연 1회</div><div class="label">사용내역·연차보고서 공개</div></div>
         </div>
 
         <!-- 후원 폼 -->
@@ -161,22 +161,22 @@
         </div>
         <div class="values">
           <div class="value">
-            <div class="ic" aria-hidden="true">📊</div>
+            <div class="ic is-1" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
             <h3>투명한 사용내역</h3>
             <p>후원금 사용내역과 연차보고서를 정기적으로 공개합니다.</p>
           </div>
           <div class="value">
-            <div class="ic" aria-hidden="true">🧾</div>
+            <div class="ic is-2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6"/><path d="M9 12h6"/></svg></div>
             <h3>기부금영수증</h3>
             <p>연말정산을 위한 기부금영수증을 발급해 드립니다.</p>
           </div>
           <div class="value">
-            <div class="ic" aria-hidden="true">🔒</div>
+            <div class="ic is-3" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
             <h3>안전한 결제</h3>
             <p>검증된 결제 시스템으로 후원 정보를 안전하게 보호합니다.</p>
           </div>
           <div class="value">
-            <div class="ic" aria-hidden="true">🤝</div>
+            <div class="ic is-4" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6Z"/><path d="M9 12l2 2 4-4"/></svg></div>
             <h3>공식 비영리법인</h3>
             <p>사단법인으로서 책임 있게 운영합니다.</p>
           </div>
@@ -195,9 +195,45 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="footer__bottom" style="border:0; margin:0; padding:0">
-        <div>© 2026 또봄 (한국청년암협회). 1차 초안 — 실제 결제·정보로 교체 예정.</div>
-        <div><a href="index.html">홈으로</a></div>
+      <div class="footer__top">
+        <div class="footer__brand">
+          <span class="footer__logo"><img src="assets/img/logo.png" alt="또봄 한국청년암협회" /></span>
+          <p>사단법인 한국청년암협회 또봄<br />국내 최초 20·30대 청년 암 환자·경험자 지원 비영리단체 (2020년 설립)</p>
+          <div class="footer__account">
+            <strong>후원 계좌</strong> SC제일은행 202-20-132734<br />
+            예금주: 사단법인 한국청년암협회또봄
+          </div>
+        </div>
+        <nav aria-label="사이트 메뉴">
+          <h4>바로가기</h4>
+          <ul>
+            <li><a href="about.html">또봄 소개</a></li>
+            <li><a href="programs.html">사업·활동</a></li>
+            <li><a href="index.html#join">참여하기</a></li>
+            <li><a href="donate.html">후원하기</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="안내 메뉴">
+          <h4>안내</h4>
+          <ul>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">이용약관</a></li>
+            <li><a href="#">후원금 사용내역·연차보고</a></li>
+            <li><a href="admin.html" class="footer__admin">관리자</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <div>
+          서울특별시 강남구 테헤란로2길 8, 4층 17호 | 대표: 이정훈 | 고유번호: 772-82-00377<br />
+          TEL 02-501-0302 | EMAIL help@kyca.or.kr
+          <span style="display:block; margin-top:6px;">© 2026 또봄 (한국청년암협회). All rights reserved.</span>
+        </div>
+        <div class="footer__sns">
+          <a href="https://www.instagram.com/iseeuagain" target="_blank" rel="noopener noreferrer" class="sns-insta" aria-label="또봄 인스타그램 (새 창)">📷</a>
+          <a href="https://www.youtube.com/@tvttottobomtv" target="_blank" rel="noopener noreferrer" class="sns-youtube" aria-label="또또봄TV 유튜브 (새 창)">▶</a>
+          <a href="https://cafe.naver.com/iseeuagain" target="_blank" rel="noopener noreferrer" class="sns-cafe" aria-label="또봄 네이버 카페 (새 창)">N</a>
+        </div>
       </div>
     </div>
   </footer>
