@@ -279,8 +279,14 @@ button { font-family: inherit; cursor: pointer; }
 .card__media {
   aspect-ratio: 16/10;
   display: grid; place-items: center;
-  font-size: 2.6rem; color: #fff;
+  color: #fff; overflow: hidden;
 }
+.card__media svg {
+  width: 44px; height: 44px; stroke: currentColor; fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.25s ease;
+}
+.card:hover .card__media svg { transform: scale(1.1) rotate(-3deg); }
 .card__media.is-1 { background: linear-gradient(135deg, #1f9d6b, #56c596); }
 .card__media.is-2 { background: linear-gradient(135deg, #ff7a59, #ffb199); }
 .card__media.is-3 { background: linear-gradient(135deg, #ffc94d, #ffe29a); color: #7a5a00; }
@@ -296,9 +302,16 @@ button { font-family: inherit; cursor: pointer; }
 .value { text-align: center; padding: var(--space-4); }
 .value .ic {
   width: 64px; height: 64px; margin: 0 auto var(--space-3);
-  border-radius: 50%; background: var(--color-primary-light);
-  display: grid; place-items: center; font-size: 1.8rem;
+  border-radius: 50%; color: #fff;
+  display: grid; place-items: center;
+  transition: transform 0.22s ease;
 }
+.value:hover .ic { transform: scale(1.08) rotate(-4deg); }
+.value .ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.value .ic.is-1 { background: linear-gradient(135deg, #1f9d6b, #56c596); }
+.value .ic.is-2 { background: linear-gradient(135deg, #ff7a59, #ffb199); }
+.value .ic.is-3 { background: linear-gradient(135deg, #5aa9e6, #9bd0ff); }
+.value .ic.is-4 { background: linear-gradient(135deg, #B9F227, #e4ff9c); color: #16241a; } /* 포인트 컬러(스프링그린) 제한적 사용 */
 .value h3 { font-size: 1.1rem; }
 .value p { color: var(--color-ink-soft); font-size: var(--fs-small); margin-top: var(--space-2); }
 
@@ -337,7 +350,16 @@ button { font-family: inherit; cursor: pointer; }
   border-radius: var(--radius); padding: var(--space-6);
   text-align: center; background: #fff;
 }
-.join-card .ic { font-size: 2.2rem; }
+.join-card .ic {
+  width: 64px; height: 64px; margin: 0 auto var(--space-3);
+  border-radius: 50%; color: #fff; display: grid; place-items: center;
+  transition: transform 0.22s ease;
+}
+.join-card:hover .ic { transform: scale(1.08) rotate(4deg); }
+.join-card .ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.join-card .ic.is-1 { background: linear-gradient(135deg, #1f9d6b, #56c596); }
+.join-card .ic.is-2 { background: linear-gradient(135deg, #B9F227, #e4ff9c); color: #16241a; }
+.join-card .ic.is-3 { background: linear-gradient(135deg, #c084fc, #e3c4ff); }
 .join-card h3 { margin: var(--space-3) 0; font-size: var(--fs-h3); }
 .join-card p { color: var(--color-ink-soft); font-size: var(--fs-small); margin-bottom: var(--space-4); }
 
@@ -753,6 +775,7 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .mission-visual { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .mission-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; min-height: 210px; padding: 24px; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; box-shadow: var(--shadow); }
 .mission-card .mi { position: absolute; top: 18px; right: 18px; font-size: 2.4rem; opacity: 0.92; }
+.mission-card .mi svg { width: 40px; height: 40px; stroke: #fff; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0.92; }
 .mission-card h3 { font-family: var(--font-point); font-size: 1.25rem; margin-bottom: 6px; letter-spacing: 0; }
 .mission-card p { font-size: 0.9rem; opacity: 0.95; line-height: 1.6; }
 .mission-card.m1 { background: linear-gradient(150deg, #17b39a, #0f8a76); }
@@ -776,6 +799,7 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .mission-visual { grid-template-columns: 1fr 1fr; gap: 12px; }
   .mission-card { min-height: 158px; padding: 16px; }
   .mission-card .mi { font-size: 1.8rem; }
+  .mission-card .mi svg { width: 30px; height: 30px; }
 }
 
 /* ===================================================================
@@ -826,7 +850,8 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .section-head p { font-size: 1.04rem; }
   .value h3 { font-size: 1.22rem; }
   .value p { font-size: 1rem; }
-  .value .ic { width: 74px; height: 74px; font-size: 2rem; }
+  .value .ic { width: 74px; height: 74px; }
+  .value .ic svg { width: 32px; height: 32px; }
   .card__body h3 { font-size: 1.22rem; }
   .card__body p { font-size: 1rem; }
   .mission-card h3 { font-size: 1.18rem; }
@@ -855,13 +880,14 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   /* 신뢰/미션 아이콘 카드: 1열 → 2×2 */
   .values { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .value { padding: 16px 10px; }
-  .value .ic { width: 60px; height: 60px; font-size: 1.7rem; margin-bottom: 10px; }
+  .value .ic { width: 60px; height: 60px; margin-bottom: 10px; }
+  .value .ic svg { width: 24px; height: 24px; }
   .value h3 { font-size: 1.08rem; }
   .value p { font-size: 0.9rem; }
 
   /* 사업·활동 카드: 1열 → 2열 */
   .card-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .card__media { font-size: 2rem; }
+  .card__media svg { width: 34px; height: 34px; }
   .card__body { padding: 14px; }
   .card__body h3 { font-size: 1.06rem; }
   .card__body p { font-size: 0.9rem; }
