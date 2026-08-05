@@ -281,9 +281,14 @@ button { font-family: inherit; cursor: pointer; }
   display: grid; place-items: center;
   color: #fff; overflow: hidden;
 }
+/* 카드 썸네일 아이콘: 크게 + 음각(engraved) 느낌으로 은은하게 */
 .card__media svg {
-  width: 44px; height: 44px; stroke: currentColor; fill: none;
-  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  display: block;
+  width: 104px; height: 104px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.42;
+  filter: drop-shadow(0 1.5px 1px rgba(0, 0, 0, 0.2));
   transition: transform 0.25s ease;
 }
 .card:hover .card__media svg { transform: scale(1.1) rotate(-3deg); }
@@ -307,7 +312,7 @@ button { font-family: inherit; cursor: pointer; }
   transition: transform 0.22s ease;
 }
 .value:hover .ic { transform: scale(1.08) rotate(-4deg); }
-.value .ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.value .ic svg { display: block; width: 38px; height: 38px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .value .ic.is-1 { background: linear-gradient(135deg, #1f9d6b, #56c596); }
 .value .ic.is-2 { background: linear-gradient(135deg, #ff7a59, #ffb199); }
 .value .ic.is-3 { background: linear-gradient(135deg, #5aa9e6, #9bd0ff); }
@@ -356,7 +361,7 @@ button { font-family: inherit; cursor: pointer; }
   transition: transform 0.22s ease;
 }
 .join-card:hover .ic { transform: scale(1.08) rotate(4deg); }
-.join-card .ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.join-card .ic svg { display: block; width: 38px; height: 38px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .join-card .ic.is-1 { background: linear-gradient(135deg, #1f9d6b, #56c596); }
 .join-card .ic.is-2 { background: linear-gradient(135deg, #B9F227, #e4ff9c); color: #16241a; }
 .join-card .ic.is-3 { background: linear-gradient(135deg, #c084fc, #e3c4ff); }
@@ -775,7 +780,7 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .mission-visual { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .mission-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; min-height: 210px; padding: 24px; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; box-shadow: var(--shadow); }
 .mission-card .mi { position: absolute; top: 18px; right: 18px; font-size: 2.4rem; opacity: 0.92; }
-.mission-card .mi svg { width: 40px; height: 40px; stroke: #fff; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0.92; }
+.mission-card .mi svg { display: block; width: 48px; height: 48px; stroke: #fff; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0.92; }
 .mission-card h3 { font-family: var(--font-point); font-size: 1.25rem; margin-bottom: 6px; letter-spacing: 0; }
 .mission-card p { font-size: 0.9rem; opacity: 0.95; line-height: 1.6; }
 .mission-card.m1 { background: linear-gradient(150deg, #17b39a, #0f8a76); }
@@ -851,7 +856,7 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .value h3 { font-size: 1.22rem; }
   .value p { font-size: 1rem; }
   .value .ic { width: 74px; height: 74px; }
-  .value .ic svg { width: 32px; height: 32px; }
+  .value .ic svg { width: 44px; height: 44px; }
   .card__body h3 { font-size: 1.22rem; }
   .card__body p { font-size: 1rem; }
   .mission-card h3 { font-size: 1.18rem; }
@@ -881,13 +886,13 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .values { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .value { padding: 16px 10px; }
   .value .ic { width: 60px; height: 60px; margin-bottom: 10px; }
-  .value .ic svg { width: 24px; height: 24px; }
+  .value .ic svg { width: 36px; height: 36px; }
   .value h3 { font-size: 1.08rem; }
   .value p { font-size: 0.9rem; }
 
   /* 사업·활동 카드: 1열 → 2열 */
   .card-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .card__media svg { width: 34px; height: 34px; }
+  .card__media svg { width: 68px; height: 68px; }
   .card__body { padding: 14px; }
   .card__body h3 { font-size: 1.06rem; }
   .card__body p { font-size: 0.9rem; }
@@ -899,4 +904,38 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 
   /* 섹션 상하 간격 살짝 축소 */
   .section { padding: 52px 0; }
+}
+
+/* ===================================================================
+   29. 인라인 아이콘 (버튼·채널칩·푸터·로그인수단·소제목)
+   미션/카드 아이콘과 동일한 모노라인 규격(stroke 기반)으로 통일한다.
+   =================================================================== */
+.btn svg,
+.donate-float__icon svg,
+.channel-chip .ci svg,
+.footer__sns a svg,
+.provider-btn .p-mark svg,
+.prose h2 svg,
+.hint svg {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+/* 하트는 면으로 채워 CTA에서 또렷하게 */
+.ico-heart { fill: currentColor !important; stroke: none !important; }
+
+.btn svg { width: 1.05em; height: 1.05em; }
+.donate-float__icon svg { width: 22px; height: 22px; }
+.channel-chip .ci svg { width: 20px; height: 20px; }
+.footer__sns a svg { width: 20px; height: 20px; }
+.provider-btn .p-mark svg { width: 18px; height: 18px; }
+.prose h2 svg { width: 0.85em; height: 0.85em; vertical-align: -0.06em; margin-right: 4px; }
+.hint svg { width: 1em; height: 1em; vertical-align: -0.15em; }
+
+@media (max-width: 767px) {
+  .donate-float__icon svg { width: 20px; height: 20px; }
 }
