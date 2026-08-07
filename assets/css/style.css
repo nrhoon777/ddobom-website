@@ -597,7 +597,8 @@ button { font-family: inherit; cursor: pointer; }
 .hero--full .hero__bg::after {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(7,7,15,0.45) 0%, rgba(7,7,15,0.55) 45%, rgba(7,7,15,0.82) 100%);
+  /* 영상 위 본문을 걷어냈으므로 어둡게 덮는 정도를 낮춰 영상이 더 잘 보이게 한다 */
+  background: linear-gradient(180deg, rgba(7,7,15,0.30) 0%, rgba(7,7,15,0.38) 45%, rgba(7,7,15,0.72) 100%);
 }
 .hero--full .container { position: relative; z-index: 1; padding: 100px 20px 130px; }
 .hero--full .hero__inner-full { max-width: 760px; }
@@ -1200,6 +1201,47 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .channel-chip .ci svg { width: 16px; height: 16px; }
 }
 
+/* ===================================================================
+   36. 히어로 — I SEE U AGAIN 옆 회색 흐름 문구
+   영상 위에 본문이 겹쳐 둘 다 안 보이던 문제를 해결. 문구는 부제로 내리고
+   헤드라인만 영상 위에 남긴다.
+   =================================================================== */
+.hero__eyebrow-row {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: var(--space-4);
+}
+.hero__eyebrow-row .hero__eyebrow { margin-bottom: 0; flex: none; }
+.hero__ticker {
+  flex: 1 1 auto; min-width: 0; overflow: hidden;
+  /* 양끝을 페이드시켜 잘린 글자가 튀지 않게 */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.hero__ticker-track {
+  display: flex; width: max-content;
+  animation: hero-ticker 38s linear infinite;
+}
+.hero__ticker span {
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.6);   /* 회색 계열 — 헤드라인보다 뒤로 물러나게 */
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+@keyframes hero-ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* 오버레이를 옅게 한 만큼 헤드라인은 그림자로 가독성 확보 */
+.hero--full h1 { text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); }
+
+@media (max-width: 767px) {
+  /* 좁은 화면에선 배지 아래로 내려 한 줄을 온전히 쓴다 */
+  .hero__eyebrow-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .hero__ticker { width: 100%; flex: none; }
+  .hero__ticker span { font-size: 0.82rem; }
+}
+
 /* 사업·활동 카드: 문구 길이가 달라도 줄 높이를 맞춰 그리드가 흔들리지 않게 */
 .card__body p { min-height: calc(var(--lh-body) * 2em); }
 @media (max-width: 767px) {
@@ -1209,6 +1251,8 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 /* 모션 최소화 설정에서는 흐름·축소 모두 정지 */
 @media (prefers-reduced-motion: reduce) {
   .marquee__track { animation: none; transform: none; }
+  .hero__ticker-track { animation: none; transform: none; }
+  .hero__ticker { -webkit-mask-image: none; mask-image: none; }
   .hero--full .hero__bg { inset: 0 !important; border-radius: 0 !important; }
   .hero--full .hero__inner-full { opacity: 1 !important; }
 }
