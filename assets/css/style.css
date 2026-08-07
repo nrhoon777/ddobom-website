@@ -323,7 +323,12 @@ button { font-family: inherit; cursor: pointer; }
 .value .ic.is-3 { background: linear-gradient(135deg, #5aa9e6, #9bd0ff); }
 .value .ic.is-4 { background: linear-gradient(135deg, #B9F227, #e4ff9c); color: #16241a; } /* 포인트 컬러(스프링그린) 제한적 사용 */
 .value h3 { font-size: 1.1rem; }
-.value p { color: var(--color-ink-soft); font-size: var(--fs-small); margin-top: var(--space-2); }
+/* 설명문은 어떤 화면에서도 '두 줄'로 보이도록 폭을 제한하고 2줄 높이를 확보 */
+.value p {
+  color: var(--color-ink-soft); font-size: var(--fs-small);
+  margin: var(--space-2) auto 0;
+  max-width: 14em; line-height: 1.6; min-height: 3.2em;
+}
 
 /* ---------- 10. 후원 CTA ---------- */
 .donate-cta {
