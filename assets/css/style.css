@@ -518,7 +518,13 @@ button { font-family: inherit; cursor: pointer; }
   }
   .gnb.is-open { transform: translateY(0); }
   .gnb a { padding: 14px 12px; font-size: 1.05rem; }
-  .header__cta .btn--text-hide { display: none; }
+  /* 후원 버튼은 모바일에서도 유지 — 플로팅 원형 버튼을 없앤 뒤 유일한 상시 CTA다 */
+  .header__cta .btn--text-hide {
+    min-height: 40px;
+    padding: 8px 14px;
+    font-size: 0.92rem;
+    gap: 4px;
+  }
 
   .stats { grid-template-columns: repeat(2, 1fr); }
   .card-grid, .news-list, .join-grid, .values, .footer__top { grid-template-columns: 1fr; }
@@ -527,41 +533,10 @@ button { font-family: inherit; cursor: pointer; }
   .footer__bottom { flex-direction: column; }
 }
 
-/* ---------- 16. 플로팅 후원 버튼 (우상단 고정) ---------- */
-.donate-float {
-  position: fixed;
-  top: calc(var(--header-h) + 16px);
-  right: 20px;
-  z-index: 95;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--color-secondary);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  text-decoration: none;
-  font-weight: 800;
-  box-shadow: 0 8px 22px rgba(255, 122, 89, 0.5);
-  animation: donate-pulse 2.4s ease-in-out infinite;
-  transition: transform 0.15s, background 0.15s;
-}
-.donate-float:hover { transform: scale(1.08); background: var(--color-secondary-dark); }
-.donate-float__icon { font-size: 1.45rem; line-height: 1; }
-.donate-float__label { font-size: 0.72rem; line-height: 1; }
-@keyframes donate-pulse {
-  0%, 100% { box-shadow: 0 8px 22px rgba(255, 122, 89, 0.45); }
-  50% { box-shadow: 0 10px 30px rgba(255, 122, 89, 0.8); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .donate-float { animation: none; }
-}
-@media (max-width: 767px) {
-  .donate-float { width: 58px; height: 58px; right: 14px; }
-}
+/* ---------- 16. (삭제) 플로팅 후원 버튼
+   헤더가 sticky라 헤더의 후원 버튼이 이미 항상 보였고, 원형 버튼이 바로 아래
+   겹쳐 라임 CTA가 둘로 나뉘었다. 헤더 버튼 하나로 통일하고 원형은 제거함.
+   ---------------------------------------------------------------- */
 
 /* ---------- 17. 후원 로그인 수단 버튼 ---------- */
 .provider-grid { display: grid; gap: 8px; }
@@ -845,20 +820,6 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
    =================================================================== */
 :root { --brand-mint: #7fe3a8; }
 
-/* 플로팅 후원 버튼: 시안 포인트 컬러 #DCFF50 (라임) */
-.donate-float {
-  background: #dcff50;
-  color: #16241a;               /* 밝은 배경 → 어두운 글씨(가독성) */
-  box-shadow: 0 8px 24px rgba(180, 220, 40, 0.6);
-  animation: donate-pulse-lime 2.4s ease-in-out infinite;
-}
-.donate-float:hover { background: #cff23a; color: #16241a; }
-@keyframes donate-pulse-lime {
-  0%, 100% { box-shadow: 0 8px 22px rgba(180, 220, 40, 0.45); }
-  50% { box-shadow: 0 12px 34px rgba(220, 255, 80, 0.9); }
-}
-@media (prefers-reduced-motion: reduce) { .donate-float { animation: none; } }
-
 /* 히어로 헤드라인 민트 강조 */
 .hero--full h1 .mint { color: var(--brand-mint); }
 
@@ -966,7 +927,6 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
    미션/카드 아이콘과 동일한 모노라인 규격(stroke 기반)으로 통일한다.
    =================================================================== */
 .btn svg,
-.donate-float__icon svg,
 .channel-chip .ci svg,
 .footer__sns a svg,
 .provider-btn .p-mark svg,
@@ -984,16 +944,12 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .ico-heart { fill: currentColor !important; stroke: none !important; }
 
 .btn svg { width: 1.05em; height: 1.05em; }
-.donate-float__icon svg { width: 22px; height: 22px; }
 .channel-chip .ci svg { width: 20px; height: 20px; }
 .footer__sns a svg { width: 20px; height: 20px; }
 .provider-btn .p-mark svg { width: 18px; height: 18px; }
 .prose h2 svg { width: 0.85em; height: 0.85em; vertical-align: -0.06em; margin-right: 4px; }
 .hint svg { width: 1em; height: 1em; vertical-align: -0.15em; }
 
-@media (max-width: 767px) {
-  .donate-float__icon svg { width: 20px; height: 20px; }
-}
 
 /* ===================================================================
    30. 결산·활동 내역 링크 카드 (donate.html)
@@ -1151,15 +1107,26 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .gnb a:hover { background: var(--color-primary-dark); color: #fff; transform: translateY(-2px); }
 .gnb a[aria-current="page"] { background: var(--color-primary-dark); color: #fff; }
 
-/* 헤더 후원 버튼: 라임(후원 전용 색) */
+/* 헤더 후원 버튼: 라임(후원 전용 색)
+   플로팅 원형 버튼을 없앴으므로 이 버튼이 유일한 상시 후원 CTA다.
+   헤더가 sticky라 항상 보이며, 은은한 빛 번짐으로 시선을 끈다. */
 .header__cta .btn--secondary {
   background: var(--color-lime);
   color: var(--color-lime-ink);
   border-radius: 6px;
   font-weight: 800;
   box-shadow: 0 3px 0 rgba(22, 36, 26, 0.18);
+  animation: donate-glow 2.6s ease-in-out infinite;
 }
-.header__cta .btn--secondary:hover { background: var(--color-lime-dark); color: var(--color-lime-ink); }
+.header__cta .btn--secondary:hover {
+  background: var(--color-lime-dark);
+  color: var(--color-lime-ink);
+  animation: none;
+}
+@keyframes donate-glow {
+  0%, 100% { box-shadow: 0 3px 0 rgba(22, 36, 26, 0.18), 0 0 0 0 rgba(220, 255, 80, 0.6); }
+  50%      { box-shadow: 0 3px 0 rgba(22, 36, 26, 0.18), 0 0 0 7px rgba(220, 255, 80, 0); }
+}
 
 /* ===================================================================
    33. 후원 유도 띠배너 (가로로 흐르는 문구)
