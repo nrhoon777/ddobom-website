@@ -1202,6 +1202,26 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 }
 
 /* ===================================================================
+   37. 임팩트 — '현실' 지표(20·30대 암 환자 비중) 픽토그램
+   또봄의 성과가 아니라 문제 상황이라 색과 배경을 달리해 구분한다.
+   =================================================================== */
+.stat--context {
+  grid-column: span 2;          /* 그래프가 들어가므로 두 칸을 쓴다 */
+  background: #fffaf7;
+  border-color: #ffd9c6;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.ratio-chart { width: 100%; max-width: 260px; height: auto; margin: 0 auto 12px; display: block; }
+.stat--context .num--sm { font-size: 1.15rem; color: var(--color-ink); }
+.stat--context .num--sm b { font-size: 1.5rem; color: var(--color-secondary-dark); font-weight: 800; }
+.stat--context .num--sm span { color: var(--color-ink-soft); font-weight: 600; font-size: 0.95rem; }
+
+@media (max-width: 767px) {
+  .stat--context { grid-column: span 2; }   /* 2열 그리드에서 한 줄 전체 */
+  .ratio-chart { max-width: 220px; }
+}
+
+/* ===================================================================
    36. 히어로 — I SEE U AGAIN 옆 회색 흐름 문구
    영상 위에 본문이 겹쳐 둘 다 안 보이던 문제를 해결. 문구는 부제로 내리고
    헤드라인만 영상 위에 남긴다.
