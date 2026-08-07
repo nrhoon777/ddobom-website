@@ -16,6 +16,13 @@
 
     var applyHeroShrink = function () {
       ticking = false;
+      // 태블릿 이하는 영상/문구가 위아래로 분리된 레이아웃이라 축소 효과를 쓰지 않는다.
+      if (window.innerWidth <= 1023) {
+        heroBg.style.removeProperty("--i");
+        heroBg.style.removeProperty("--r");
+        if (heroInner) heroInner.style.removeProperty("--o");
+        return;
+      }
       var h = hero.offsetHeight || 1;
       // 히어로를 지나간 비율 0~1 (한 화면 내려가면 1)
       var p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / h));
@@ -66,8 +73,15 @@
       }
     });
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 767) gnb.classList.remove("is-open");
+      if (window.innerWidth > 1023) gnb.classList.remove("is-open");
     });
+  }
+
+  /* ---------- 후원 페이지: #once로 들어오면 '일시 후원'을 미리 선택 ---------- */
+  var typeOnce = document.getElementById("typeOnce");
+  if (typeOnce && window.location.hash === "#once") {
+    typeOnce.checked = true;
+    typeOnce.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
   /* ---------- 후원 페이지: 금액 선택 칩 ---------- */

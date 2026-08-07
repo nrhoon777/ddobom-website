@@ -6,7 +6,7 @@
   <title>후원하기 | 또봄 한국청년암협회</title>
   <meta name="description" content="정기·일시 후원으로 청년 암 경험자의 봄을 함께 피워주세요. 후원금은 투명하게 공개되고 기부금영수증이 발급됩니다." />
   <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260807f" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260808a" />
 </head>
 <body>
   <a href="#main" class="skip-link">본문 바로가기</a>
@@ -82,8 +82,8 @@
             3분이면 충분합니다. 청년의 봄에 함께해 주세요.
           </p>
 
-          <!-- 정기 / 일시 -->
-          <fieldset style="border:0; padding:0; margin:0 0 20px">
+          <!-- 정기 / 일시 (홈의 '일시 후원하기'가 #once로 들어오면 main.js가 일시를 선택한다) -->
+          <fieldset id="once" style="border:0; padding:0; margin:0 0 20px">
             <legend class="sr-only">후원 유형 선택</legend>
             <div class="toggle-group" role="radiogroup">
               <input type="radio" name="type" id="typeRegular" value="regular" checked />
@@ -156,7 +156,7 @@
           <div class="field check-row">
             <input type="checkbox" id="agree" name="agree" required />
             <label for="agree" style="font-weight:400">
-              <a href="#" style="color:var(--color-primary-dark); text-decoration:underline">개인정보 수집·이용</a> 및
+              <a href="policy.html#privacy" target="_blank" rel="noopener" style="color:var(--color-primary-dark); text-decoration:underline">개인정보 수집·이용</a> 및
               후원 약관에 동의합니다. (필수)
             </label>
           </div>
@@ -231,8 +231,8 @@
         <nav aria-label="안내 메뉴">
           <h4>안내</h4>
           <ul>
-            <li><a href="#">개인정보처리방침</a></li>
-            <li><a href="#">이용약관</a></li>
+            <li><a href="policy.html#privacy">개인정보처리방침</a></li>
+            <li><a href="policy.html#terms">이용약관</a></li>
             <li><a href="reports.html">결산 내역</a></li>
             <li><a href="admin.html" class="footer__admin">관리자</a></li>
           </ul>
@@ -253,6 +253,6 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js?v=20260807f"></script>
+  <script src="assets/js/main.js?v=20260808a"></script>
 </body>
 </html>

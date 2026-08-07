@@ -1276,3 +1276,309 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .hero--full .hero__bg { inset: 0 !important; border-radius: 0 !important; }
   .hero--full .hero__inner-full { opacity: 1 !important; }
 }
+
+/* ===================================================================
+   38. 반응형 히어로 재구성 (2026-08-08)
+   문제: 모바일에서 16:9 영상을 세로로 긴 히어로에 contain으로 넣어
+        위아래 검정 여백이 화면 절반을 차지하고, 헤드라인이 영상을 덮었다.
+   해결: ~1023px에서는 영상을 문서 흐름 안의 16:9 배너로 올리고
+        문구를 그 아래 별도 블록으로 내려 서로 가리지 않게 한다.
+   =================================================================== */
+
+@media (max-width: 1023px) {
+  .hero--full {
+    display: block;
+    min-height: 0;
+    background: linear-gradient(180deg, #0a1020 0%, #12203a 100%);
+  }
+
+  /* 배경 → 흐름 안의 16:9 배너. 컨테이너 비율 = 영상 비율이라 잘림도 여백도 없다.
+     inset/border-radius는 스크롤 축소 효과용이므로 여기선 무력화한다. */
+  .hero--full .hero__bg {
+    position: relative;
+    inset: auto !important;
+    border-radius: 0 !important;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0a1020;
+  }
+  .hero--full .hero__bg video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  /* 영상 위 어두운 막을 걷고, 아래쪽만 문구 영역으로 자연스럽게 잇는다 */
+  .hero--full .hero__bg::after {
+    background: linear-gradient(180deg, rgba(10,16,32,0) 62%, rgba(14,26,52,0.92) 100%);
+  }
+
+  /* 문구 블록 */
+  .hero--full .container { padding: 24px 20px 40px; }
+  .hero--full .hero__inner-full { max-width: 640px; opacity: 1 !important; }
+  .hero--full h1 { text-shadow: none; }
+
+  /* 양끝이 잘리던 흐름 문구 대신 정지된 본문으로 (같은 문장) */
+  .hero__eyebrow-row { display: block; margin-bottom: 14px; }
+  .hero__ticker { display: none; }
+  .hero__lead {
+    position: static; width: auto; height: auto;
+    margin: 14px 0 24px; padding: 0; overflow: visible;
+    clip: auto; clip-path: none; white-space: normal;
+    color: rgba(255,255,255,0.86);
+    font-size: 1rem; line-height: 1.65;
+  }
+
+  /* 문구와 겹치므로 숨김 — 바로 다음 섹션이 이어진다 */
+  .hero--full .scroll-ind { display: none; }
+}
+
+@media (max-width: 767px) {
+  .hero--full .container { padding: 20px 20px 34px; }
+  .hero--full h1 { font-size: clamp(1.8rem, 8vw, 2.3rem); line-height: 1.28; }
+  .hero__eyebrow { font-size: 0.72rem; letter-spacing: 0.12em; padding: 7px 14px; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero--full h1 { font-size: clamp(2.1rem, 4.6vw, 2.8rem); line-height: 1.22; }
+  .hero__lead { font-size: 1.1rem; max-width: 34em; }
+  .hero--full .hero__actions .btn { flex: 0 1 auto; }
+}
+
+/* 데스크톱: 흐름 문구를 쓰므로 정지 문구는 스크린리더 전용 */
+@media (min-width: 1024px) {
+  .hero__lead {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+}
+
+/* ---------- 데스크톱 히어로: 문구 쪽만 어둡게 덮어 영상은 살리고 글자는 읽히게 ---------- */
+@media (min-width: 1024px) {
+  .hero--full .hero__bg::after {
+    background:
+      linear-gradient(90deg, rgba(7,7,15,0.80) 0%, rgba(7,7,15,0.70) 34%, rgba(7,7,15,0.34) 58%, rgba(7,7,15,0.08) 78%, rgba(7,7,15,0.03) 100%),
+      linear-gradient(180deg, rgba(7,7,15,0.30) 0%, rgba(7,7,15,0) 28%, rgba(7,7,15,0.42) 100%);
+  }
+  /* 흐름 문구는 헤드라인보다 뒤로 물러나되, 영상 위에서도 읽히도록 */
+  .hero__ticker span {
+    color: rgba(255,255,255,0.82);
+    text-shadow: 0 1px 10px rgba(0,0,0,0.6);
+  }
+}
+
+/* ===================================================================
+   39. 약관·방침 페이지 (policy.html)
+   =================================================================== */
+.policy-notice {
+  background: #fff8e8; border: 1px solid #f3dfae; border-left: 4px solid var(--color-warning);
+  border-radius: var(--radius-sm); padding: 16px 18px; margin-bottom: var(--space-7);
+  font-size: 0.95rem; line-height: 1.7; color: #6b5320;
+}
+.policy-notice a { color: #6b5320; text-decoration: underline; }
+.prose h3 { font-size: 1.1rem; margin: var(--space-6) 0 var(--space-2); color: var(--color-primary-dark); }
+.policy-list { margin: var(--space-2) 0 var(--space-4); padding-left: 0; }
+.policy-list li {
+  position: relative; padding-left: 18px; margin-bottom: 8px;
+  color: var(--color-ink-soft); line-height: 1.7;
+}
+.policy-list li::before {
+  content: ""; position: absolute; left: 2px; top: 0.68em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary);
+}
+.policy-list a, .prose p a { color: var(--color-primary-dark); text-decoration: underline; }
+.policy-rule { border: 0; border-top: 1px solid var(--color-line); margin: var(--space-8) 0; }
+.policy-date { margin-top: var(--space-6); color: var(--color-ink-soft); font-size: var(--fs-small); }
+
+/* ===================================================================
+   40. 소개 페이지 (about.html) — 글 덩어리를 사진·이모지·리듬으로 풀어낸다
+   =================================================================== */
+
+/* 섹션 머리: 이모지 배지 + 큰 제목 + 보조 문장 */
+.about-head { text-align: center; max-width: 720px; margin: 0 auto var(--space-6); }
+.about-eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-point); font-size: 0.86rem; letter-spacing: 0.06em;
+  color: var(--color-primary-dark); background: var(--color-primary-light);
+  padding: 7px 16px; border-radius: var(--radius-pill); margin-bottom: var(--space-3);
+}
+.about-eyebrow span[aria-hidden] { font-size: 1.05rem; line-height: 1; }
+.about-eyebrow--light { color: #0f2b26; background: rgba(255,255,255,0.9); }
+.about-head h2 { font-size: clamp(1.7rem, 4.2vw, 2.4rem); line-height: 1.28; }
+.about-sub { color: var(--color-ink-soft); margin-top: var(--space-3); font-size: 1.02rem; }
+
+/* 도입 문장 — 본문보다 확실히 크게 */
+.about-lead {
+  max-width: 760px; margin: 0 auto var(--space-7);
+  text-align: center; font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+  line-height: 1.75; color: var(--color-ink);
+}
+.about-lead strong { color: var(--color-secondary-dark); font-weight: 800; }
+
+/* 사진 + 글 2단 */
+.about-split {
+  display: grid; grid-template-columns: 1.05fr 1fr;
+  gap: var(--space-7); align-items: center;
+}
+.about-figure { margin: 0; }
+.about-figure img {
+  width: 100%; border-radius: var(--radius-lg);
+  box-shadow: var(--shadow); display: block;
+}
+.about-figure figcaption {
+  margin-top: 10px; font-size: var(--fs-small);
+  color: var(--color-ink-soft); text-align: center;
+}
+.about-figure--wide { max-width: 860px; margin: var(--space-7) auto 0; }
+
+/* 아이콘 붙은 짧은 문장 목록 */
+.about-points { display: grid; gap: 18px; }
+.about-points li { display: flex; gap: 14px; align-items: flex-start; }
+.about-points .ap-ic {
+  flex: 0 0 44px; width: 44px; height: 44px; border-radius: 14px;
+  display: grid; place-items: center; font-size: 1.35rem;
+  background: var(--color-primary-light);
+}
+.about-points b { display: block; font-size: 1.1rem; margin-bottom: 4px; }
+.about-points p { color: var(--color-ink-soft); font-size: 0.97rem; line-height: 1.65; }
+
+/* 인용 — 감성 세리프로 톤을 바꿔 리듬을 준다 */
+.about-quote {
+  max-width: 720px; margin: 0 auto var(--space-7); padding: 0;
+  text-align: center; border: 0;
+  font-family: "Gowun Batang", var(--font-base);
+  font-size: clamp(1.45rem, 3.6vw, 2rem); line-height: 1.55;
+  color: var(--color-primary-dark); font-weight: 700;
+}
+.about-quote .aq-sub {
+  display: block; margin-top: 12px;
+  font-family: var(--font-base); font-weight: 600;
+  font-size: 1rem; color: var(--color-ink-soft);
+}
+
+/* 3단 스토리 카드 */
+.about-story { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+.story-step {
+  background: #fff; border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg); padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.story-step .st-year {
+  display: inline-block; font-family: var(--font-point);
+  font-size: 1.4rem; color: var(--color-primary);
+  line-height: 1; margin-bottom: 10px;
+}
+.story-step h3 { font-size: 1.16rem; margin-bottom: 10px; }
+.story-step h3 span[aria-hidden] { margin-right: 4px; }
+.story-step p { color: var(--color-ink-soft); font-size: 0.97rem; line-height: 1.75; }
+.story-step strong { color: var(--color-ink); }
+
+/* 이름의 의미 — 딥네이비 풀블리드 브레이크 */
+.about-name {
+  background: linear-gradient(160deg, #0d1a2e 0%, #123a37 100%);
+  color: #fff; text-align: center;
+  padding: var(--space-9) 0;
+}
+.about-name h2 {
+  font-family: var(--font-head); font-weight: 800;
+  font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.2;
+  letter-spacing: -0.02em; margin-bottom: var(--space-5);
+}
+.about-name .an-eq { color: rgba(255,255,255,0.45); margin: 0 6px; font-weight: 400; }
+.about-name .mint { color: var(--brand-mint); }
+.about-name .an-body {
+  font-family: "Gowun Batang", var(--font-base);
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem); line-height: 1.9;
+  color: rgba(255,255,255,0.88);
+}
+.about-name .an-slogan {
+  margin-top: var(--space-6);
+  font-family: var(--font-point); letter-spacing: 0.04em;
+  font-size: clamp(0.98rem, 2vw, 1.15rem); color: var(--brand-mint);
+}
+
+/* 마무리 CTA */
+.about-cta { margin-top: var(--space-8); text-align: center; }
+.about-cta__line {
+  font-family: "Gowun Batang", var(--font-base);
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  color: var(--color-ink); margin-bottom: var(--space-5);
+}
+.about-cta__btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+/* ---------- 태블릿 ---------- */
+@media (max-width: 1023px) {
+  .about-split { grid-template-columns: 1fr; gap: var(--space-6); }
+  .about-story { grid-template-columns: 1fr; gap: var(--space-4); }
+}
+
+/* ---------- 모바일 ---------- */
+@media (max-width: 767px) {
+  .about-head { margin-bottom: var(--space-5); }
+  .about-head h2 { font-size: 1.62rem; }
+  .about-lead { font-size: 1.06rem; line-height: 1.7; margin-bottom: var(--space-6); text-align: left; }
+  .about-lead br { display: none; }
+  .about-quote { font-size: 1.35rem; }
+  .about-points .ap-ic { flex-basis: 40px; width: 40px; height: 40px; font-size: 1.2rem; }
+  .about-points b { font-size: 1.04rem; }
+  .story-step { padding: 20px 18px; }
+  .about-name { padding: var(--space-8) 0; }
+  .about-name .an-body br { display: none; }
+  .about-cta__btns .btn { width: 100%; }
+}
+
+/* ===================================================================
+   41. 사업·활동 — 긴 설명을 '한 줄 훅 + 짧은 본문 + 메타'로 분리
+   =================================================================== */
+.prog-hook {
+  font-family: "Gowun Batang", var(--font-base);
+  font-size: clamp(1.25rem, 2.8vw, 1.65rem);
+  line-height: 1.5; font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-bottom: var(--space-3);
+}
+.prog-meta {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--color-bg-soft); border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill); padding: 7px 15px;
+  font-size: 0.88rem; color: var(--color-ink-soft); font-weight: 600;
+}
+.prog-meta span[aria-hidden] { font-size: 1rem; line-height: 1; }
+
+@media (max-width: 767px) {
+  .prog-hook { font-size: 1.2rem; }
+}
+
+/* 영상 카드 자막: 재생 컨트롤 바와 겹치던 문제 → 상단으로 이동 */
+.video-card .cap {
+  top: 0; bottom: auto;
+  padding: 10px 14px 18px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.72), transparent);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+}
+
+/* ===================================================================
+   42. 태블릿 헤더 — 768~1023px에서 메뉴가 "또봄/소개"처럼 두 줄로 깨지던 문제
+   드로어 기준을 1023px까지 올린다. (main.js resize 초기화 기준도 동일)
+   =================================================================== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-toggle { display: flex; }
+  .gnb {
+    position: fixed;
+    inset: var(--header-h) 0 auto 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: #fff;
+    border-bottom: 1px solid var(--color-line);
+    padding: var(--space-4);
+    gap: var(--space-1);
+    box-shadow: var(--shadow);
+    transform: translateY(-120%);
+    transition: transform 0.25s ease;
+    max-height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    z-index: 90;
+  }
+  .gnb.is-open { transform: translateY(0); }
+  .gnb a { border-radius: 8px; padding: 14px 16px; font-size: 1.05rem; }
+}
