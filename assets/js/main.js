@@ -2,6 +2,41 @@
 (function () {
   "use strict";
 
+  /* ---------- 히어로 스크롤 축소 (영상이 라임 배경 위 네모로 줄어듦) ---------- */
+  var hero = document.querySelector(".hero--full");
+  var heroBg = hero && hero.querySelector(".hero__bg");
+  var heroInner = hero && hero.querySelector(".hero__inner-full");
+  var reduceMotion =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (hero && heroBg && !reduceMotion) {
+    var MAX_INSET = 5;   // vw — 너무 크면 영상이 답답해진다
+    var MAX_RADIUS = 26; // px
+    var ticking = false;
+
+    var applyHeroShrink = function () {
+      ticking = false;
+      var h = hero.offsetHeight || 1;
+      // 히어로를 지나간 비율 0~1 (한 화면 내려가면 1)
+      var p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / h));
+      heroBg.style.setProperty("--i", (p * MAX_INSET).toFixed(2) + "vw");
+      heroBg.style.setProperty("--r", (p * MAX_RADIUS).toFixed(1) + "px");
+      // 헤드라인은 영상이 충분히 줄어든 뒤(p≈0.8) 사라지도록 완만하게
+      if (heroInner) heroInner.style.setProperty("--o", (1 - Math.min(1, p * 1.25)).toFixed(2));
+    };
+
+    var onScroll = function () {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(applyHeroShrink);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    applyHeroShrink();
+  }
+
   /* ---------- 모바일 네비게이션 토글 ---------- */
   var toggle = document.getElementById("navToggle");
   var gnb = document.getElementById("gnb");

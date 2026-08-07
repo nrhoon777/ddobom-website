@@ -25,6 +25,11 @@
   --brand-purple: #8455c9;
   --brand-headline: #1d6fc4;       /* 히어로 헤드라인 블루 */
 
+  /* 후원 전용 포인트 — 라임은 '후원'에만 써서 위계를 지킨다 */
+  --color-lime: #DCFF50;
+  --color-lime-dark: #cff23a;
+  --color-lime-ink: #16241a;
+
   /* Semantic */
   --color-success: #2e7d32;
   --color-warning: #b26a00;
@@ -1128,4 +1133,90 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .ledger__amt { grid-column: 2; grid-row: 1; }
   .ledger__track { grid-column: 1 / -1; grid-row: 2; }
   .ledger__note { margin-left: 0; }
+}
+
+/* ===================================================================
+   32. 상단 메뉴 — 청록 네모 버튼 + 후원하기 라임 강조
+   메뉴 전체가 청록이라 라임 하나가 확실히 도드라진다.
+   =================================================================== */
+.gnb { gap: 4px; }
+.gnb a {
+  padding: 12px 18px;
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  transition: background 0.15s, transform 0.12s;
+}
+.gnb a:hover { background: var(--color-primary-dark); color: #fff; transform: translateY(-2px); }
+.gnb a[aria-current="page"] { background: var(--color-primary-dark); color: #fff; }
+
+/* 헤더 후원 버튼: 라임(후원 전용 색) */
+.header__cta .btn--secondary {
+  background: var(--color-lime);
+  color: var(--color-lime-ink);
+  border-radius: 6px;
+  font-weight: 800;
+  box-shadow: 0 3px 0 rgba(22, 36, 26, 0.18);
+}
+.header__cta .btn--secondary:hover { background: var(--color-lime-dark); color: var(--color-lime-ink); }
+
+/* ===================================================================
+   33. 후원 유도 띠배너 (가로로 흐르는 문구)
+   =================================================================== */
+.marquee {
+  overflow: hidden;
+  background: var(--color-lime);
+  color: var(--color-lime-ink);
+  padding: 15px 0;
+  border-top: 2px solid var(--color-lime-ink);
+  border-bottom: 2px solid var(--color-lime-ink);
+  user-select: none;
+}
+/* 동일 그룹 2개를 이어 붙여 -50% 이동으로 끊김 없이 순환시킨다 */
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 34s linear infinite;
+}
+.marquee__group {
+  display: flex; align-items: center; gap: 30px;
+  padding-right: 30px; white-space: nowrap;
+}
+.marquee b { font-weight: 800; font-size: 1.06rem; letter-spacing: -0.01em; }
+.marquee i { font-style: normal; opacity: 0.45; font-size: 0.95rem; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ===================================================================
+   34. 히어로 스크롤 축소 — 내려갈수록 영상이 라임 배경 위 네모로 줄어든다
+   --i(안쪽 여백)·--r(모서리)은 main.js가 스크롤 진행도에 맞춰 갱신한다.
+   =================================================================== */
+.hero--full { background: var(--color-lime); }
+.hero--full .hero__bg {
+  inset: var(--i, 0px);
+  border-radius: var(--r, 0px);
+  overflow: hidden;
+  will-change: inset, border-radius;
+}
+/* 줄어드는 동안 헤드라인이 영상 밖으로 삐져나오지 않게 함께 페이드 */
+.hero--full .hero__inner-full { opacity: var(--o, 1); }
+
+@media (max-width: 767px) {
+  .marquee { padding: 12px 0; }
+  .marquee b { font-size: 0.94rem; }
+  .marquee__group { gap: 20px; padding-right: 20px; }
+
+  /* 모바일 드로어에서는 네모 버튼을 꽉 찬 블록으로 */
+  .gnb a { border-radius: 8px; padding: 14px 16px; }
+}
+
+/* 모션 최소화 설정에서는 흐름·축소 모두 정지 */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; transform: none; }
+  .hero--full .hero__bg { inset: 0 !important; border-radius: 0 !important; }
+  .hero--full .hero__inner-full { opacity: 1 !important; }
 }
