@@ -1181,6 +1181,31 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .gnb a { border-radius: 8px; padding: 14px 16px; }
 }
 
+/* ===================================================================
+   35. 채널 칩 — 모바일에서도 한 줄 유지
+   =================================================================== */
+@media (max-width: 767px) {
+  .channels-row { flex-wrap: nowrap; gap: 6px; }
+  .channel-chip {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    padding: 10px 6px;
+    gap: 6px;
+    font-size: 0.76rem;
+    white-space: nowrap;
+    letter-spacing: -0.03em;
+  }
+  .channel-chip .ci { width: 26px; height: 26px; border-radius: 8px; }
+  .channel-chip .ci svg { width: 16px; height: 16px; }
+}
+
+/* 사업·활동 카드: 문구 길이가 달라도 줄 높이를 맞춰 그리드가 흔들리지 않게 */
+.card__body p { min-height: calc(var(--lh-body) * 2em); }
+@media (max-width: 767px) {
+  .card__body p { min-height: calc(1.5 * 3em); }
+}
+
 /* 모션 최소화 설정에서는 흐름·축소 모두 정지 */
 @media (prefers-reduced-motion: reduce) {
   .marquee__track { animation: none; transform: none; }
