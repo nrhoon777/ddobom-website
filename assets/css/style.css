@@ -2009,3 +2009,11 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .iceberg { padding: 24px 18px; }
   .iceberg__quote { font-size: 1.12rem; line-height: 1.8; }
 }
+
+/* 90% 이상 표기 — 숫자는 크게, 단위·수식어는 붙여서 작게 */
+.bias-hero__num { align-items: baseline; }
+.bh-unit em { display: block; font-size: 0.62em; font-style: normal; font-weight: 700; line-height: 1.1; margin-top: 2px; }
+.bh-pre {
+  font-size: 1.1rem; font-weight: 700; color: #d85a1d;
+  margin-right: 6px; align-self: center;
+}
