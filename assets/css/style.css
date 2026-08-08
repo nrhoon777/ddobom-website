@@ -1626,3 +1626,79 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .footer__oversight-links { flex-direction: column; }
   .footer__oversight-links a { justify-content: center; }
 }
+
+/* ===================================================================
+   44. 후원 — 실제 후원관리시스템(HSIT MRM) 연동 UI
+   데모 폼을 걷어내고, 진입점과 후원자 셀프서비스 링크만 남긴다.
+   =================================================================== */
+.donate-ways { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--space-5); align-items: start; }
+.donate-way {
+  position: relative;
+  background: #fff; border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg); padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.donate-way--primary {
+  border: 2px solid var(--color-primary);
+  box-shadow: var(--shadow);
+}
+.dw-badge {
+  position: absolute; top: -12px; left: var(--space-6);
+  background: var(--color-primary); color: #fff;
+  font-size: 0.78rem; font-weight: 700;
+  padding: 5px 12px; border-radius: var(--radius-pill);
+}
+.donate-way h3 { font-size: 1.35rem; margin-bottom: var(--space-3); }
+.donate-way h3 span[aria-hidden] { margin-right: 4px; }
+.donate-way > p { color: var(--color-ink-soft); line-height: 1.7; margin-bottom: var(--space-5); }
+.donate-way .btn { width: 100%; }
+.dw-note {
+  margin-top: var(--space-3); font-size: var(--fs-small);
+  color: var(--color-ink-soft); line-height: 1.65;
+}
+.dw-note a { color: var(--color-primary-dark); text-decoration: underline; }
+.dw-account {
+  background: var(--color-primary-light); border-radius: var(--radius);
+  padding: var(--space-4) var(--space-5); text-align: center;
+}
+.dw-account strong { display: block; font-size: 1.12rem; color: var(--color-primary-dark); }
+.dw-account span { display: block; margin-top: 4px; font-size: var(--fs-small); color: var(--color-ink-soft); }
+
+/* 후원자 셀프서비스 링크 */
+.mrm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.mrm-link {
+  display: flex; align-items: center; gap: 14px;
+  background: #fff; border: 1px solid var(--color-line);
+  border-radius: var(--radius); padding: 18px 20px;
+  min-height: 76px;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.mrm-link:hover, .mrm-link:focus-visible {
+  transform: translateY(-3px); box-shadow: var(--shadow);
+  border-color: var(--color-primary);
+}
+.mrm-ic {
+  flex: 0 0 44px; width: 44px; height: 44px; border-radius: 13px;
+  display: grid; place-items: center; font-size: 1.3rem;
+  background: var(--color-primary-light);
+}
+.mrm-txt { flex: 1 1 auto; min-width: 0; }
+.mrm-txt strong { display: block; font-size: 1.02rem; margin-bottom: 3px; }
+.mrm-txt span { display: block; font-size: 0.86rem; color: var(--color-ink-soft); line-height: 1.5; }
+.mrm-go { flex: none; color: var(--color-primary); font-weight: 700; }
+.mrm-help {
+  margin-top: var(--space-5); text-align: center;
+  font-size: var(--fs-small); color: var(--color-ink-soft);
+}
+.mrm-help a { color: var(--color-primary-dark); text-decoration: underline; }
+
+@media (max-width: 1023px) {
+  .donate-ways { grid-template-columns: 1fr; }
+  .mrm-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .mrm-grid { grid-template-columns: 1fr; }
+  .donate-way { padding: 22px 18px; }
+  .donate-way h3 { font-size: 1.2rem; }
+  .mrm-help a { display: inline-block; padding: 4px 0; }
+}

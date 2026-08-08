@@ -6,7 +6,7 @@
   <title>후원하기 | 또봄 한국청년암협회</title>
   <meta name="description" content="정기·일시 후원으로 청년 암 경험자의 봄을 함께 피워주세요. 후원금은 투명하게 공개되고 기부금영수증이 발급됩니다." />
   <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260808b" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260808c" />
 </head>
 <body>
   <a href="#main" class="skip-link">본문 바로가기</a>
@@ -24,7 +24,7 @@
         <a href="donate.html" aria-current="page">후원하기</a>
       </nav>
       <div class="header__cta">
-        <a href="#donateForm" class="btn btn--secondary btn--text-hide"><svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>바로 후원</a>
+        <a href="#start" class="btn btn--secondary btn--text-hide"><svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>바로 후원</a>
         <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="gnb">
           <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
         </button>
@@ -75,99 +75,87 @@
           </a>
         </div>
 
-        <!-- 후원 폼 -->
-        <form class="donate-box" id="donateForm" novalidate>
-          <h2 style="text-align:center; margin-bottom:8px">후원 신청</h2>
-          <p style="text-align:center; color:var(--color-ink-soft); margin-bottom:24px">
-            3분이면 충분합니다. 청년의 봄에 함께해 주세요.
-          </p>
+        <!-- ===== 후원 시작 =====
+             실제 후원 접수·결제는 또봄 후원관리시스템(HSIT MRM)에서 처리한다.
+             이 페이지는 안내와 진입점만 담당하고 개인정보를 직접 수집하지 않는다. -->
+        <div class="section-head" id="start" style="margin:8px auto 24px">
+          <span class="eyebrow">JOIN</span>
+          <h2>후원 시작하기</h2>
+          <p>3분이면 충분합니다. 청년의 봄에 함께해 주세요.</p>
+        </div>
 
-          <!-- 정기 / 일시 (홈의 '일시 후원하기'가 #once로 들어오면 main.js가 일시를 선택한다) -->
-          <fieldset id="once" style="border:0; padding:0; margin:0 0 20px">
-            <legend class="sr-only">후원 유형 선택</legend>
-            <div class="toggle-group" role="radiogroup">
-              <input type="radio" name="type" id="typeRegular" value="regular" checked />
-              <label for="typeRegular">정기 후원</label>
-              <input type="radio" name="type" id="typeOnce" value="once" />
-              <label for="typeOnce">일시 후원</label>
-            </div>
-          </fieldset>
-
-          <!-- 후원 방식: 무기명 / 기명(로그인) -->
-          <fieldset style="border:0; padding:0; margin:0 0 16px">
-            <legend style="font-weight:700; margin-bottom:8px">후원 방식</legend>
-            <div class="toggle-group" role="radiogroup">
-              <input type="radio" name="mode" id="modeAnon" value="anon" checked />
-              <label for="modeAnon">무기명 후원</label>
-              <input type="radio" name="mode" id="modeNamed" value="named" />
-              <label for="modeNamed">로그인하고 후원</label>
-            </div>
-            <p class="hint" id="modeHint" style="margin-top:8px">무기명 후원은 로그인 없이 후원하실 수 있어요. (기부금영수증 발급은 어렵습니다.)</p>
-          </fieldset>
-
-          <!-- 로그인 수단 (기명 선택 시 노출) -->
-          <fieldset id="loginProviders" hidden style="border:0; padding:0; margin:0 0 20px">
-            <legend style="font-weight:700; margin-bottom:8px">로그인 방법 선택</legend>
-            <div class="provider-grid">
-              <button type="button" class="provider-btn p-google" data-provider="구글"><span class="p-mark" aria-hidden="true">G</span> 구글로 로그인</button>
-              <button type="button" class="provider-btn p-kakao" data-provider="카카오"><span class="p-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.3L7 21l1-3.4A8 8 0 1 1 21 11.5Z"/></svg></span> 카카오로 로그인</button>
-              <button type="button" class="provider-btn p-apple" data-provider="애플"><span class="p-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 13c0-2.2 1.6-3.2 1.7-3.3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.5 2 2.5 2 1 0 1.4-.6 2.6-.6s1.5.6 2.6.6 1.7-1 2.4-1.9c.7-1.1 1-2.1 1-2.2 0 0-1.9-.8-2-3Z"/><path d="M14.5 6.3c.5-.7.9-1.6.8-2.6-.8 0-1.8.5-2.4 1.2-.5.6-1 1.6-.8 2.5.9.1 1.8-.4 2.4-1.1Z"/></svg></span> 애플로 로그인</button>
-              <button type="button" class="provider-btn p-phone" data-provider="휴대폰 번호"><span class="p-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg></span> 휴대폰 번호로 로그인</button>
-              <button type="button" class="provider-btn p-email" data-provider="이메일"><span class="p-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg></span> 이메일로 로그인</button>
-            </div>
-            <p class="hint">로그인하면 후원 내역 관리와 기부금영수증 발급이 가능합니다.</p>
-          </fieldset>
-
-          <!-- 금액 -->
-          <fieldset style="border:0; padding:0; margin:0">
-            <legend style="font-weight:700; margin-bottom:8px">후원 금액</legend>
-            <div class="amount-grid">
-              <button type="button" data-amount="10000">1만원</button>
-              <button type="button" data-amount="30000" aria-pressed="true">3만원</button>
-              <button type="button" data-amount="50000">5만원</button>
-              <button type="button" data-amount="100000">10만원</button>
-              <button type="button" data-amount="200000">20만원</button>
-              <button type="button" data-amount="">직접입력</button>
-            </div>
-            <div class="field" style="margin-top:12px">
-              <label for="customAmount">후원 금액 (원)</label>
-              <input type="text" id="customAmount" name="amount" inputmode="numeric" value="30,000" autocomplete="off" />
-            </div>
-          </fieldset>
-
-          <div class="field">
-            <label for="donorName">이름 <span style="font-weight:400; color:var(--color-ink-soft)">(무기명 후원 시 생략 가능)</span></label>
-            <input type="text" id="donorName" name="donorName" autocomplete="name" />
-          </div>
-          <div class="field">
-            <label for="donorPhone">연락처 <span style="font-weight:400; color:var(--color-ink-soft)">(선택)</span></label>
-            <input type="tel" id="donorPhone" name="donorPhone" autocomplete="tel" placeholder="010-0000-0000" />
-            <p class="hint">후원 안내 및 기부금영수증 발급을 위해 사용됩니다.</p>
-          </div>
-          <div class="field" id="receiptField" hidden>
-            <label for="receipt">기부금영수증 발급</label>
-            <select id="receipt" name="receipt">
-              <option value="no">신청 안 함</option>
-              <option value="yes">신청함 (연말정산용)</option>
-            </select>
-            <p class="hint">기부금영수증은 로그인(기명) 후원 시 발급할 수 있습니다.</p>
+        <div class="donate-ways">
+          <div class="donate-way donate-way--primary">
+            <span class="dw-badge">가장 큰 힘이 됩니다</span>
+            <h3><span aria-hidden="true">💚</span> 정기후원</h3>
+            <p>매달 일정 금액으로 청년의 곁을 꾸준히 지켜주세요. 안정적인 지원이 가능해집니다.</p>
+            <a class="btn btn--secondary btn--lg" href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=join" target="_blank" rel="noopener noreferrer">
+              정기후원 신청하기 <span aria-hidden="true">↗</span><span class="sr-only">(새 창)</span>
+            </a>
+            <p class="dw-note">또봄 후원관리시스템으로 이동합니다. 기부금영수증 발급이 가능합니다.</p>
           </div>
 
-          <div class="field check-row">
-            <input type="checkbox" id="agree" name="agree" required />
-            <label for="agree" style="font-weight:400">
-              <a href="policy.html#privacy" target="_blank" rel="noopener" style="color:var(--color-primary-dark); text-decoration:underline">개인정보 수집·이용</a> 및
-              후원 약관에 동의합니다. (필수)
-            </label>
+          <div class="donate-way">
+            <h3><span aria-hidden="true">🌱</span> 일시후원</h3>
+            <p>한 번의 마음도 큰 힘이 됩니다. 아래 계좌로 보내주세요.</p>
+            <div class="dw-account">
+              <strong>SC제일은행 202-20-132734</strong>
+              <span>예금주 · 사단법인 한국청년암협회또봄</span>
+            </div>
+            <p class="dw-note">
+              기부금영수증이 필요하시면 입금 후
+              <a href="mailto:help@kyca.or.kr">help@kyca.or.kr</a>로
+              성함·연락처를 알려주세요.
+            </p>
           </div>
+        </div>
 
-          <button type="submit" class="btn btn--secondary btn--lg" style="width:100%; margin-top:8px">
-            <svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>후원 신청하기
-          </button>
-          <p class="hint" style="text-align:center; margin-top:14px">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> 실제 서비스에서는 안전한 결제(PG)로 진행됩니다. <br />본 화면은 1차 초안 데모입니다.
-          </p>
-        </form>
+        <!-- ===== 후원자 서비스 ===== -->
+        <div class="section-head" id="mypage" style="margin:64px auto 24px">
+          <span class="eyebrow">MY DONATION</span>
+          <h2>이미 후원하고 계신가요?</h2>
+          <p>납부내역 확인부터 기부금영수증 발급까지, 후원관리시스템에서 직접 하실 수 있습니다.</p>
+        </div>
+
+        <div class="mrm-grid">
+          <a class="mrm-link" href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=list" target="_blank" rel="noopener noreferrer">
+            <span class="mrm-ic" aria-hidden="true">📋</span>
+            <span class="mrm-txt"><strong>납부내역 확인</strong><span>그동안의 후원 내역을 봅니다</span></span>
+            <span class="mrm-go" aria-hidden="true">↗</span><span class="sr-only">(새 창)</span>
+          </a>
+          <a class="mrm-link" href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=receipt" target="_blank" rel="noopener noreferrer">
+            <span class="mrm-ic" aria-hidden="true">🧾</span>
+            <span class="mrm-txt"><strong>기부금영수증 발급</strong><span>연말정산용 영수증을 발급합니다</span></span>
+            <span class="mrm-go" aria-hidden="true">↗</span><span class="sr-only">(새 창)</span>
+          </a>
+          <a class="mrm-link" href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=receiptonly" target="_blank" rel="noopener noreferrer">
+            <span class="mrm-ic" aria-hidden="true">🔎</span>
+            <span class="mrm-txt"><strong>기부금영수증 조회</strong><span>발급된 영수증을 다시 봅니다</span></span>
+            <span class="mrm-go" aria-hidden="true">↗</span><span class="sr-only">(새 창)</span>
+          </a>
+          <a class="mrm-link" href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=incdonation" target="_blank" rel="noopener noreferrer">
+            <span class="mrm-ic" aria-hidden="true">📈</span>
+            <span class="mrm-txt"><strong>후원 증액</strong><span>후원 금액을 늘립니다</span></span>
+            <span class="mrm-go" aria-hidden="true">↗</span><span class="sr-only">(새 창)</span>
+          </a>
+          <a class="mrm-link" href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=receiptedit" target="_blank" rel="noopener noreferrer">
+            <span class="mrm-ic" aria-hidden="true">✏️</span>
+            <span class="mrm-txt"><strong>기부자 정보 수정</strong><span>연락처·주소 등을 변경합니다</span></span>
+            <span class="mrm-go" aria-hidden="true">↗</span><span class="sr-only">(새 창)</span>
+          </a>
+          <a class="mrm-link" href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=info" target="_blank" rel="noopener noreferrer">
+            <span class="mrm-ic" aria-hidden="true">👤</span>
+            <span class="mrm-txt"><strong>내 후원 정보</strong><span>로그인 후 전체 정보를 봅니다</span></span>
+            <span class="mrm-go" aria-hidden="true">↗</span><span class="sr-only">(새 창)</span>
+          </a>
+        </div>
+
+        <p class="mrm-help">
+          로그인이 처음이신가요?
+          <a href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=certify" target="_blank" rel="noopener noreferrer">아이디 만들기</a> ·
+          <a href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=searchid" target="_blank" rel="noopener noreferrer">아이디 찾기</a> ·
+          <a href="https://mrmweb.hsit.co.kr/v2/default.aspx?Server=/giPBHF1RD0ftO38X%2BJ/iw==&amp;action=searchpwd" target="_blank" rel="noopener noreferrer">비밀번호 찾기</a>
+        </p>
 
         <!-- 신뢰 / 투명성 -->
         <div class="section-head" style="margin:64px auto 24px">
@@ -188,7 +176,7 @@
           <div class="value">
             <div class="ic is-3" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
             <h3>안전한 결제</h3>
-            <p>검증된 결제 시스템으로 후원 정보를 안전하게 보호합니다.</p>
+            <p>전문 후원관리시스템에서 후원 정보를 안전하게 처리합니다.</p>
           </div>
           <div class="value">
             <div class="ic is-4" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6Z"/><path d="M9 12l2 2 4-4"/></svg></div>
@@ -260,6 +248,6 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js?v=20260808b"></script>
+  <script src="assets/js/main.js?v=20260808c"></script>
 </body>
 </html>
