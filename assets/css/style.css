@@ -2376,3 +2376,77 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .news-list { grid-template-columns: 1fr; }
   .news-thumb { aspect-ratio: 16 / 9; }
 }
+
+/* ===================================================================
+   58. 가로 스크롤 캐러셀 (또봄활동 · 또봄 소식)
+   세로로 길어지지 않도록 옆으로 넘겨 보게 한다.
+   터치·트랙패드는 그대로 스와이프, 마우스 사용자를 위해 좌우 버튼을 둔다.
+   =================================================================== */
+.hscroll { position: relative; }
+.hscroll__track {
+  display: flex; gap: var(--space-5);
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; scroll-behavior: smooth;
+  padding: 4px 4px 18px;
+  scrollbar-width: thin;
+}
+.hscroll__track > * { flex: 0 0 min(78%, 300px); scroll-snap-align: start; }
+.hscroll__track::-webkit-scrollbar { height: 8px; }
+.hscroll__track::-webkit-scrollbar-thumb { background: #d8e2dd; border-radius: 4px; }
+.hscroll__track::-webkit-scrollbar-track { background: transparent; }
+
+.hscroll__btn {
+  position: absolute; top: 42%; z-index: 3;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; border: 1px solid var(--color-line);
+  box-shadow: var(--shadow); display: grid; place-items: center;
+  transition: background 0.15s, transform 0.15s, opacity 0.2s;
+}
+.hscroll__btn svg { width: 22px; height: 22px; stroke: var(--color-ink); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.hscroll__btn:hover { background: var(--color-primary-light); transform: scale(1.06); }
+.hscroll__btn--prev { left: -18px; }
+.hscroll__btn--next { right: -18px; }
+.hscroll__hint { text-align: center; color: #6b7772; font-size: 0.82rem; margin-top: -6px; }
+.news-more { text-align: center; margin-top: var(--space-4); }
+
+/* 캐러셀 안에서는 카드가 같은 높이로 */
+.hscroll__track .card, .hscroll__track .news-item { height: auto; display: flex; flex-direction: column; }
+.hscroll__track .card__body, .hscroll__track .news-body { flex: 1 1 auto; }
+
+@media (max-width: 1279px) { .hscroll__btn { display: none; } }
+@media (max-width: 767px) {
+  .hscroll__track { gap: var(--space-4); }
+  .hscroll__track > * { flex-basis: min(84%, 280px); }
+}
+
+/* ===================================================================
+   59. 소식 게시판 (news.html)
+   =================================================================== */
+.board { display: grid; gap: var(--space-4); }
+.board-item {
+  display: grid; grid-template-columns: 132px 1fr auto; gap: var(--space-5);
+  align-items: center;
+  background: #fff; border: 1px solid var(--color-line);
+  border-radius: var(--radius); padding: var(--space-4) var(--space-5);
+  box-shadow: var(--shadow-sm); transition: box-shadow 0.18s, transform 0.18s;
+}
+.board-item:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.board-thumb { width: 132px; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; background: var(--color-bg-soft); }
+.board-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.board-body { min-width: 0; display: block; }
+.board-body .tag {
+  display: inline-block; font-size: 0.76rem; font-weight: 700;
+  color: var(--color-secondary-dark); background: #fff1ec;
+  padding: 3px 10px; border-radius: var(--radius-pill);
+}
+.board-body strong { display: block; font-size: 1.05rem; margin: 8px 0 5px; line-height: 1.45; color: var(--color-ink); }
+.board-desc { display: block; font-size: 0.9rem; color: var(--color-ink-soft); line-height: 1.6; }
+.board-item time { font-size: var(--fs-small); color: #8d9a94; white-space: nowrap; }
+.board-note { margin-top: var(--space-6); text-align: center; font-size: var(--fs-small); color: var(--color-ink-soft); }
+.board-note a { color: var(--color-primary-dark); text-decoration: underline; }
+
+@media (max-width: 767px) {
+  .board-item { grid-template-columns: 92px 1fr; gap: var(--space-4); }
+  .board-thumb { width: 92px; }
+  .board-item time { grid-column: 2; }
+}

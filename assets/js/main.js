@@ -100,6 +100,23 @@
     }
   }
 
+
+  /* ---------- 가로 스크롤 캐러셀 (또봄활동 · 소식) ----------
+     스크롤 이벤트에 기대어 버튼을 비활성화하면, 그 이벤트가 오지 않는 환경에서
+     '이전' 버튼이 잠겨 되돌아갈 수 없다. 화살표는 항상 눌리게 두고
+     끝에서는 아무 일도 일어나지 않도록 둔다. */
+  document.querySelectorAll("[data-hscroll]").forEach(function (wrap) {
+    var track = wrap.querySelector(".hscroll__track");
+    if (!track) return;
+    wrap.querySelectorAll(".hscroll__btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var card = track.firstElementChild;
+        var step = card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+        track.scrollBy({ left: step * Number(b.dataset.dir), behavior: "smooth" });
+      });
+    });
+  });
+
   /* ---------- 숫자 카운터 ---------- */
   var counters = document.querySelectorAll("[data-count]");
   if (counters.length) {
