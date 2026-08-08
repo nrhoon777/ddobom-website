@@ -1926,3 +1926,24 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 @media (max-width: 767px) {
   .lang-switch { min-width: 40px; min-height: 36px; padding: 0 9px; font-size: 0.8rem; }
 }
+
+/* ===================================================================
+   50. '국내 최초' 강조 배지 + 현실 카드 보조 문구
+   =================================================================== */
+.first-badge {
+  display: inline-block;
+  background: var(--color-secondary); color: #fff;
+  font-weight: 800; font-size: 0.88em;
+  padding: 3px 12px; border-radius: var(--radius-pill);
+  letter-spacing: -0.01em; white-space: nowrap;
+}
+.page-hero .first-badge, .section-head .first-badge { margin-bottom: 6px; }
+
+.reality-note {
+  margin-top: 8px; font-size: 0.88rem; line-height: 1.6;
+  color: var(--color-ink-soft);
+}
+.reality-note strong { color: #d85a1d; font-weight: 800; }
+
+/* 히어로 수치만 있는 카드는 위아래 여백을 조금 더 준다 */
+.reality-card .reality-hero { margin-top: 6px; }
