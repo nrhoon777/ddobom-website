@@ -2293,3 +2293,31 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .an-quote { font-size: 1.35rem; }
   .season { max-width: 360px; }
 }
+
+/* ===================================================================
+   56. 소개 페이지 미세 조정 (2026-08-09 · 2차)
+   =================================================================== */
+
+/* 편견 블록 — 제목을 밑줄로 주목시키고, 행은 순차로 등장 */
+.whyblock__q .mark {
+  position: relative; color: var(--color-ink); font-weight: 800;
+  background-image: linear-gradient(#f7ded0, #f7ded0);
+  background-repeat: no-repeat; background-position: 0 88%;
+  background-size: 0 42%;
+  transition: background-size 0.7s cubic-bezier(.2,.7,.3,1) 0.2s;
+}
+.reveal.in .whyblock__q .mark { background-size: 100% 42%; }
+.whyblock__list li { transition: opacity .55s ease, transform .55s ease; }
+
+/* 90% 설명 — 세 줄로 딱 떨어지게 */
+.bias-lines span { display: block; }
+.bias-lines span + span { margin-top: 4px; }
+
+/* 이름 섹션 */
+.an-lead { font-size: 1.02rem; color: rgba(255,255,255,0.75); margin-bottom: var(--space-5); }
+.an-mean__k { letter-spacing: 0.04em; }
+
+@media (max-width: 767px) {
+  .bias-lines span { display: inline; }
+  .bias-lines span + span::before { content: " "; }
+}
