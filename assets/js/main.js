@@ -103,11 +103,16 @@
   /* ---------- 숫자 카운터 ---------- */
   var counters = document.querySelectorAll("[data-count]");
   if (counters.length) {
+    /* data-dec="1"이면 소수 첫째 자리까지 세어 올린다 (70.6 / 30.5 / 69.5) */
     var setVal = function (el, v) {
-      el.textContent = v.toLocaleString("ko-KR") + (el.dataset.suffix || "");
+      var d = parseInt(el.dataset.dec || "0", 10);
+      var txt = d > 0
+        ? v.toFixed(d)
+        : Math.round(v).toLocaleString("ko-KR");
+      el.textContent = txt + (el.dataset.suffix || "");
     };
     if (reduceMotion || !("IntersectionObserver" in window)) {
-      counters.forEach(function (el) { setVal(el, parseInt(el.dataset.count, 10)); });
+      counters.forEach(function (el) { setVal(el, parseFloat(el.dataset.count)); });
     } else {
       var cio = new IntersectionObserver(
         function (entries) {
@@ -115,17 +120,21 @@
             if (!en.isIntersecting) return;
             var el = en.target;
             cio.unobserve(el);
-            var target = parseInt(el.dataset.count, 10);
-            var dur = 1300, t0 = null;
+            var target = parseFloat(el.dataset.count);
+            var dur = 1300, t0 = null, done = false;
+            var finish = function () { if (!done) { done = true; setVal(el, target); } };
             var step = function (ts) {
+              if (done) return;
               if (!t0) t0 = ts;
               var p = Math.min((ts - t0) / dur, 1);
               var eased = 1 - Math.pow(1 - p, 3);
-              setVal(el, Math.floor(eased * target));
-              if (p < 1) requestAnimationFrame(step);
-              else setVal(el, target);
+              if (p < 1) { setVal(el, eased * target); requestAnimationFrame(step); }
+              else finish();
             };
             requestAnimationFrame(step);
+            /* 통계 페이지라 중간값이 남으면 '틀린 수치'가 된다.
+               rAF가 멈추더라도 최종값은 반드시 찍히도록 타이머로 못 박는다. */
+            setTimeout(finish, dur + 500);
           });
         },
         { threshold: 0.5 }

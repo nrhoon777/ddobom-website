@@ -2136,3 +2136,133 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .tp-facts b { font-size: 1.3rem; }
   .tp-block__media { gap: var(--space-3); }
 }
+
+/* ===================================================================
+   55. 소개 페이지 정밀 조정 (2026-08-09)
+   통계 6장을 하나의 흐름으로 · 이름의 두 가지 의미 · 로고 사계절 · 빙산 그림
+   =================================================================== */
+
+/* ---------- 흐름형 인포그래픽: 많이 걸린다 → 살아남는다 → 못 돌아간다 ---------- */
+.flow {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  list-style: none; margin: var(--space-7) 0 0; padding: 0;
+  counter-reset: fl;
+}
+.flow__step {
+  position: relative; padding: var(--space-6) var(--space-5);
+  background: #fff; border: 1px solid var(--color-line);
+  border-right-width: 0;
+}
+.flow__step:first-child { border-radius: var(--radius-lg) 0 0 var(--radius-lg); }
+.flow__step:last-child { border-right-width: 1px; border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+/* 단계 사이 화살표 */
+.flow__step + .flow__step::before {
+  content: ""; position: absolute; left: -9px; top: 50%;
+  width: 16px; height: 16px; margin-top: -8px;
+  background: #fff; border-top: 1px solid var(--color-line); border-right: 1px solid var(--color-line);
+  transform: rotate(45deg); z-index: 2;
+}
+.flow__step--hi { background: #fffaf7; border-color: #f0cdb6; }
+.flow__step--hi + .flow__step::before, .flow__step--hi::before { background: #fffaf7; }
+
+.flow__no {
+  display: inline-grid; place-items: center; width: 26px; height: 26px;
+  border-radius: 50%; background: var(--color-primary-light); color: var(--color-primary-dark);
+  font-weight: 800; font-size: 0.82rem; margin-bottom: 10px;
+}
+.flow__step--hi .flow__no { background: #f7ded0; color: #d85a1d; }
+.flow__label { font-size: 1rem; font-weight: 800; color: var(--color-ink); margin-bottom: 6px; }
+.flow__num { display: flex; align-items: baseline; gap: 2px; margin-bottom: 8px; }
+.flow__num b { font-size: clamp(2.4rem, 5vw, 3rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: var(--color-primary-dark); }
+.flow__num i { font-style: normal; font-size: 1.15rem; font-weight: 700; color: var(--color-primary-dark); }
+.flow__step--hi .flow__num b, .flow__step--hi .flow__num i { color: #d85a1d; }
+.flow__sub { font-size: 0.92rem; color: var(--color-ink-soft); line-height: 1.65; }
+.flow__sub span { display: block; margin-top: 4px; font-size: 0.85rem; color: #8d9a94; }
+.flow__sub b { color: var(--color-ink); font-weight: 700; }
+.flow__src { margin-top: 12px; text-align: right; font-size: 0.76rem; color: #8d9a94; }
+
+/* 유럽 vs 한국 미니 바 */
+.flow__bars { margin-top: var(--space-4); display: grid; gap: 7px; }
+.fb { display: grid; grid-template-columns: 34px 1fr 34px; align-items: center; gap: 8px; }
+.fb__t { font-size: 0.78rem; color: var(--color-ink-soft); }
+.fb__track { height: 10px; border-radius: 5px; background: #eef2f0; overflow: hidden; }
+.fb__track i { display: block; height: 100%; width: var(--w); border-radius: 5px; background: #c8d3ce;
+}
+.fb--hi .fb__track i { background: #d85a1d; }
+.fb__v { font-size: 0.8rem; font-weight: 800; color: var(--color-ink); text-align: right; }
+
+/* ---------- 왜 못 돌아가는가 (편견) ---------- */
+.whyblock {
+  margin-top: var(--space-6); background: #fff;
+  border: 1px solid var(--color-line); border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-7); box-shadow: var(--shadow-sm);
+}
+.whyblock__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); }
+.whyblock__q { font-size: 1.15rem; color: var(--color-ink-soft); }
+.whyblock__q strong { color: var(--color-ink); font-weight: 800; }
+.whyblock__hero { display: flex; align-items: baseline; gap: 3px; }
+.wb-num { font-size: clamp(2.2rem, 5vw, 2.8rem); font-weight: 800; line-height: 1; color: #d85a1d; letter-spacing: -0.03em; }
+.wb-unit { font-size: 1.15rem; font-weight: 700; color: #d85a1d; }
+.wb-cap { margin-left: 10px; font-size: 0.9rem; color: var(--color-ink-soft); align-self: center; }
+.whyblock__list { display: grid; gap: 10px; }
+.whyblock__list li { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 12px; }
+.wb-bar { grid-column: 1 / -1; order: 2; height: 9px; border-radius: 5px; background: #eef2f0; overflow: hidden; }
+.wb-bar i { display: block; height: 100%; width: var(--w); border-radius: 5px; background: #d85a1d;
+}
+.wb-txt { order: 1; font-size: 0.95rem; color: var(--color-ink); }
+.whyblock__list b { order: 1; font-size: 0.95rem; font-weight: 800; color: #d85a1d; }
+.whyblock__src { margin-top: var(--space-4); text-align: right; font-size: 0.76rem; color: #8d9a94; }
+.whyblock__src span { color: #aab5b0; }
+
+/* ---------- 90% 이상 ---------- */
+.bh-over { align-self: center; margin-left: 6px; font-size: 1rem; font-weight: 700; color: #d85a1d; }
+
+/* ---------- 빙산 ---------- */
+.iceberg__art { width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto var(--space-5); border-radius: var(--radius); }
+.ib-lb { font-size: 11px; fill: #2f6b60; font-family: var(--font-base); font-weight: 700; }
+.ib-lb--sea { fill: #ffffff; }
+.iceberg__by { margin-top: 16px; text-align: right; font-style: italic; font-size: var(--fs-small); color: var(--color-ink-soft); }
+
+/* ---------- 이름의 두 가지 의미 ---------- */
+.an-two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); max-width: 860px; margin: var(--space-6) auto 0; text-align: left; }
+.an-mean { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: var(--radius-lg); padding: var(--space-5) var(--space-6); }
+.an-mean__k { font-family: var(--font-point); font-size: 1.05rem; color: var(--brand-mint); margin-bottom: 2px; }
+.an-mean__t { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 10px; }
+.an-mean__t em { font-style: normal; }
+.an-mean__d { font-size: 0.95rem; line-height: 1.8; color: rgba(255,255,255,0.82); }
+.an-mean__d strong { color: #fff; font-weight: 700; }
+
+/* ---------- 로고 사계절 ---------- */
+.an-logo { max-width: 860px; margin: var(--space-7) auto 0; text-align: left; }
+.an-logo__lead { text-align: center; font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,0.85); margin-bottom: var(--space-5); }
+.an-logo__lead strong { color: #fff; }
+.season { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); list-style: none; padding: 0; margin: 0; }
+.season__it { text-align: center; }
+.season__box { display: block; width: 46px; height: 46px; margin: 0 auto 12px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.35); }
+.s-summer .season__box { background: #3f8edc; }
+.s-fall   .season__box { background: #f06f2c; }
+.s-winter .season__box { background: #8455c9; }
+.s-spring .season__box { background: #17b39a; }
+.season__it b { display: block; font-size: 1.05rem; color: #fff; margin-bottom: 4px; }
+.season__it span { display: block; font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.72); }
+
+@media (max-width: 1023px) {
+  .flow { grid-template-columns: 1fr; }
+  .flow__step { border-right-width: 1px; border-bottom-width: 0; }
+  .flow__step:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .flow__step:last-child { border-bottom-width: 1px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+  .flow__step + .flow__step::before { left: 50%; top: -9px; margin: 0 0 0 -8px; transform: rotate(135deg); }
+  .an-two { grid-template-columns: 1fr; }
+  .season { grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+}
+@media (max-width: 767px) {
+  .flow__step { padding: 22px 20px; }
+  .whyblock { padding: 22px 18px; }
+  .whyblock__head { flex-direction: column; align-items: flex-start; }
+  .an-mean { padding: 20px 18px; }
+  .flow__src, .whyblock__src { text-align: left; }
+}
+
+/* 막대는 애니메이션 없이 항상 정확한 폭으로 그린다.
+   모션은 블록 전체의 리빌(페이드·슬라이드)과 숫자 카운트업이 담당한다.
+   — 트랜지션/애니메이션에 폭을 맡기면 그것이 멈췄을 때 막대가 사라진다. */
