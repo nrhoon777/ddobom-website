@@ -1898,3 +1898,31 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .org-facts > div { grid-template-columns: 68px 1fr; gap: 10px; }
   .org-purpose { padding: 22px 18px; }
 }
+
+/* ===================================================================
+   49. 한국어 / 영문 전환
+   =================================================================== */
+.lang-switch {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 44px; min-height: 40px; padding: 0 12px;
+  border: 1.5px solid var(--color-line); border-radius: 8px;
+  font-weight: 800; font-size: 0.86rem; letter-spacing: 0.04em;
+  color: var(--color-ink-soft); background: #fff;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.lang-switch:hover, .lang-switch:focus-visible {
+  border-color: var(--color-primary); color: var(--color-primary-dark);
+  background: var(--color-primary-light); text-decoration: none;
+}
+/* 영문 페이지에서 한국어로만 제공되는 링크 표시 */
+.lang-tag {
+  display: inline-block; margin-left: 6px; padding: 1px 6px;
+  border: 1px solid rgba(255,255,255,0.28); border-radius: 4px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em;
+  color: #9fb0a8; vertical-align: 2px;
+}
+.footer__note { margin-top: var(--space-3); font-size: 0.78rem; color: #8d9a94; line-height: 1.6; }
+
+@media (max-width: 767px) {
+  .lang-switch { min-width: 40px; min-height: 36px; padding: 0 9px; font-size: 0.8rem; }
+}
