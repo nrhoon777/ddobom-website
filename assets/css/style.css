@@ -2040,3 +2040,12 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 @media (max-width: 767px) {
   .rp-year { min-width: 480px; }
 }
+
+/* 현물기부 안내 — 같은 페이지의 두 수치가 왜 다른지 짚어준다 */
+.rp-note--inkind {
+  margin-top: 14px;
+  background: #fff8e8; border-color: #f3dfae; border-left: 4px solid var(--color-warning);
+  color: #6b5320;
+}
+.rp-note--inkind strong { color: #55411a; }
+.rp-note--inkind a { color: #6b5320; text-decoration: underline; }
