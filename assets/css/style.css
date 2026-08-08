@@ -2017,3 +2017,26 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   font-size: 1.1rem; font-weight: 700; color: #d85a1d;
   margin-right: 6px; align-self: center;
 }
+
+/* ===================================================================
+   52. 연도별 공시 아카이브 (reports.html)
+   =================================================================== */
+.rp-chart-wrap { margin: 0; }
+.rp-chart { width: 100%; max-width: 560px; height: auto; margin: 0 auto; display: block; }
+.rp-bval { font-size: 10px; font-weight: 800; fill: var(--color-ink); font-family: var(--font-base); }
+.rp-bcat { font-size: 10px; fill: var(--color-ink-soft); font-family: var(--font-base); }
+.rp-chart-wrap figcaption {
+  margin-top: 10px; text-align: center;
+  font-size: var(--fs-small); color: var(--color-ink-soft);
+}
+.rp-unit { color: #8d9a94; font-size: 0.9em; }
+.rp-year th[scope="row"] { font-weight: 800; color: var(--color-ink); white-space: nowrap; }
+.rp-year td { text-align: right; font-variant-numeric: tabular-nums; color: var(--color-ink); }
+.rp-year thead th:not(:first-child) { text-align: right; }
+.ry-note { display: block; font-weight: 600; font-size: 0.78rem; color: #8d9a94; }
+.rp-src { margin-top: 14px; font-size: var(--fs-small); color: #8d9a94; line-height: 1.7; }
+.rp-src a { color: var(--color-primary-dark); text-decoration: underline; }
+
+@media (max-width: 767px) {
+  .rp-year { min-width: 480px; }
+}
