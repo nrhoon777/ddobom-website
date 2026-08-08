@@ -1582,3 +1582,47 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .gnb.is-open { transform: translateY(0); }
   .gnb a { border-radius: 8px; padding: 14px 16px; font-size: 1.05rem; }
 }
+
+/* ===================================================================
+   43. 푸터 — 기부금품 공시 감독기관 링크 (법정 표기)
+   「기부금품의 모집 및 사용에 관한 법률」 등록청(서울특별시)과
+   국세청 홈택스 공익법인 공시로 연결한다.
+   =================================================================== */
+.footer__oversight {
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  text-align: center;
+}
+.footer__oversight-label {
+  font-size: var(--fs-small);
+  color: #9fb0a8;
+  margin-bottom: var(--space-4);
+}
+.footer__oversight-links {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+}
+.footer__oversight-links a {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 46px; padding: 11px 26px;
+  border: 1.5px solid var(--color-lime, #dcff50);
+  border-radius: var(--radius-sm);
+  color: var(--color-lime, #dcff50);
+  font-weight: 700; font-size: 0.95rem;
+  transition: background 0.15s, color 0.15s;
+}
+.footer__oversight-links a:hover,
+.footer__oversight-links a:focus-visible {
+  background: var(--color-lime, #dcff50);
+  color: #16241a;
+  text-decoration: none;
+}
+.footer__oversight-links a span[aria-hidden] { font-size: 0.85em; }
+
+/* 공시 블록이 생겼으므로 아래 저작권 줄의 윗선은 중복 */
+.footer__oversight + .footer__bottom { border-top: 0; margin-top: var(--space-5); padding-top: 0; }
+
+@media (max-width: 767px) {
+  .footer__oversight-links { flex-direction: column; }
+  .footer__oversight-links a { justify-content: center; }
+}
