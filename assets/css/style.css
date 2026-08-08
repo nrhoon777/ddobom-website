@@ -2078,3 +2078,61 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .poster figcaption b { font-size: 0.9rem; }
   .poster figcaption span { font-size: 0.76rem; }
 }
+
+/* ===================================================================
+   54. 여행 프로젝트 (앎 캠페인) — 포토북 · 함께 떠난 여행
+   또봄의 시작이자 메인 프로젝트라 글과 이미지를 나란히 놓는다.
+   =================================================================== */
+.tp-block { display: grid; grid-template-columns: 1fr 1.05fr; gap: var(--space-7); align-items: center; }
+.tp-block--rev .tp-block__text { order: 2; }
+.tp-block--rev .tp-block__media { order: 1; }
+
+.tp-tag {
+  display: inline-block; font-family: var(--font-point); font-size: 0.84rem;
+  color: var(--color-secondary-dark); background: #fff1ec;
+  padding: 6px 14px; border-radius: var(--radius-pill); margin-bottom: var(--space-3);
+}
+.tp-block__text h3 { font-size: clamp(1.35rem, 3vw, 1.75rem); line-height: 1.35; margin-bottom: var(--space-4); }
+.tp-block__text p { color: var(--color-ink-soft); line-height: 1.8; margin-bottom: var(--space-4); }
+.tp-block__text strong { color: var(--color-ink); }
+.tp-block__text em { color: var(--color-primary-dark); font-style: normal; font-weight: 700; }
+
+/* 핵심 수치 3종 */
+.tp-facts { display: flex; flex-wrap: wrap; gap: var(--space-5); margin-top: var(--space-5); }
+.tp-facts li { display: flex; flex-direction: column; }
+.tp-facts b { font-size: 1.5rem; font-weight: 800; color: var(--color-secondary-dark); line-height: 1.2; }
+.tp-facts span { font-size: 0.85rem; color: var(--color-ink-soft); margin-top: 2px; }
+
+/* 회차 목록 */
+.tp-timeline { counter-reset: tp; display: grid; gap: 10px; margin: var(--space-4) 0; list-style: none; padding: 0; }
+.tp-timeline li {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 11px 16px; background: #fff; border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm); color: var(--color-ink); font-size: 0.98rem;
+}
+.tp-timeline b { color: var(--color-primary-dark); font-weight: 800; flex: 0 0 auto; }
+.tp-timeline span {
+  margin-left: auto; font-size: 0.76rem; font-weight: 700;
+  color: var(--color-ink-soft); background: var(--color-bg-soft);
+  padding: 3px 9px; border-radius: var(--radius-pill);
+}
+.tp-note { font-size: 0.92rem; color: var(--color-ink-soft); }
+
+/* 이미지 묶음 */
+.tp-block__media { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.tp-block__media .poster img { aspect-ratio: 4 / 3; object-fit: cover; background: #f2f5f3; }
+.tp-block__media--wide { grid-template-columns: 1fr 1fr; }
+.tp-block__media--wide .poster:first-child { grid-column: 1 / -1; }
+.tp-block__media--wide .poster:first-child img { aspect-ratio: 16 / 9; }
+.tp-block__media--wide .poster:last-child img { object-fit: contain; padding: 6px; aspect-ratio: 3 / 4; }
+
+@media (max-width: 1023px) {
+  .tp-block { grid-template-columns: 1fr; gap: var(--space-6); }
+  .tp-block--rev .tp-block__text { order: 1; }
+  .tp-block--rev .tp-block__media { order: 2; }
+}
+@media (max-width: 767px) {
+  .tp-facts { gap: var(--space-4); }
+  .tp-facts b { font-size: 1.3rem; }
+  .tp-block__media { gap: var(--space-3); }
+}
