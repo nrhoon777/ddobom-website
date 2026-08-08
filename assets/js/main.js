@@ -115,6 +115,15 @@
         track.scrollBy({ left: step * Number(b.dataset.dir), behavior: "smooth" });
       });
     });
+
+    /* 카드가 전부 보이는 폭(주로 PC)에서는 화살표와 안내가 할 일이 없다.
+       판정에 실패하면 화살표가 그대로 보일 뿐이라 안전한 쪽으로 기운다. */
+    var syncStatic = function () {
+      wrap.classList.toggle("is-static", track.scrollWidth <= track.clientWidth + 4);
+    };
+    syncStatic();
+    window.addEventListener("resize", syncStatic, { passive: true });
+    window.addEventListener("load", syncStatic);
   });
 
   /* ---------- 숫자 카운터 ---------- */

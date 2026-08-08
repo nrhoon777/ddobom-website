@@ -2409,6 +2409,10 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .hscroll__hint { text-align: center; color: #6b7772; font-size: 0.82rem; margin-top: -6px; }
 .news-more { text-align: center; margin-top: var(--space-4); }
 
+/* 카드가 다 보이는 폭에서는 화살표·안내를 감춘다 (main.js가 .is-static을 붙인다) */
+.hscroll.is-static .hscroll__btn { display: none; }
+.hscroll.is-static + .hscroll__hint { display: none; }
+
 /* 캐러셀 안에서는 카드가 같은 높이로 */
 .hscroll__track .card, .hscroll__track .news-item { height: auto; display: flex; flex-direction: column; }
 .hscroll__track .card__body, .hscroll__track .news-body { flex: 1 1 auto; }
