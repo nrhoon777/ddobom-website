@@ -9,7 +9,7 @@
   <meta property="og:description" content="청년 암 경험자의 곁에서 다시 봄을 만듭니다. I SEE U AGAIN." />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260808e" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260808j" />
 </head>
 <body>
   <a href="#main" class="skip-link">본문 바로가기</a>
@@ -91,24 +91,25 @@
       </div>
     </section>
 
-    <!-- ===== 임팩트 (카운터) ===== -->
-    <section class="section section--soft" aria-labelledby="impact-title">
+    <!-- ===== 현실 (문제 제기) =====
+         '또봄의 성과'가 아니라 '청년 암의 현실'이라 색과 배경을 달리해 구분한다.
+         강조색 #d85a1d 하나 + 중립 회색만 쓰고, 모든 값은 직접 라벨로 읽힌다. -->
+    <section class="section section--soft" aria-labelledby="reality-title">
       <div class="container">
         <div class="section-head reveal">
-          <span class="eyebrow">IMPACT</span>
-          <h2 id="impact-title">함께 만든 변화</h2>
-          <p>20·30대 암 환자는 늘고 있습니다. 또봄은 2016년 작은 모임에서 시작해 그 곁을 지켜왔습니다.</p>
+          <span class="eyebrow">REALITY</span>
+          <h2 id="reality-title">청년에게도, 암은 옵니다</h2>
+          <p>살아남는 사람은 늘었습니다. 그런데 돌아갈 자리는 그만큼 늘지 않았습니다.</p>
         </div>
-        <div class="stats">
-          <!-- 첫 칸은 '성과'가 아니라 '현실'이라 색을 달리해 구분한다.
-               구체적 수치는 검증된 출처를 확보할 때까지 넣지 않는다. -->
-          <div class="stat stat--context reveal">
+
+        <div class="reality-row">
+          <figure class="reality-card">
             <svg class="ratio-chart" viewBox="0 0 200 28" role="img"
                  aria-label="암 환자 10명 중 1.7명이 20·30대입니다">
               <defs>
                 <!-- 0.7명을 나타내려고 아이콘 하나를 70% 지점에서 끊는다 -->
                 <linearGradient id="rc-part" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="70%" stop-color="#f06f2c" />
+                  <stop offset="70%" stop-color="#d85a1d" />
                   <stop offset="70%" stop-color="#d8e2dd" />
                 </linearGradient>
                 <g id="rc-p">
@@ -116,22 +117,62 @@
                   <path d="M1.6 25c0-4.6 3.3-7.9 7.4-7.9s7.4 3.3 7.4 7.9z" />
                 </g>
               </defs>
-              <use href="#rc-p" x="0" fill="#f06f2c" />
+              <use href="#rc-p" x="0" fill="#d85a1d" />
               <use href="#rc-p" x="20" fill="url(#rc-part)" />
-              <use href="#rc-p" x="40" fill="#d8e2dd" />
-              <use href="#rc-p" x="60" fill="#d8e2dd" />
-              <use href="#rc-p" x="80" fill="#d8e2dd" />
-              <use href="#rc-p" x="100" fill="#d8e2dd" />
-              <use href="#rc-p" x="120" fill="#d8e2dd" />
-              <use href="#rc-p" x="140" fill="#d8e2dd" />
-              <use href="#rc-p" x="160" fill="#d8e2dd" />
-              <use href="#rc-p" x="180" fill="#d8e2dd" />
+              <use href="#rc-p" x="40" fill="#d8e2dd" /><use href="#rc-p" x="60" fill="#d8e2dd" />
+              <use href="#rc-p" x="80" fill="#d8e2dd" /><use href="#rc-p" x="100" fill="#d8e2dd" />
+              <use href="#rc-p" x="120" fill="#d8e2dd" /><use href="#rc-p" x="140" fill="#d8e2dd" />
+              <use href="#rc-p" x="160" fill="#d8e2dd" /><use href="#rc-p" x="180" fill="#d8e2dd" />
             </svg>
-            <div class="num num--sm"><b>1.7명</b> <span>／ 10명</span></div>
-            <div class="label">암 환자 10명 중 20·30대</div>
-          </div>
-          <div class="stat reveal d1"><div class="num">2016</div><div class="label">커뮤니티 시작</div></div>
-          <div class="stat reveal d2"><div class="num">2020</div><div class="label">사단법인 설립</div></div>
+            <div class="reality-val"><b>1.7명</b> <span>／ 10명</span></div>
+            <p class="reality-label">암 환자 10명 중 20·30대</p>
+            <figcaption class="reality-src">보건복지부·중앙암등록본부</figcaption>
+          </figure>
+
+          <figure class="reality-card reality-card--hi">
+            <svg class="reality-bars" viewBox="0 0 200 118" role="img"
+                 aria-label="암 경험자의 5년 내 직장 복귀 비율. 유럽 62퍼센트, 한국 30.5퍼센트.">
+              <line x1="8" y1="96" x2="192" y2="96" stroke="#dfe6e2" stroke-width="1" />
+              <path d="M52,96 L52,32 Q52,28 56,28 L72,28 Q76,28 76,32 L76,96 Z" fill="#c8d3ce" />
+              <text x="64" y="20" text-anchor="middle" class="rb-val rb-val--muted">62</text>
+              <text x="64" y="112" text-anchor="middle" class="rb-cat">유럽</text>
+              <path d="M124,96 L124,63.5 Q124,59.5 128,59.5 L144,59.5 Q148,59.5 148,63.5 L148,96 Z" fill="#d85a1d" />
+              <text x="136" y="51" text-anchor="middle" class="rb-val">30.5</text>
+              <text x="136" y="112" text-anchor="middle" class="rb-cat">한국</text>
+            </svg>
+            <p class="reality-label">5년 내 직장 복귀 비율 <span class="reality-unit">(%)</span></p>
+            <figcaption class="reality-src">사이코온콜로지 · 임상암저널</figcaption>
+          </figure>
+
+          <figure class="reality-card">
+            <div class="reality-hero"><span class="rh-num">69.5</span><span class="rh-unit">%</span></div>
+            <svg class="reality-meter" viewBox="0 0 300 18" role="img"
+                 aria-label="일터에서 암 투병 경험자에 대한 차별이 있다고 답한 비율 69.5퍼센트.">
+              <rect x="0" y="0" width="300" height="18" rx="9" fill="#f7ded0" />
+              <path d="M0,0 L199.5,0 Q208.5,0 208.5,9 Q208.5,18 199.5,18 L0,18 Z" fill="#d85a1d" />
+            </svg>
+            <p class="reality-label">일터에서 차별을 겪었다</p>
+            <figcaption class="reality-src">대한암협회 · 국립암센터</figcaption>
+          </figure>
+        </div>
+
+        <p class="reality-cta reveal">
+          <a href="about.html#why-title">청년 암의 현실 자세히 보기 →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== 또봄의 발자취 ===== -->
+    <section class="section" aria-labelledby="impact-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">IMPACT</span>
+          <h2 id="impact-title">그래서 또봄이 합니다</h2>
+          <p>2016년 작은 모임에서 시작해, 그 곁을 지켜왔습니다.</p>
+        </div>
+        <div class="stats stats--two">
+          <div class="stat reveal"><div class="num">2016</div><div class="label">커뮤니티 시작</div></div>
+          <div class="stat reveal d1"><div class="num">2020</div><div class="label">사단법인 설립</div></div>
         </div>
       </div>
     </section>
@@ -340,7 +381,7 @@
       </div>
       <div class="footer__bottom">
         <div>
-          서울특별시 강남구 테헤란로2길 8, 4층 17호 | 대표: 이정훈 | 고유번호: 772-82-00377<br />
+          서울특별시 강남구 테헤란로2길 8, 4층 17호(역삼동, 마이워크스페이스) | 이사장: 이정훈 | 고유번호: 772-82-00377<br />
           TEL 02-501-0302 | 문의 <a href="https://cafe.naver.com/iseeuagain" target="_blank" rel="noopener noreferrer">네이버 카페</a>
           <span style="display:block; margin-top:6px;">© 2026 또봄 (한국청년암협회). All rights reserved.</span>
         </div>
@@ -353,7 +394,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js?v=20260808e"></script>
+  <script src="assets/js/main.js?v=20260808j"></script>
   <script type="module" src="assets/js/news-loader.js?v=20260807f"></script>
 </body>
 </html>
