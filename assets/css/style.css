@@ -2070,8 +2070,10 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .poster figcaption b { display: block; font-size: 0.98rem; color: var(--color-ink); }
 .poster figcaption span { display: block; font-size: 0.82rem; color: #8d9a94; margin-top: 2px; }
 
-/* 치얼업 포스터는 세로형 */
+/* 치얼업 포스터는 세로형이고 회차마다 한 장씩 늘어난다 */
+.poster-grid--tall { grid-template-columns: repeat(4, 1fr); }
 .poster-grid--tall img { aspect-ratio: 3 / 4; object-fit: contain; padding: 6px; }
+@media (max-width: 1023px) { .poster-grid--tall { grid-template-columns: repeat(2, 1fr); } }
 
 @media (max-width: 767px) {
   .poster-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
