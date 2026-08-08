@@ -2378,7 +2378,7 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 }
 
 /* ===================================================================
-   58. 가로 스크롤 캐러셀 (또봄활동 · 또봄 소식)
+   58. 가로 스크롤 캐러셀 (또봄 활동 · 또봄 소식)
    세로로 길어지지 않도록 옆으로 넘겨 보게 한다.
    터치·트랙패드는 그대로 스와이프, 마우스 사용자를 위해 좌우 버튼을 둔다.
    =================================================================== */
@@ -2453,4 +2453,108 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .board-item { grid-template-columns: 92px 1fr; gap: var(--space-4); }
   .board-thumb { width: 92px; }
   .board-item time { grid-column: 2; }
+}
+
+/* ===========================================================
+   60. 소식 게시판 — 사진이 주인공인 두 가지 레이아웃
+   가로 사진: 제목 → 사진, 설명은 사진 위에 얹는다.
+   세로 사진(포스터): 왼쪽에 크게, 나머지는 오른쪽에.
+   =========================================================== */
+.posts { display: grid; gap: var(--space-8); max-width: 880px; margin-inline: auto; }
+
+.post {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.post:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+  box-shadow: 0 16px 40px rgba(16, 42, 34, 0.12);
+}
+.post .tag {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+.post__title {
+  display: block;
+  font-size: 1.28rem;
+  line-height: 1.42;
+  font-weight: 800;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+.post__desc { display: block; line-height: 1.68; }
+.post__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  font-size: 0.9rem;
+}
+.post__meta em { font-style: normal; font-weight: 700; white-space: nowrap; }
+.post__figure { display: block; position: relative; }
+.post__figure img { display: block; width: 100%; }
+
+/* --- 가로형 --- */
+.post--wide .post__head {
+  display: block;
+  padding: var(--space-6) var(--space-6) var(--space-5);
+}
+.post--wide .post__head .tag { margin-bottom: 10px; }
+/* 전면 사진이라 비율만 두면 화면을 다 잡아먹는다. 높이에 상한을 준다. */
+.post--wide .post__figure img { aspect-ratio: 3 / 2; max-height: 460px; object-fit: cover; }
+.post--wide .post__over {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 88px var(--space-6) var(--space-5);
+  /* 사진 위 글이라 대비가 전부다. 아래로 갈수록 확실히 어둡게. */
+  background: linear-gradient(to top, rgba(9, 26, 21, 0.92) 0%, rgba(9, 26, 21, 0.78) 42%, rgba(9, 26, 21, 0) 100%);
+  color: #fff;
+}
+.post--wide .post__desc { color: rgba(255, 255, 255, 0.94); font-size: 1rem; }
+.post--wide .post__meta { margin-top: 12px; color: rgba(255, 255, 255, 0.78); }
+.post--wide .post__meta em { color: var(--color-lime, #cdf564); }
+
+/* --- 세로형 --- */
+.post--tall { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
+.post--tall .post__figure { height: 100%; background: #f2f5f3; }
+.post--tall .post__figure img { height: 100%; aspect-ratio: 5 / 7; object-fit: cover; }
+.post--tall .post__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  padding: var(--space-8);
+}
+.post--tall .post__desc { color: var(--color-ink-soft); }
+.post--tall .post__meta { width: 100%; margin-top: 4px; color: #6b7772; }
+.post--tall .post__meta em { color: var(--color-primary-dark); }
+
+.board-note { text-align: center; margin-top: var(--space-8); color: #55635e; }
+
+@media (max-width: 767px) {
+  .posts { gap: var(--space-6); }
+  .post--wide .post__head { padding: var(--space-5) var(--space-5) var(--space-4); }
+  .post__title { font-size: 1.1rem; }
+  /* 글이 아래쪽 절반을 덮으므로, 좁은 화면에서는 사진에 세로 여유를 더 준다. */
+  .post--wide .post__figure img { aspect-ratio: 1 / 1; max-height: 380px; }
+  .post--wide .post__over { padding: 56px var(--space-5) var(--space-5); }
+  .post--wide .post__desc { font-size: 0.92rem; line-height: 1.55; }
+  .post__meta { font-size: 0.84rem; }
+  /* 좁은 화면에서 포스터를 반으로 가르면 둘 다 못 읽는다. 위아래로 쌓는다. */
+  .post--tall { grid-template-columns: 1fr; }
+  .post--tall .post__body { padding: var(--space-5); }
 }
