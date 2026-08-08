@@ -2321,3 +2321,58 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .bias-lines span { display: inline; }
   .bias-lines span + span::before { content: " "; }
 }
+
+/* ===================================================================
+   57. 홈 화면 정돈 (2026-08-09)
+   =================================================================== */
+
+/* 임팩트 — 배지를 한 줄 위로 빼고 본문 줄간격을 넓혀 읽히게 */
+.badge-line { margin-bottom: var(--space-3); }
+.section-head .lead-2 {
+  font-size: 1.05rem; line-height: 2; color: var(--color-ink-soft);
+  max-width: 30em; margin-inline: auto;
+}
+
+/* 후원 CTA — 감성 문장 + 가로 보증 칩 */
+.donate-cta__lead { font-size: 1.1rem; line-height: 1.9; }
+.donate-cta__lead strong { font-weight: 800; }
+.donate-chips {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  margin: var(--space-5) 0 var(--space-6); list-style: none; padding: 0;
+}
+.donate-chips li {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28);
+  color: #fff; font-size: 0.9rem; font-weight: 700;
+  padding: 9px 16px; border-radius: var(--radius-pill);
+}
+.donate-chips span[aria-hidden] { font-size: 1rem; line-height: 1; }
+
+/* 소식 — 사진을 키우고 제목 아래 한 줄 설명 */
+.news-item { flex-direction: column; gap: 0; padding: 0; overflow: hidden; }
+.news-thumb {
+  width: 100%; height: auto; aspect-ratio: 16 / 10;
+  border-radius: 0; flex: none;
+}
+.news-body { padding: var(--space-5); gap: 0; }
+.news-item h3 { font-size: 1.05rem; margin: 8px 0 6px; line-height: 1.45; }
+.news-desc {
+  font-size: 0.9rem; line-height: 1.65; color: var(--color-ink-soft);
+  margin-bottom: 10px;
+}
+
+/* 사업·활동 카드 4개 — PC에서 한 줄, 좁아지면 가로 스크롤 */
+.card-grid { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 1279px) and (min-width: 768px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .news-list { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .section-head .lead-2 { font-size: 1rem; line-height: 1.9; }
+  .donate-cta__lead { font-size: 1.02rem; }
+  .donate-chips { gap: 8px; }
+  .donate-chips li { font-size: 0.84rem; padding: 8px 13px; }
+  .news-list { grid-template-columns: 1fr; }
+  .news-thumb { aspect-ratio: 16 / 9; }
+}
