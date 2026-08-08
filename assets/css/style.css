@@ -2049,3 +2049,32 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 }
 .rp-note--inkind strong { color: #55411a; }
 .rp-note--inkind a { color: #6b5320; text-decoration: underline; }
+
+/* ===================================================================
+   53. 포스터 갤러리 (또봄클래스 · Cheer UP 곧,봄)
+   실제 행사 포스터라 디자인을 그대로 살리고 캡션만 얹는다.
+   =================================================================== */
+.poster-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5); margin: var(--space-6) 0 var(--space-6);
+}
+.poster { margin: 0; }
+.poster img {
+  width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  background: var(--color-bg-soft);
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.poster:hover img { transform: translateY(-4px); box-shadow: var(--shadow); }
+.poster figcaption { margin-top: 10px; line-height: 1.5; }
+.poster figcaption b { display: block; font-size: 0.98rem; color: var(--color-ink); }
+.poster figcaption span { display: block; font-size: 0.82rem; color: #8d9a94; margin-top: 2px; }
+
+/* 치얼업 포스터는 세로형 */
+.poster-grid--tall img { aspect-ratio: 3 / 4; object-fit: contain; padding: 6px; }
+
+@media (max-width: 767px) {
+  .poster-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+  .poster figcaption b { font-size: 0.9rem; }
+  .poster figcaption span { font-size: 0.76rem; }
+}
