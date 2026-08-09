@@ -2862,6 +2862,14 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .lt-block__kicker::before {
   content: ""; width: 26px; height: 3px; border-radius: 2px; background: var(--season);
 }
+.letter .lt-h3 {
+  margin: var(--space-9) 0 var(--space-4);
+  padding-top: var(--space-5);
+  border-top: 2px solid var(--color-line);
+  font-size: clamp(1.15rem, 3vw, 1.35rem); line-height: 1.4;
+  letter-spacing: -0.02em; color: var(--color-ink);
+}
+.letter .lt-block--ink .lt-h3 { color: #fff; border-top-color: rgba(255,255,255,0.18); }
 .letter .lt-block__title {
   margin: 0 0 var(--space-6);
   font-size: clamp(1.5rem, 4.2vw, 2.1rem); line-height: 1.28;
