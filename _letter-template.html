@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!--
+  ══════════════════════════════════════════════════════════════
+  또봄 편지 — 새 호 만들기 뼈대
+
+  1. 이 파일을 복사해 letter-2026-autumn.html 처럼 이름을 붙입니다.
+     (여름 summer · 가을 autumn · 겨울 winter · 봄 spring)
+  2. 아래 {{ }} 자리만 채웁니다. 구조는 건드리지 않습니다.
+  3. <main> 의 letter--summer 를 그 호의 계절로 바꿉니다.
+     그것만 바꾸면 표지·번호·카드·인용 색이 전부 따라옵니다.
+  4. letters.html 의 해당 호 카드를 <div class="lt-item is-soon"> 에서
+     <a class="lt-item" href="..."> 로 바꿔 링크를 엽니다.
+  5. news.html 게시판 맨 위에 카드 하나를 추가합니다.
+
+  블록은 순서대로 쌓기만 하면 됩니다. 자동화할 때도 조립 단위가 이것입니다.
+  기계가 채울 수 있는 곳은 [AUTO], 사람이 써야 하는 곳은 [사람] 으로 표시했습니다.
+  ══════════════════════════════════════════════════════════════
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>또봄 편지 {{연도}} {{계절}}호 — {{표지 제목}} | 또봄 한국청년암협회</title>
+  <meta name="description" content="{{한 줄 요약}}" />
+  <link rel="alternate" hreflang="ko" href="https://nrhoon777.github.io/ddobom-website/{{파일명}}" />
+  <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260810n" />
+</head>
+<body>
+  <a href="#main" class="skip-link">본문 바로가기</a>
+
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo" aria-label="또봄 한국청년암협회 홈으로">
+        <img src="assets/img/logo.png" alt="또봄 한국청년암협회" class="logo__img" />
+      </a>
+      <nav class="gnb" id="gnb" aria-label="주요 메뉴">
+        <a href="about.html">또봄 소개</a>
+        <a href="programs.html">사업·활동</a>
+        <a href="index.html#join">참여하기</a>
+        <a href="news.html">알림·소식</a>
+        <a href="donate.html">후원하기</a>
+      </nav>
+      <div class="header__cta">
+        <a class="lang-switch" href="en/index.html" lang="en" hreflang="en" aria-label="View in English">EN</a>
+        <a href="donate.html" class="btn btn--secondary btn--text-hide"><svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>후원하기</a>
+        <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="gnb">
+          <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ▼ 계절만 바꾸면 색이 전부 따라옵니다: letter--summer / --autumn / --winter / --spring -->
+  <main id="main" class="letter letter--autumn">
+
+    <!-- ══════════ BLOCK: 표지 ══════════ [사람]
+         사진은 또봄이 직접 찍은 것만. 계절 분위기가 나는 사진이 좋습니다.
+         네모 네 개 중 이번 호 계절 자리에만 class="on" 을 둡니다.
+         여름 1번째 · 가을 2번째 · 겨울 3번째 · 봄 4번째 -->
+    <section class="lt-cover">
+      <div class="lt-cover__img">
+        <img src="assets/img/{{표지사진.jpg}}" alt="{{사진 설명}}" />
+      </div>
+      <div class="lt-cover__veil" aria-hidden="true"></div>
+      <div class="container">
+        <p class="lt-cover__mast">
+          또봄 편지
+          <span class="lt-seasons" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i></span>
+          {{연도}} {{계절}}호
+        </p>
+        <h1>{{표지 제목}}<br />{{두 줄이면 여기}}</h1>
+        <p class="lt-cover__sub">{{두세 줄. 이 호가 왜 이 계절인지}}</p>
+      </div>
+    </section>
+
+    <!-- ══════════ BLOCK: 목차 ══════════ [AUTO] 아래 블록 제목에서 그대로 뽑습니다 -->
+    <nav class="lt-toc" aria-label="이번 호 차례">
+      <div class="container">
+        <p class="lt-toc__label">이번 호에는</p>
+        <ol>
+          <li><b>01</b><span>여는 글 &mdash; {{제목}}</span></li>
+          <li><b>02</b><span>{{커버 꼭지 이름}} &mdash; {{제목}}</span></li>
+          <li><b>03</b><span>챙기세요 &mdash; {{제목}}</span></li>
+          <li><b>04</b><span>또봄이 한 일 &mdash; 후원금이 간 곳</span></li>
+          <li><b>05</b><span>다음 호 &mdash; {{다음 계절}}</span></li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ══════════ BLOCK 01: 여는 글 ══════════ [사람]
+         이사장 편지. 3~4문단. 여기가 자동이면 편지가 아닙니다. -->
+    <section class="lt-block">
+      <span class="lt-ghost" aria-hidden="true">01</span>
+      <div class="container">
+        <div class="lt-block__inner">
+          <p class="lt-block__kicker">여는 글</p>
+          <h2 class="lt-block__title">{{제목}}</h2>
+
+          <p class="lt-drop">{{첫 문단. 첫 글자가 크게 떨어집니다}}</p>
+          <p>{{둘째 문단}}</p>
+          <p>{{셋째 문단 — 이번 호에서 가장 하고 싶은 말}}</p>
+
+          <p class="lt-sign">이정훈 &middot; 한국청년암협회또봄 이사장</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ BLOCK 02: 커버스토리 ══════════ [사람 + 카드뱅크]
+         계절마다 성격이 다릅니다.
+           여름 — 다 나으면 갈 곳 (여행)
+           가을 — 곁에 있는 사람들 (병문안·보호자)
+           겨울 — 다시 봄 (극복 이야기·마음)
+           봄  — 돌아온 사람 (복귀 이야기)
+         길어지면 별도 페이지로 빼고 .lt-more 로 넘깁니다. -->
+    <section class="lt-block lt-block--tint">
+      <span class="lt-ghost" aria-hidden="true">02</span>
+      <div class="container">
+        <div class="lt-block__inner">
+          <p class="lt-block__kicker">{{꼭지 이름}}</p>
+          <h2 class="lt-block__title">{{제목}}</h2>
+        </div>
+
+        <figure class="lt-figure lt-figure--wide">
+          <img src="assets/img/{{사진.jpg}}" alt="{{설명}}" loading="lazy" />
+          <figcaption>{{캡션}}</figcaption>
+        </figure>
+
+        <div class="lt-block__inner">
+          <p>{{본문}}</p>
+        </div>
+
+        <blockquote class="lt-quote">
+          {{인용 한 줄}}
+          <cite>{{출처}}</cite>
+        </blockquote>
+
+        <div class="lt-block__inner">
+          <p>{{본문}}</p>
+
+          <div class="lt-card">
+            <p class="lt-card__label">{{카드 제목}}</p>
+            <p>{{실용적인 팁 한 덩어리}}</p>
+          </div>
+
+          <!-- 의학·건강 내용이 들어가면 이 주의 문구는 반드시 함께 둡니다 -->
+          <p class="lt-caution">
+            <span aria-hidden="true">⚠️</span>
+            <span>{{주의할 점}} <strong>반드시 담당 의료진과 상의</strong>하세요.</span>
+          </p>
+
+          <!-- 별도 페이지로 뺐다면 -->
+          <p class="lt-more">
+            <a href="{{페이지.html}}">{{더 보기 문구}} &rarr;</a>
+            <span>{{한 줄 설명}}</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ BLOCK 03: 챙기세요 ══════════ [카드뱅크 + 사람 확인]
+         제도·실용 정보. 수치와 기한은 반드시 공식 출처로 확인하고,
+         마지막에 출처와 '바뀔 수 있음'을 명시합니다. -->
+    <section class="lt-block">
+      <span class="lt-ghost" aria-hidden="true">03</span>
+      <div class="container">
+        <div class="lt-block__inner">
+          <p class="lt-block__kicker">챙기세요</p>
+          <h2 class="lt-block__title">{{제목}}</h2>
+
+          <p>{{제도 한 줄 설명}}</p>
+
+          <div class="lt-card">
+            <p class="lt-card__label">{{놓치기 쉬운 지점}}</p>
+            <p>{{기한·조건. 굵게 표시}}</p>
+          </div>
+
+          <p><strong>신청은 이렇게</strong></p>
+          <ol class="lt-steps">
+            <li>{{1단계}}</li>
+            <li>{{2단계}}</li>
+            <li>{{3단계}}</li>
+          </ol>
+
+          <!-- 한 꼭지에 두 제도를 담을 때 소제목으로 나눕니다 -->
+          <h3 class="lt-h3">{{두 번째 제도}}</h3>
+          <p>{{설명}}</p>
+
+          <p class="lt-src">
+            출처 &middot; <a href="{{공식 링크}}" target="_blank" rel="noopener noreferrer">{{기관명}}</a>.
+            제도는 바뀔 수 있습니다. 신청 전 해당 기관에 확인하세요.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ BLOCK 04: 또봄이 한 일 ══════════ [AUTO]
+         reports.html 과 news.html 에서 가져옵니다.
+         후원자가 '내 돈이 뭘 했나'를 보는 유일한 자리라 빼지 않습니다. -->
+    <section class="lt-block lt-block--ink">
+      <span class="lt-ghost" aria-hidden="true">04</span>
+      <div class="container">
+        <div class="lt-block__inner">
+          <p class="lt-block__kicker">또봄이 한 일</p>
+          <h2 class="lt-block__title">후원금이 간 곳</h2>
+
+          <ul class="lt-stats">
+            <li><b>{{금액}}</b><span>{{설명}}</span></li>
+            <li><b>{{금액}}</b><span>{{설명}}</span></li>
+            <li><b>{{수치}}</b><span>{{설명}}</span></li>
+          </ul>
+
+          <p><strong>{{활동 1}}</strong>{{내용}}</p>
+          <p><strong>{{활동 2}}</strong>{{내용}}</p>
+
+          <p class="lt-src">
+            전체 내역은 <a href="reports.html">결산 내역</a>에서 보실 수 있습니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ BLOCK 05: 다음 호 · 마무리 ══════════ [AUTO + 한 줄만 사람] -->
+    <section class="lt-block lt-block--tint">
+      <span class="lt-ghost" aria-hidden="true">05</span>
+      <div class="container">
+        <div class="lt-block__inner">
+          <p class="lt-block__kicker">다음 호</p>
+          <h2 class="lt-block__title">{{다음 계절}} &mdash; {{다음 호 제목}}</h2>
+          <p>{{다음 호에 무엇이 실리는지 3~4줄}}</p>
+
+          <div class="lt-end">
+            <div class="lt-card" style="text-align:center">
+              <p><strong>이 편지는 후원으로 만들어집니다.</strong></p>
+              <p class="lt-end__btns">
+                <a href="donate.html" class="btn btn--primary">후원하기</a>
+                <a href="letters.html" class="btn btn--ghost">지난 편지 보기</a>
+              </p>
+            </div>
+            <p class="lt-end__foot">
+              또봄 편지는 계절마다 한 번, 네 번에 걸쳐 한 해를 돕니다.<br />
+              여름 &middot; 가을 &middot; 겨울 &middot; 봄 &mdash; 또봄 로고의 네 네모와 같은 순서입니다.
+            </p>
+            <p style="margin-top:32px">
+              <a href="news.html" class="btn btn--ghost">목록으로</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__oversight">
+        <p class="footer__oversight-label">기부금품 모집·사용 내역은 아래 기관을 통해 공시됩니다</p>
+        <div class="footer__oversight-links">
+          <a href="https://www.seoul.go.kr/main/index.jsp" target="_blank" rel="noopener noreferrer">서울특별시 <span aria-hidden="true">↗</span><span class="sr-only">(새 창)</span></a>
+          <a href="https://www.hometax.go.kr/" target="_blank" rel="noopener noreferrer">국세청 홈택스 <span aria-hidden="true">↗</span><span class="sr-only">(새 창)</span></a>
+        </div>
+      </div>
+      <div class="footer__bottom" style="border:0; margin:0; padding:0">
+        <div>© 2026 또봄 (한국청년암협회) · 이사장 이정훈</div>
+        <div><a href="index.html">홈으로</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js?v=20260810n"></script>
+</body>
+</html>

@@ -3026,3 +3026,82 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .letter .lt-more a { display: block; font-weight: 700; font-size: 1.05rem; color: var(--season-ink); }
 .letter .lt-more span { display: block; margin-top: 6px; font-size: 0.92rem; color: #6b7772; }
 .letter .lt-lead { font-size: 1.16rem; line-height: 1.8; font-weight: 600; color: var(--color-ink); }
+
+/* ===========================================================
+   65. 또봄 편지 아카이브
+   =========================================================== */
+.lt-intro {
+  display: grid; grid-template-columns: 96px minmax(0, 1fr);
+  gap: var(--space-7); align-items: center;
+  max-width: 800px; margin: 0 auto var(--space-9);
+  word-break: keep-all;
+}
+/* 로고의 네 네모 배치 그대로: ①여름 ②가을 / ④봄 ③겨울 */
+.lt-intro__logo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.lt-intro__logo span { aspect-ratio: 1; border-radius: 6px; }
+.lt-intro__logo .s-summer { background: #3f8edc; }
+.lt-intro__logo .s-autumn { background: #f06f2c; }
+.lt-intro__logo .s-spring { background: #17b39a; }
+.lt-intro__logo .s-winter { background: #8455c9; }
+.lt-intro p { line-height: 1.9; color: var(--color-ink-soft); }
+.lt-intro p + p { margin-top: 0.9em; }
+
+.lt-list { display: grid; gap: var(--space-6); max-width: 900px; margin: 0 auto; }
+
+.lt-item {
+  --c: var(--color-primary);
+  display: grid; grid-template-columns: 240px minmax(0, 1fr);
+  background: #fff; border: 1px solid var(--color-line);
+  border-radius: 20px; overflow: hidden;
+  color: inherit; text-decoration: none;
+  word-break: keep-all;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.lt-item--summer { --c: #3f8edc; }
+.lt-item--autumn { --c: #f06f2c; }
+.lt-item--winter { --c: #8455c9; }
+.lt-item--spring { --c: #17b39a; }
+
+a.lt-item:hover { transform: translateY(-3px); border-color: var(--c); box-shadow: 0 16px 40px rgba(16, 42, 34, 0.12); }
+.lt-item.is-soon { opacity: 0.72; }
+
+.lt-item__thumb { display: block; background: var(--color-bg-soft); }
+.lt-item__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lt-item__thumb--blank {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 10px, rgba(0, 0, 0, 0.03) 10px 20px),
+    color-mix(in srgb, var(--c) 14%, #fff);
+  min-height: 150px;
+}
+
+.lt-item__body { display: block; padding: var(--space-6) var(--space-7); }
+.lt-item__meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.84rem; font-weight: 700; color: var(--c); margin-bottom: 10px;
+}
+.lt-item__meta i { width: 11px; height: 11px; border-radius: 3px; background: var(--c); display: block; }
+.lt-item__title {
+  display: block; font-size: 1.28rem; font-weight: 800;
+  letter-spacing: -0.02em; color: var(--color-ink); line-height: 1.4;
+}
+.lt-item__desc { display: block; margin-top: 10px; font-size: 0.98rem; line-height: 1.75; color: var(--color-ink-soft); }
+.lt-item__go { display: block; margin-top: 14px; font-size: 0.92rem; font-weight: 700; color: var(--c); }
+.lt-item.is-soon .lt-item__go { color: #8d9a94; }
+
+.lt-notice {
+  max-width: 900px; margin: var(--space-9) auto 0;
+  padding: var(--space-6) var(--space-7);
+  border-radius: 18px; background: var(--color-bg-soft);
+  word-break: keep-all;
+}
+.lt-notice p { line-height: 1.85; color: var(--color-ink-soft); }
+.lt-notice strong { color: var(--color-ink); }
+
+@media (max-width: 767px) {
+  .lt-intro { grid-template-columns: 1fr; gap: var(--space-5); text-align: left; }
+  .lt-intro__logo { width: 76px; }
+  .lt-item { grid-template-columns: 1fr; }
+  .lt-item__thumb img { aspect-ratio: 16 / 9; height: auto; }
+  .lt-item__body { padding: var(--space-5); }
+  .lt-item__title { font-size: 1.14rem; }
+}
