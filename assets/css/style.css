@@ -2983,3 +2983,34 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .lt-end__btns .btn { flex: 1 1 100%; }
   .lt-ghost { font-size: 6rem; top: -12px; }
 }
+
+/* --- 여행지 목록: 고도순 --- */
+.letter .lt-dest { list-style: none; margin: var(--space-6) 0; padding: 0; display: grid; gap: 2px; }
+.letter .lt-dest li {
+  display: grid; grid-template-columns: 92px minmax(0, 1fr);
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--color-line);
+}
+.letter .lt-dest li:last-child { border-bottom: 1px solid var(--color-line); }
+.lt-dest__alt {
+  font-size: 0.94rem; font-weight: 800; color: var(--season-ink);
+  font-variant-numeric: tabular-nums; padding-top: 2px;
+}
+.letter .lt-dest b {
+  display: inline; font-size: 1.08rem; font-weight: 800;
+  color: var(--color-ink); margin-right: 8px;
+}
+.lt-dest__tag {
+  display: inline-block; vertical-align: 2px;
+  font-size: 0.74rem; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+}
+.lt-dest__tag--ok   { background: #e4f5ec; color: #1c6b46; }
+.lt-dest__tag--mid  { background: #fff2dc; color: #8a5a15; }
+.lt-dest__tag--hard { background: #fde8e4; color: #9c3520; }
+.letter .lt-dest p { margin-top: 8px; font-size: 1rem; line-height: 1.8; }
+
+@media (max-width: 560px) {
+  .letter .lt-dest li { grid-template-columns: 1fr; gap: 6px; }
+  .lt-dest__alt { font-size: 0.86rem; }
+}
