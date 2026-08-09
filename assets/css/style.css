@@ -1534,9 +1534,9 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
    41. 사업·활동 — 긴 설명을 '한 줄 훅 + 짧은 본문 + 메타'로 분리
    =================================================================== */
 .prog-hook {
-  font-family: "Gowun Batang", var(--font-base);
+  font-family: var(--font-head);
   font-size: clamp(1.25rem, 2.8vw, 1.65rem);
-  line-height: 1.5; font-weight: 700;
+  line-height: 1.5; font-weight: 800;
   color: var(--color-primary-dark);
   margin-bottom: var(--space-3);
 }
