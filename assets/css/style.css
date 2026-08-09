@@ -2724,3 +2724,51 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
    잘라내면 로고타입이 반토막 나므로, 자르지 않고 크기만 줄인다. */
 .prog-img { max-width: 320px; }
 @media (max-width: 767px) { .prog-img { max-width: 260px; } }
+
+/* ===========================================================
+   63. 뉴스레터 구독 영역
+   =========================================================== */
+.nl-box {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  align-items: center;
+  gap: var(--space-8);
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-9) var(--space-9);
+  word-break: keep-all;
+}
+.nl-box h2 { margin: 6px 0 12px; }
+.nl-box__lead { font-size: 1.08rem; line-height: 1.8; color: var(--color-ink); font-weight: 600; }
+
+.nl-list {
+  list-style: none; padding: 0;
+  margin: var(--space-5) 0 var(--space-5);
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px;
+}
+.nl-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.98rem; line-height: 1.6; color: var(--color-ink-soft);
+}
+
+.nl-soon {
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 14px; padding: 14px 18px;
+  font-size: 0.95rem; line-height: 1.7; color: var(--color-ink-soft);
+}
+.nl-soon strong { color: var(--color-ink); }
+
+.nl-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: var(--space-5); }
+
+.nl-box__mark svg { width: 100%; height: auto; fill: none; stroke: var(--color-primary); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.nl-box__mark .nl-flap { stroke: var(--color-primary-dark); }
+
+@media (max-width: 1023px) {
+  .nl-box { grid-template-columns: 1fr; padding: var(--space-7); }
+  .nl-box__mark { display: none; }
+}
+@media (max-width: 767px) {
+  .nl-list { grid-template-columns: 1fr; }
+  .nl-box__lead { font-size: 1rem; }
+  .nl-actions .btn { flex: 1 1 100%; text-align: center; }
+}
