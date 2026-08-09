@@ -2560,3 +2560,167 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .post--tall { grid-template-columns: 1fr; }
   .post--tall .post__body { padding: var(--space-5); }
 }
+
+/* ===========================================================
+   61. 읽기용 본문 (.article) — 카페에서 옮겨온 글을 사이트 서체로
+   한국어는 줄바꿈이 단어 중간에서 일어나면 읽는 속도가 확 떨어진다.
+   그래서 본문 전체에 word-break: keep-all 을 건다.
+   =========================================================== */
+.article {
+  max-width: 720px;
+  margin-inline: auto;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.article > * + * { margin-top: 1.15em; }
+
+.article p {
+  font-size: 1.06rem;
+  line-height: 1.95;
+  color: var(--color-ink-soft);
+  letter-spacing: -0.005em;
+}
+.article strong { color: var(--color-ink); font-weight: 700; }
+.article em { font-style: normal; color: var(--color-primary-dark); font-weight: 600; }
+
+.article h2 {
+  margin-top: 2.6em;
+  font-size: 1.44rem;
+  line-height: 1.45;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+}
+.article h2 + p { margin-top: 0.9em; }
+.article h3 { margin-top: 2em; font-size: 1.12rem; color: var(--color-ink); }
+
+.article .lead {
+  font-size: 1.22rem;
+  line-height: 1.8;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* 인용 — 원문에서 그대로 옮긴 말 */
+.article blockquote {
+  margin: 2em 0;
+  padding: 4px 0 4px 22px;
+  border-left: 3px solid var(--color-primary);
+  font-size: 1.16rem;
+  line-height: 1.8;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+.article blockquote p { font-size: inherit; line-height: inherit; color: inherit; }
+.article blockquote cite { display: block; margin-top: 10px; font-size: 0.9rem; font-style: normal; font-weight: 500; color: #6b7772; }
+
+.article ul, .article ol { padding-left: 1.3em; }
+.article li { font-size: 1.04rem; line-height: 1.9; color: var(--color-ink-soft); margin-top: 0.5em; }
+
+.article figure { margin: 2.2em 0; }
+.article figure img { width: 100%; border-radius: 16px; display: block; }
+.article figcaption {
+  margin-top: 12px; text-align: center;
+  font-size: 0.86rem; line-height: 1.6; color: #6b7772;
+}
+
+/* 강조 상자 */
+.article .callout {
+  background: var(--color-primary-light);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin: 2.2em 0;
+}
+.article .callout p { color: var(--color-ink); }
+.article .callout > :first-child { margin-top: 0; }
+
+/* 끝난 일이라는 걸 먼저 알려주는 띠 */
+.article .notice-closed {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: #fff7e8; border: 1px solid #f2dcb4; border-radius: 14px;
+  padding: 14px 18px; margin: 0 0 2em;
+  font-size: 0.96rem; line-height: 1.7; color: #6b5327;
+}
+
+/* 숫자 세 개 — 결과 요약 */
+.article .fact-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4); margin: 2.2em 0;
+  padding: 0; list-style: none;
+}
+.article .fact-row li {
+  margin: 0; text-align: center;
+  background: var(--color-bg-soft); border-radius: 16px; padding: 20px 12px;
+}
+.article .fact-row b {
+  display: block; font-size: 1.5rem; font-weight: 800;
+  color: var(--color-primary-dark); letter-spacing: -0.02em;
+}
+.article .fact-row span { display: block; margin-top: 4px; font-size: 0.86rem; color: #6b7772; }
+
+/* 기사 머리말 */
+.article-head { max-width: 720px; margin: 0 auto var(--space-8); text-align: center; word-break: keep-all; }
+.article-head h1 { font-size: clamp(1.6rem, 4.2vw, 2.3rem); line-height: 1.35; letter-spacing: -0.025em; }
+.article-head .tag {
+  display: inline-block; margin-bottom: 14px;
+  font-size: 0.78rem; font-weight: 700; padding: 5px 14px; border-radius: 999px;
+  background: var(--color-primary-light); color: var(--color-primary-dark);
+}
+.article-head .article-meta { margin-top: 14px; font-size: 0.92rem; color: #6b7772; }
+
+/* 원문 보기 */
+.article-source {
+  max-width: 720px; margin: var(--space-10) auto 0;
+  padding-top: var(--space-6); border-top: 1px solid var(--color-line);
+  font-size: 0.92rem; color: #6b7772; line-height: 1.8;
+}
+
+@media (max-width: 767px) {
+  .article p { font-size: 1.02rem; line-height: 1.88; }
+  .article .lead { font-size: 1.1rem; }
+  .article h2 { font-size: 1.24rem; margin-top: 2.2em; }
+  .article blockquote { font-size: 1.06rem; padding-left: 16px; }
+  .article .fact-row { grid-template-columns: 1fr; gap: 10px; }
+  .article .fact-row li { display: flex; align-items: baseline; justify-content: center; gap: 10px; padding: 14px; }
+  .article .fact-row b { font-size: 1.25rem; }
+}
+
+/* --- 본문 속 막대 차트 (단일 계열이라 범례 없음) --- */
+.chart-fig { margin: 2.4em 0; }
+.chart-bars { width: 100%; height: auto; display: block; }
+.chart-bars .chart-axis { stroke: var(--color-line); stroke-width: 1.5; }
+.chart-bars .chart-bar { fill: var(--color-primary); }
+.chart-bars .chart-val {
+  text-anchor: middle; font-size: 20px; font-weight: 800;
+  fill: var(--color-ink); letter-spacing: -0.02em;
+}
+.chart-bars .chart-cat { text-anchor: middle; font-size: 16px; font-weight: 600; fill: var(--color-ink-soft); }
+.chart-bars .chart-unit { font-size: 13px; fill: #8d9a94; }
+
+/* ===========================================================
+   62. 본문 가독성 — 한국어 줄바꿈과 행간
+   .prose 는 사이트 곳곳(소개·활동·방침)에서 쓰는 본문 틀이다.
+   단어 중간에서 줄이 끊기면 읽는 속도가 눈에 띄게 떨어지므로
+   keep-all 을 걸고, 행간을 본문 기준으로 넉넉히 잡는다.
+   =========================================================== */
+.prose { word-break: keep-all; overflow-wrap: break-word; }
+.prose p { line-height: 1.9; font-size: 1.05rem; }
+.prose h2, .prose h3, .prose li { word-break: keep-all; }
+.prose li { line-height: 1.85; }
+
+/* 활동 소개 블록도 같은 기준으로 */
+.tp-block__text, .prog-hook, .class-tags, .tp-facts, .tp-timeline { word-break: keep-all; }
+.tp-block__text p { line-height: 1.9; }
+.prog-hook { line-height: 1.5; }
+
+@media (max-width: 767px) {
+  .prose p { font-size: 1.01rem; line-height: 1.88; }
+}
+
+/* 본문 폭(720px) 안에서 포스터 4장을 한 줄에 넣으면 글씨가 안 읽힌다 */
+.article .poster-grid--tall { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 520px) { .article .poster-grid--tall { grid-template-columns: 1fr; } }
+
+/* 정사각 브랜드 카드가 540px이면 첫 화면을 통째로 차지해 본문이 밀린다.
+   잘라내면 로고타입이 반토막 나므로, 자르지 않고 크기만 줄인다. */
+.prog-img { max-width: 320px; }
+@media (max-width: 767px) { .prog-img { max-width: 260px; } }
