@@ -2772,3 +2772,206 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .nl-box__lead { font-size: 1rem; }
   .nl-actions .btn { flex: 1 1 100%; text-align: center; }
 }
+
+
+/* ===========================================================
+   64. 또봄 편지 — 계절 매거진
+   블록 하나 = 자동화의 조립 단위.
+   .lt-block 을 순서대로 쌓기만 하면 한 호가 만들어지고,
+   호마다 --season 하나만 바꾸면 색이 전부 따라온다.
+   여름 파랑 · 가을 주황 · 겨울 보라 · 봄 초록 — 로고 순서.
+   =========================================================== */
+.letter { --season: var(--brand-green); --season-ink: #0f6b4f; word-break: keep-all; }
+.letter--summer { --season: #3f8edc; --season-ink: #1d5c9c; }
+.letter--autumn { --season: #f06f2c; --season-ink: #a84614; }
+.letter--winter { --season: #8455c9; --season-ink: #5b3494; }
+.letter--spring { --season: #17b39a; --season-ink: #0f7d6b; }
+
+/* ---------- 표지 ---------- */
+.lt-cover {
+  position: relative;
+  min-height: 520px;
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+}
+.lt-cover__img { position: absolute; inset: 0; }
+.lt-cover__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 사진이 보여야 표지다. 계절색은 얇게 얹고, 글 있는 아래쪽만 확실히 어둡게. */
+.lt-cover__veil { position: absolute; inset: 0; }
+.lt-cover__veil::before,
+.lt-cover__veil::after { content: ""; position: absolute; inset: 0; }
+.lt-cover__veil::before { background: var(--season); mix-blend-mode: multiply; opacity: 0.42; }
+.lt-cover__veil::after {
+  background: linear-gradient(to top, rgba(6, 16, 28, 0.88) 0%, rgba(6, 16, 28, 0.42) 46%, rgba(6, 16, 28, 0.06) 100%);
+}
+.lt-cover .container { position: relative; padding-top: 96px; padding-bottom: 56px; }
+.lt-cover__mast {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.84rem; font-weight: 700; letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.86); text-transform: uppercase;
+}
+.lt-seasons { display: inline-flex; gap: 5px; }
+.lt-seasons i {
+  width: 13px; height: 13px; border-radius: 3px;
+  border: 2px solid rgba(255, 255, 255, 0.5); display: block;
+}
+.lt-seasons i.on { background: #fff; border-color: #fff; }
+.lt-cover h1 {
+  margin: var(--space-5) 0 0;
+  font-size: clamp(2.1rem, 7vw, 4rem); line-height: 1.12;
+  letter-spacing: -0.04em; color: #fff;
+}
+.lt-cover__sub {
+  margin-top: var(--space-4); max-width: 30em;
+  font-size: 1.05rem; line-height: 1.75; color: rgba(255, 255, 255, 0.86);
+}
+
+/* ---------- 목차 ---------- */
+.lt-toc { background: var(--color-ink); color: #fff; }
+.lt-toc .container { padding: var(--space-7) var(--space-6); }
+.lt-toc__label {
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em;
+  color: var(--season); margin-bottom: var(--space-4);
+}
+.lt-toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lt-toc li { display: flex; gap: 14px; align-items: baseline; font-size: 1rem; line-height: 1.6; }
+.lt-toc b { color: var(--season); font-variant-numeric: tabular-nums; min-width: 2.2em; }
+.lt-toc span { color: rgba(255, 255, 255, 0.9); }
+
+/* ---------- 본문 블록 ---------- */
+.lt-block { position: relative; padding: var(--space-10) 0; overflow: hidden; }
+.lt-block--tint { background: var(--color-bg-soft); }
+.lt-block--ink { background: var(--color-ink); }
+.lt-block > .container { position: relative; }
+.lt-block__inner { max-width: 660px; margin: 0 auto; }
+
+/* 배경에 크게 깔리는 호수 — 잡지의 페이지 번호 자리 */
+.lt-ghost {
+  position: absolute; top: -22px; right: 2%;
+  font-size: clamp(7rem, 18vw, 13rem); font-weight: 800;
+  line-height: 1; letter-spacing: -0.05em;
+  color: var(--season); opacity: 0.09;
+  pointer-events: none; user-select: none;
+}
+
+.letter .lt-block__kicker {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--season-ink); margin-bottom: 12px;
+}
+.lt-block__kicker::before {
+  content: ""; width: 26px; height: 3px; border-radius: 2px; background: var(--season);
+}
+.letter .lt-block__title {
+  margin: 0 0 var(--space-6);
+  font-size: clamp(1.5rem, 4.2vw, 2.1rem); line-height: 1.28;
+  letter-spacing: -0.03em; color: var(--color-ink);
+}
+.lt-block--ink .lt-block__title, .lt-block--ink p, .lt-block--ink li { color: #fff; }
+.letter .lt-block--ink .lt-block__kicker { color: var(--season); }
+
+.lt-block p { font-size: 1.06rem; line-height: 1.95; color: var(--color-ink-soft); }
+.lt-block p + p { margin-top: 1.15em; }
+.lt-block strong { color: var(--color-ink); font-weight: 700; }
+.lt-block--ink strong { color: #fff; }
+.lt-block em { font-style: normal; color: var(--season-ink); font-weight: 600; }
+
+/* 첫 글자 드롭캡 */
+.lt-drop::first-letter {
+  float: left; font-size: 3.2em; line-height: 0.86;
+  font-weight: 800; color: var(--season);
+  margin: 6px 10px 0 0;
+}
+
+/* 폭을 꽉 채우는 사진 */
+.lt-figure { margin: var(--space-8) 0; }
+.lt-figure--wide { max-width: 900px; margin-inline: auto; }
+.lt-figure img { width: 100%; display: block; border-radius: 18px; }
+.lt-figure figcaption {
+  margin-top: 12px; text-align: center;
+  font-size: 0.86rem; line-height: 1.6; color: #6b7772;
+}
+
+/* 인용 */
+.letter .lt-quote {
+  margin: var(--space-8) auto; max-width: 660px;
+  padding-left: 22px; border-left: 4px solid var(--season);
+  font-size: 1.24rem; line-height: 1.7; font-weight: 600; color: var(--color-ink);
+}
+.lt-quote cite { display: block; margin-top: 10px; font-size: 0.9rem; font-style: normal; font-weight: 500; color: #6b7772; }
+.letter .lt-sign { margin-top: var(--space-6); text-align: right; font-style: italic; color: #6b7772; font-size: 0.95rem; }
+
+/* 정보 카드 */
+.lt-card {
+  margin: var(--space-7) 0; padding: var(--space-6) var(--space-7);
+  border-radius: 18px; background: #fff;
+  border: 1px solid var(--color-line);
+  border-left: 5px solid var(--season);
+}
+.lt-block--tint .lt-card { background: #fff; }
+.letter .lt-card__label {
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em;
+  color: var(--season-ink); margin-bottom: 8px;
+}
+.lt-card p { font-size: 1.02rem; }
+.lt-card > :last-child { margin-bottom: 0; }
+
+/* 단계 목록 */
+.lt-steps { list-style: none; margin: var(--space-5) 0; padding: 0; counter-reset: s; display: grid; gap: 12px; }
+.letter .lt-steps li {
+  counter-increment: s; position: relative; padding-left: 44px;
+  font-size: 1.02rem; line-height: 1.8; color: var(--color-ink-soft);
+}
+.lt-steps li::before {
+  content: counter(s); position: absolute; left: 0; top: 2px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--season); color: #fff;
+  display: grid; place-items: center;
+  font-size: 0.86rem; font-weight: 800;
+}
+
+/* 주의 문구 */
+.letter .lt-caution {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: #fff7e8; border: 1px solid #f2dcb4; border-radius: 16px;
+  padding: 16px 20px; margin: var(--space-7) 0;
+  font-size: 0.96rem; line-height: 1.75; color: #6b5327;
+}
+.lt-caution strong { color: #5a4520; }
+
+/* 숫자 3개 */
+.lt-stats { list-style: none; margin: var(--space-7) 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.lt-stats li { text-align: center; padding: var(--space-6) var(--space-3); border-radius: 18px; background: rgba(255, 255, 255, 0.08); }
+.lt-block--tint .lt-stats li, .letter .lt-block:not(.lt-block--ink) .lt-stats li { background: #fff; border: 1px solid var(--color-line); }
+.lt-stats b { display: block; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--season); }
+.lt-stats span { display: block; margin-top: 6px; font-size: 0.84rem; color: #6b7772; }
+.lt-block--ink .lt-stats span { color: rgba(255, 255, 255, 0.7); }
+
+/* 출처 */
+.letter .lt-src {
+  margin-top: var(--space-7); padding-top: var(--space-4);
+  border-top: 1px solid var(--color-line);
+  font-size: 0.88rem; line-height: 1.7; color: #6b7772;
+}
+.letter .lt-block--ink .lt-src { border-top-color: rgba(255, 255, 255, 0.18); color: rgba(255, 255, 255, 0.66); }
+.lt-src a { color: var(--color-primary-dark); }
+.lt-block--ink .lt-src a { color: var(--season); }
+
+/* 마무리 */
+.lt-end { text-align: center; }
+.lt-end__btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: var(--space-5); }
+.letter .lt-end__foot { margin-top: var(--space-7); font-size: 0.9rem; line-height: 1.8; color: #8d9a94; }
+
+@media (max-width: 767px) {
+  .lt-cover { min-height: 460px; }
+  .lt-cover .container { padding-top: 84px; padding-bottom: 40px; }
+  .lt-block { padding: var(--space-8) 0; }
+  .lt-block p { font-size: 1.01rem; line-height: 1.88; }
+  .lt-quote { font-size: 1.08rem; padding-left: 16px; }
+  .lt-card { padding: var(--space-5); }
+  .lt-stats { grid-template-columns: 1fr; gap: 10px; }
+  .lt-stats li { display: flex; align-items: baseline; justify-content: center; gap: 10px; padding: 14px; }
+  .lt-stats b { font-size: 1.2rem; }
+  .lt-end__btns .btn { flex: 1 1 100%; }
+  .lt-ghost { font-size: 6rem; top: -12px; }
+}
