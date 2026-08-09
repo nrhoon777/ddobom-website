@@ -3146,3 +3146,33 @@ a.lt-item:hover { transform: translateY(-3px); border-color: var(--c); box-shado
   .an-illus__row span { font-size: 0.8rem; }
   .lt-item__thumb--ill { padding: 10px; }
 }
+
+/* ===========================================================
+   67. 포토북 캐릭터 — 봄·여름만 사용
+   링거·병상이 나오는 가을·겨울 그림은 이야기하는 자리(소개·편지)에만 두고,
+   기능적인 자리에는 '떠나는 사람'만 쓴다.
+   버튼 안에는 넣지 않는다. 크레용 선은 20px에서 뭉개진다.
+   =========================================================== */
+
+/* 후원 CTA 옆에 서 있는 봄 캐릭터 */
+.donate-cta--ch { position: relative; }
+.donate-cta__ch {
+  position: absolute; right: var(--space-7); bottom: 0;
+  width: 168px; height: auto;
+  pointer-events: none;
+}
+@media (max-width: 1023px) {
+  .donate-cta__ch { position: static; display: block; width: 120px; margin: 0 auto var(--space-4); }
+}
+
+/* 참여하기 카드의 캐릭터 */
+.join-ch {
+  height: 104px; margin-bottom: var(--space-4);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.join-ch img { max-height: 104px; width: auto; }
+
+@media (max-width: 767px) {
+  .join-ch { height: 88px; }
+  .join-ch img { max-height: 88px; }
+}
