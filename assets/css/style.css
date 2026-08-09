@@ -3014,3 +3014,15 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .letter .lt-dest li { grid-template-columns: 1fr; gap: 6px; }
   .lt-dest__alt { font-size: 0.86rem; }
 }
+
+/* 다음 글로 넘기는 안내 */
+.letter .lt-more {
+  margin: var(--space-7) 0 0;
+  padding: var(--space-5) var(--space-6);
+  border-radius: 16px;
+  background: var(--color-bg-soft);
+  border-left: 4px solid var(--season);
+}
+.letter .lt-more a { display: block; font-weight: 700; font-size: 1.05rem; color: var(--season-ink); }
+.letter .lt-more span { display: block; margin-top: 6px; font-size: 0.92rem; color: #6b7772; }
+.letter .lt-lead { font-size: 1.16rem; line-height: 1.8; font-weight: 600; color: var(--color-ink); }
