@@ -124,6 +124,43 @@
     syncStatic();
     window.addEventListener("resize", syncStatic, { passive: true });
     window.addEventListener("load", syncStatic);
+
+    /* data-hscroll-auto: 손대지 않아도 저절로 한 칸씩 넘어간다.
+       끝에 닿으면 처음으로 되돌아가고, 사용자가 만지면 잠시 멈췄다가 다시 시작한다. */
+    if (wrap.hasAttribute("data-hscroll-auto") && !reduceMotion) {
+      var AUTO_MS = 3200, RESUME_MS = 4500;
+      var autoTimer = null, resumeTimer = null;
+
+      var advance = function () {
+        var card = track.firstElementChild;
+        var step = card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+        var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+        track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + step, behavior: "smooth" });
+      };
+      var stopAuto = function () {
+        if (autoTimer) { window.clearInterval(autoTimer); autoTimer = null; }
+      };
+      var startAuto = function () {
+        stopAuto();
+        if (wrap.classList.contains("is-static")) return;
+        autoTimer = window.setInterval(advance, AUTO_MS);
+      };
+      var pauseAuto = function () {
+        stopAuto();
+        if (resumeTimer) window.clearTimeout(resumeTimer);
+        resumeTimer = window.setTimeout(startAuto, RESUME_MS);
+      };
+
+      track.addEventListener("pointerdown", pauseAuto, { passive: true });
+      track.addEventListener("touchstart", pauseAuto, { passive: true });
+      track.addEventListener("wheel", pauseAuto, { passive: true });
+      wrap.addEventListener("mouseenter", stopAuto);
+      wrap.addEventListener("mouseleave", startAuto);
+      window.addEventListener("resize", startAuto, { passive: true });
+      window.addEventListener("load", startAuto);
+
+      startAuto();
+    }
   });
 
   /* ---------- 숫자 카운터 ---------- */
