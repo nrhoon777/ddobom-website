@@ -2275,21 +2275,28 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .an-logo__mark { width: 150px; height: auto; margin: 0 auto var(--space-4); display: block; background: #fff; border-radius: var(--radius); padding: 10px 14px; }
 .an-logo__lead { text-align: center; font-size: 0.98rem; line-height: 1.8; color: rgba(255,255,255,0.82); margin-bottom: var(--space-6); }
 .an-logo__lead strong { color: #fff; }
-/* 로고와 같은 2×2 배치 — 순서 혼동을 없앤다 */
+/* 로고와 같은 2×2 배치 — 캐릭터 삽화 + 이름표 + 문구를 한 카드 안에 합쳤다.
+   (예전에는 이 배지 목록과 아래 삽화 갤러리가 같은 네 계절을 두 번 보여줘 중복이었다) */
 .season { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); list-style: none; padding: 0; margin: 0;
-  max-width: 480px; margin-inline: auto; }
-.season__it { position: relative; padding: 0; text-align: center; }
-.season__img { width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-lg);
-  display: block; margin-bottom: var(--space-3); box-shadow: var(--shadow); }
-.season__no { position: absolute; top: -10px; left: -10px; z-index: 1;
-  width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
-  font-size: 0.8rem; font-weight: 800; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.35); }
-.s-summer .season__no { background: #3f8edc; }
-.s-fall   .season__no { background: #f06f2c; }
-.s-winter .season__no { background: #8455c9; }
-.s-spring .season__no { background: #17b39a; }
-.season__it b { display: block; font-size: 1.05rem; color: #fff; margin-bottom: 4px; }
-.season__it span { display: block; font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.72); }
+  max-width: 640px; margin-inline: auto; }
+.season__it { position: relative; border-radius: var(--radius-lg); overflow: hidden;
+  aspect-ratio: 1 / 1; box-shadow: var(--shadow); }
+.season__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.season__name {
+  position: absolute; top: 14px; left: 16px; z-index: 1;
+  font-family: var(--font-head); font-weight: 900; letter-spacing: -0.02em;
+  font-size: clamp(1.5rem, 4.2vw, 2.1rem); color: #fff;
+  text-shadow: 0 2px 3px rgba(0,0,0,0.35), 0 0 22px rgba(0,0,0,0.25);
+}
+.season__cap {
+  position: absolute; left: 16px; right: 16px; bottom: 14px; z-index: 1;
+  font-weight: 700; font-size: 0.92rem; line-height: 1.5; color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 0 14px rgba(0,0,0,0.3);
+}
+.an-illus-src {
+  max-width: 640px; margin: var(--space-5) auto 0; text-align: center;
+  font-size: 0.85rem; line-height: 1.8; color: rgba(255,255,255,0.65);
+}
 
 @media (max-width: 1023px) {
   .flow { grid-template-columns: 1fr; }
@@ -2318,7 +2325,9 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .iceberg__art { max-width: 220px; margin: 0 auto; order: -1; }
   .iceberg .iceberg__quote { text-align: center; }
   .an-quote { font-size: 1.35rem; }
-  .season { max-width: 360px; }
+  .season { max-width: 420px; gap: 12px; }
+  .season__name { font-size: 1.35rem; top: 10px; left: 12px; }
+  .season__cap { font-size: 0.8rem; left: 12px; right: 12px; bottom: 10px; }
 }
 
 /* ===================================================================
@@ -3132,43 +3141,15 @@ a.lt-item:hover { transform: translateY(-3px); border-color: var(--c); box-shado
 }
 
 /* ===========================================================
-   66. 포토북 계절 삽화
-   2018년 여행 포토북의 챕터 삽화. 로고의 뜻을 글 대신 그림으로 보여준다.
+   66. (구) 포토북 계절 삽화 갤러리 — .season 카드에 흡수되어 삭제됨.
+   .lt-item__thumb--ill(편지 아카이브 썸네일)만 남겨둔다.
    =========================================================== */
-.an-illus { margin: var(--space-9) auto 0; max-width: 1000px; }
-.an-illus__row {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4);
-}
-.an-illus__row li { text-align: center; }
-.an-illus__row img {
-  width: 100%; aspect-ratio: 4 / 3; object-fit: contain;
-  background: #fff; border-radius: 16px; padding: 8px;
-  border: 1px solid var(--color-line);
-  border-bottom: 4px solid currentColor;
-}
-.an-illus__row .s-summer { color: var(--brand-blue); }
-.an-illus__row .s-fall   { color: var(--brand-orange); }
-.an-illus__row .s-winter { color: var(--brand-purple); }
-.an-illus__row .s-spring { color: var(--brand-green); }
-.an-illus__row b {
-  display: block; margin-top: 12px;
-  font-size: 1rem; font-weight: 800; color: currentColor;
-}
-.an-illus__row span { display: block; margin-top: 2px; font-size: 0.86rem; color: #6b7772; }
-.an-illus figcaption {
-  margin-top: var(--space-6); text-align: center; word-break: keep-all;
-  font-size: 0.88rem; line-height: 1.75; color: #6b7772;
-}
 
 /* 편지 아카이브 썸네일에 삽화를 쓸 때 — 잘리지 않게 여백을 준다 */
 .lt-item__thumb--ill { display: grid; place-items: center; background: #fff; padding: 14px; }
 .lt-item__thumb--ill img { width: 100%; height: auto; object-fit: contain; }
 
 @media (max-width: 767px) {
-  .an-illus__row { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
-  .an-illus__row b { font-size: 0.92rem; }
-  .an-illus__row span { font-size: 0.8rem; }
   .lt-item__thumb--ill { padding: 10px; }
 }
 
