@@ -1566,11 +1566,14 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 
 /* 픽토그램 요약 줄 — 긴 설명 문단 대신 아이콘+짧은 라벨로 */
 .prog-points { display: flex; flex-wrap: wrap; gap: 10px; margin: var(--space-3) 0 var(--space-4); }
+/* 아래 '그동안 함께한 클래스' 태그(연한 청록)와 헷갈리지 않도록,
+   여기는 오렌지 계열로 색을 달리해 주목도를 높인다. */
 .prog-points span {
   display: inline-flex; align-items: center; gap: 7px;
-  background: var(--color-primary-light); color: var(--color-primary-dark);
-  font-weight: 700; font-size: 0.9rem;
+  background: var(--color-secondary); color: #fff;
+  font-weight: 800; font-size: 0.9rem;
   padding: 8px 14px 8px 10px; border-radius: var(--radius-pill);
+  box-shadow: 0 3px 10px rgba(240, 111, 44, 0.28);
 }
 .prog-points svg {
   width: 20px; height: 20px; flex: none;
@@ -1865,6 +1868,17 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .ratio-chart { width: 100%; max-width: 200px; height: auto; margin: 6px auto 14px; display: block; }
 .reality-bars { width: 100%; max-width: 200px; height: auto; margin: 0 auto 8px; display: block; }
 .reality-meter { width: 100%; max-width: 240px; height: auto; margin: 4px auto 14px; display: block; }
+
+/* 리얼리티 그래프 모션: 카드가 화면에 들어오는 '.reveal.in' 시점에 자라난다.
+   JS가 실패해도 main.js가 즉시 .in을 붙이는 폴백이 있어, 최종 상태(꽉 찬 막대)는 항상 보장된다. */
+.reality-bars path { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.in .reality-bars path { transform: scaleY(1); }
+.reveal.in .reality-bars path:nth-of-type(2) { transition-delay: 0.18s; }
+.reality-meter path { transform-box: fill-box; transform-origin: left; transform: scaleX(0); transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s; }
+.reveal.in .reality-meter path { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .reality-bars path, .reality-meter path { transition: none; transform: none; }
+}
 
 .reality-val { font-size: 1.25rem; color: var(--color-ink); }
 .reality-val b { font-size: 1.7rem; font-weight: 800; color: #d85a1d; }
@@ -2686,6 +2700,20 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 }
 .article .callout p { color: var(--color-ink); }
 .article .callout > :first-child { margin-top: 0; }
+
+/* 사진으로 담을 수 없는 순간 — 픽토그램 아이콘 + 말풍선 카드 */
+.article .word-hurt {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: #fdf2ec; border-radius: 16px; padding: 20px 22px; margin: 2.2em 0;
+}
+.article .word-hurt svg {
+  width: 34px; height: 34px; flex: none; margin-top: 2px;
+  stroke: var(--color-secondary-dark); fill: none; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.article .word-hurt p { margin: 0; font-weight: 700; color: var(--color-ink); }
+.article .word-hurt p + p { margin-top: 10px; }
+.article .word-hurt span { display: block; margin-top: 2px; font-size: 0.86rem; font-weight: 500; color: var(--color-ink-soft); }
 
 /* 끝난 일이라는 걸 먼저 알려주는 띠 */
 .article .notice-closed {
