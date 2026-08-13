@@ -456,20 +456,21 @@ button { font-family: inherit; cursor: pointer; }
 .page-hero p { color: var(--color-ink-soft); margin-top: var(--space-3); }
 .sprout { position: relative; display: inline-block; }
 .sprout__leaf {
-  position: absolute; top: -0.85em; left: 50%;
+  position: absolute; top: -0.62em; left: 50%; transform: translateX(-50%);
   font-size: 0.62em; line-height: 1; transform-origin: bottom center;
-  animation: sprout-bloom 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both, sprout-sway 2.8s ease-in-out 1.7s infinite;
+  animation: sprout-bloom 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both, sprout-pulse 2.6s ease-in-out 1.7s infinite;
 }
-/* '새싹이 피어나는' 느낌 — 접힌 채 솟아났다가, 활짝 열리듯 커졌다 제자리로 */
+/* '새싹이 피어나는' 느낌 — 접힌 채 솟아났다가, 활짝 열리듯 커졌다 제자리로.
+   이후로도 살짝 부풀었다 가라앉기를 반복해, 한 번으로 끝나지 않고 계속 피어나는 인상을 준다. */
 @keyframes sprout-bloom {
   0% { transform: translateX(-50%) scale(0) rotate(-20deg); opacity: 0; }
   50% { transform: translateX(-50%) scale(1.35) rotate(10deg); opacity: 1; }
   72% { transform: translateX(-50%) scale(0.9) rotate(-4deg); }
   100% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
 }
-@keyframes sprout-sway {
-  0%, 100% { transform: translateX(-50%) rotate(-4deg); }
-  50% { transform: translateX(-50%) rotate(5deg); }
+@keyframes sprout-pulse {
+  0%, 100% { transform: translateX(-50%) scale(1) rotate(-3deg); }
+  50% { transform: translateX(-50%) scale(1.18) rotate(3deg); }
 }
 /* 경로 표시는 '지금 읽을 것'이 아니라 위치 안내라 한 단계 물러나게 한다.
    (#6b7772 = 흰 배경 대비 4.66:1 — 본문 기준 통과) */
