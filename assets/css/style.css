@@ -2443,14 +2443,18 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   color: rgba(255,255,255,0.58);
   text-shadow: 0 1px 4px rgba(0,0,0,0.28);
 }
-/* 캡션 뒤 그늘 — 삽화마다 아래쪽 여백이 다르다(봄 카드는 인물이 카드 밑단까지 내려온다).
-   특정 이미지에 맞춰 위치를 조정하는 대신, 아래쪽에 옅은 그늘을 깔아
-   어떤 삽화가 와도 흰 글씨가 읽히게 한다. */
-.season__it::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 40%;
-  background: linear-gradient(to top, rgba(6,20,16,0.58), rgba(6,20,16,0));
-  pointer-events: none;
-}
+/* 삽화 PNG는 모서리가 투명하고 배경이 단색(로고 4색)이라, 카드 배경을 같은 색으로 맞추면
+   이미지를 확대·축소해도 이음매가 드러나지 않는다. 봄 삽화의 위치를 조정하기 위한 전제. */
+.season__it.s-summer { background: #3f8edc; }
+.season__it.s-fall   { background: #f06f2c; }
+.season__it.s-spring { background: #0b7a66; }
+.season__it.s-winter { background: #8455c9; }
+
+/* 여름·가을·겨울은 그림이 카드의 25~75% 구간에 들어와 아래 25%가 캡션 자리로 비어 있다.
+   봄만 인물이 92%까지 내려와 캡션을 덮으므로, 같은 띠에 맞춰 축소·상향한다.
+   (모든 카드를 어둡게 덮는 것보다, 어긋난 삽화 하나를 규격에 맞추는 편이 깨끗하다) */
+.s-spring .season__img { transform: scale(0.76) translateY(-9%); }
+
 .season__cap {
   position: absolute; left: 6%; right: 6%; bottom: 5%; z-index: 3;
   text-align: center;
