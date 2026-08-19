@@ -2451,9 +2451,10 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .season__it.s-winter { background: #8455c9; }
 
 /* 여름·가을·겨울은 그림이 카드의 25~75% 구간에 들어와 아래 25%가 캡션 자리로 비어 있다.
-   봄만 인물이 92%까지 내려와 캡션을 덮으므로, 같은 띠에 맞춰 축소·상향한다.
-   (모든 카드를 어둡게 덮는 것보다, 어긋난 삽화 하나를 규격에 맞추는 편이 깨끗하다) */
-.s-spring .season__img { transform: scale(0.76) translateY(-9%); }
+   봄 삽화만 '봄' 레터링(26~74%) 위에 인물(41~92%)이 겹친 구조라 인물이 캡션까지 내려온다.
+   레터링과 인물은 한 장에 그려져 있으므로 둘을 함께 축소·상향해,
+   레터링 위쪽은 라벨 아래에서 시작하고 인물 발끝은 캡션 위(72%)에서 끝나게 맞춘다. */
+.s-spring .season__img { transform: scale(0.70) translateY(-10.5%); }
 
 .season__cap {
   position: absolute; left: 6%; right: 6%; bottom: 5%; z-index: 3;
