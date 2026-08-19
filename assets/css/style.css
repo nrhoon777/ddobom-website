@@ -57,10 +57,23 @@
   --fs-small: 0.875rem;
   --lh-body: 1.7;
 
+  /* 행간 스케일 — 요소 크기별로 다르게 (큰 글자일수록 좁게, 본문은 넉넉하게) */
+  --leading-display: 1.15;  /* 히어로 대제목 */
+  --leading-heading: 1.3;   /* 섹션/카드 제목 */
+  --leading-body: 1.7;      /* 본문 문단 */
+  --leading-caption: 1.5;   /* 캡션·출처 */
+
+  /* 읽기 폭(measure) — 화면이 넓어져도 한 줄이 무한정 길어지지 않도록 */
+  --measure-body: 60ch;
+  --measure-intro: 42ch;
+
   /* Spacing scale (4/8 기반) */
   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
   --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
   --space-9: 96px;
+  /* --space-10은 .lt-block(편지·여행기 본문 블록)과 .article-source가 쓰는데
+     정의가 빠져 있어 여백이 0으로 무너져 있었다. 스케일을 이어 128px로 둔다. */
+  --space-10: 128px;
 
   /* Radius / Shadow */
   --radius-sm: 8px;
@@ -820,12 +833,16 @@ button { font-family: inherit; cursor: pointer; }
 .video-card .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 14px; color: #fff; font-weight: 700; font-size: 0.9rem; background: linear-gradient(0deg, rgba(0,0,0,0.7), transparent); pointer-events: none; }
 a.video-more { display: grid; place-items: center; text-align: center; color: #fff; background: linear-gradient(135deg, var(--brand-green), var(--brand-blue)); font-weight: 800; gap: 8px; font-size: 1.05rem; }
 
-/* 미션 이미지화 카드 */
+/* 미션 이미지화 카드
+   제목을 하단 정렬(justify-content: flex-end)하면 설명 문구의 줄 수가 카드마다 달라질 때
+   제목의 세로 위치도 같이 흔들린다(설명이 1줄인 카드는 제목이 더 아래로 밀림).
+   제목을 위쪽에 고정(flex-start)해 카드마다 같은 높이에서 시작하게 하고,
+   설명 줄 수가 다른 만큼의 여유 공간은 카드 아래쪽에 남긴다. */
 .mission-visual { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-.mission-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; min-height: 210px; padding: 24px; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; box-shadow: var(--shadow); }
+.mission-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; min-height: 210px; padding: 24px; color: #fff; display: flex; flex-direction: column; justify-content: flex-start; box-shadow: var(--shadow); }
 .mission-card .mi { position: absolute; top: 18px; right: 18px; font-size: 2.4rem; opacity: 0.92; }
 .mission-card .mi svg { display: block; width: 48px; height: 48px; stroke: #fff; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0.92; }
-.mission-card h3 { font-family: var(--font-point); font-size: 1.25rem; margin-bottom: 6px; letter-spacing: 0; }
+.mission-card h3 { font-family: var(--font-point); font-size: 1.25rem; margin-bottom: 6px; letter-spacing: 0; margin-top: 46px; }
 .mission-card p { font-size: 0.9rem; opacity: 0.95; line-height: 1.6; }
 .mission-card.m1 { background: linear-gradient(150deg, #17b39a, #0f8a76); }
 .mission-card.m2 { background: linear-gradient(150deg, #f06f2c, #d85a1d); }
@@ -849,6 +866,7 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .mission-card { min-height: 158px; padding: 16px; }
   .mission-card .mi { font-size: 1.8rem; }
   .mission-card .mi svg { width: 30px; height: 30px; }
+  .mission-card h3 { margin-top: 34px; }
 }
 
 /* ===================================================================
@@ -1937,13 +1955,20 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   border: 1px solid var(--color-line); border-radius: var(--radius-lg);
   padding: var(--space-5) var(--space-6);
 }
+/* 라벨(dt)과 값(dd)은 글자 크기가 달라 같은 행간을 쓰면 첫 줄 기준선이 어긋난다.
+   둘 다 같은 행간으로 맞춰 첫 줄을 나란히 세우고, 값이 여러 줄로 늘어나도
+   행간이 일정하게 유지되도록 한다. */
+/* 라벨 칸은 76px 고정이 아니라 minmax — "법인명"(3자)엔 충분하지만
+   "Chairperson"·"Authorised" 같은 영문 라벨은 단어 중간에서 잘린다.
+   내용만큼 넓히되 값(dd)이 지나치게 밀리지 않도록 상한을 둔다. */
 .org-facts > div {
-  display: grid; grid-template-columns: 76px 1fr; gap: 12px;
-  padding: 12px 0; border-bottom: 1px solid var(--color-line);
+  display: grid; grid-template-columns: minmax(76px, max-content) 1fr; gap: 12px;
+  padding: 14px 0; border-bottom: 1px solid var(--color-line);
+  word-break: keep-all; overflow-wrap: break-word;
 }
 .org-facts > div:last-child { border-bottom: 0; }
-.org-facts dt { font-weight: 700; color: var(--color-ink-soft); font-size: 0.9rem; }
-.org-facts dd { margin: 0; color: var(--color-ink); font-size: 0.95rem; line-height: 1.6; }
+.org-facts dt { font-weight: 700; color: var(--color-ink-soft); font-size: 0.9rem; line-height: var(--leading-body); }
+.org-facts dd { margin: 0; color: var(--color-ink); font-size: 0.95rem; line-height: var(--leading-body); }
 
 .org-purpose {
   background: #fff; border: 1px solid var(--color-line);
@@ -1952,13 +1977,19 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 }
 .org-purpose h3 { font-size: 1.15rem; margin-bottom: 6px; }
 .org-purpose__lead { color: var(--color-ink-soft); font-size: 0.92rem; margin-bottom: var(--space-4); }
-.org-list { counter-reset: org; display: grid; gap: 12px; list-style: none; margin: 0; padding: 0; }
+.org-list { counter-reset: org; display: grid; gap: 14px; list-style: none; margin: 0; padding: 0; }
+/* 번호 배지는 절대배치라, 본문이 여러 줄로 늘어나도 두 번째 줄부터는
+   padding-left(34px)만큼 들여써져 번호 오른쪽에 세로로 가지런히 정렬된다.
+   한국어 법조문이라 어절 중간에서 끊기지 않게 keep-all을 건다. */
 .org-list li {
   counter-increment: org; position: relative; padding-left: 34px;
-  color: var(--color-ink-soft); line-height: 1.65; font-size: 0.97rem;
+  color: var(--color-ink-soft); line-height: var(--leading-body); font-size: 0.97rem;
+  word-break: keep-all; overflow-wrap: break-word;
 }
 .org-list li::before {
-  content: counter(org); position: absolute; left: 0; top: 1px;
+  content: counter(org); position: absolute; left: 0;
+  /* 배지를 첫 줄 높이의 한가운데에 맞춘다 (줄높이가 바뀌어도 따라온다) */
+  top: calc((var(--leading-body) * 1em - 24px) / 2);
   width: 24px; height: 24px; border-radius: 8px;
   background: var(--color-primary-light); color: var(--color-primary-dark);
   font-weight: 800; font-size: 0.82rem; display: grid; place-items: center;
@@ -1973,7 +2004,7 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 @media (max-width: 1023px) { .org-wrap { grid-template-columns: 1fr; } }
 @media (max-width: 767px) {
   .org-facts { padding: var(--space-4) var(--space-5); }
-  .org-facts > div { grid-template-columns: 68px 1fr; gap: 10px; }
+  .org-facts > div { grid-template-columns: minmax(68px, max-content) 1fr; gap: 10px; }
   .org-purpose { padding: 22px 18px; }
 }
 
@@ -2193,6 +2224,20 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   color: var(--color-ink-soft); background: var(--color-bg-soft);
   padding: 3px 9px; border-radius: var(--radius-pill);
 }
+/* 개별 여행기 페이지가 있는 회차는 줄 전체가 링크가 된다.
+   li가 flex 컨테이너라, 링크 항목은 안쪽 <a>가 대신 flex 행을 이루게 한다. */
+.tp-timeline li.is-linked { padding: 0; transition: border-color 0.15s, box-shadow 0.15s; }
+.tp-timeline li.is-linked > a {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  width: 100%; padding: 11px 16px;
+  border-radius: var(--radius-sm); color: inherit;
+  transition: background 0.15s;
+}
+.tp-timeline li.is-linked:hover { border-color: var(--color-primary); box-shadow: var(--shadow-sm); }
+.tp-timeline li.is-linked > a:hover,
+.tp-timeline li.is-linked > a:focus-visible { background: var(--color-primary-light); }
+.tp-timeline li.is-linked > a:hover span { background: #fff; color: var(--color-primary-dark); }
+
 .tp-note { font-size: 0.92rem; color: var(--color-ink-soft); }
 
 /* 이미지 묶음 */
@@ -2258,10 +2303,12 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .flow__sub b { color: var(--color-ink); font-weight: 700; }
 .flow__src { margin-top: 12px; text-align: right; font-size: 0.76rem; color: #8d9a94; }
 
-/* 유럽 vs 한국 미니 바 */
+/* 유럽 vs 한국 미니 바
+   좌측 라벨 폭은 34px 고정이 아니라 minmax — "유럽/한국"(2자)엔 좁게,
+   "Europe/Korea" 같은 영문에는 내용만큼 넓게 맞춰 단어 중간이 잘리지 않게 한다. */
 .flow__bars { margin-top: var(--space-4); display: grid; gap: 7px; }
-.fb { display: grid; grid-template-columns: 34px 1fr 34px; align-items: center; gap: 8px; }
-.fb__t { font-size: 0.78rem; color: var(--color-ink-soft); }
+.fb { display: grid; grid-template-columns: minmax(34px, auto) 1fr minmax(34px, auto); align-items: center; gap: 8px; }
+.fb__t { font-size: 0.78rem; color: var(--color-ink-soft); white-space: nowrap; }
 .fb__track { height: 10px; border-radius: 5px; background: #eef2f0; overflow: hidden; }
 .fb__track i { display: block; height: 100%; width: var(--w); border-radius: 5px; background: #c8d3ce;
 }
@@ -2456,6 +2503,9 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 }
 @media (max-width: 767px) {
   .section-head .lead-2 { font-size: 1rem; line-height: 1.9; }
+  /* 두 문장을 나누려고 넣은 <br>은 좁은 화면에서 어색한 3~4줄을 만든다.
+     모바일에서는 무시하고 브라우저가 폭에 맞춰 흘리게 한다(.about-lead와 같은 방식). */
+  .section-head .lead-2 br, .donate-cta__lead br { display: none; }
   .donate-cta__lead { font-size: 1.02rem; }
   .donate-chips { gap: 8px; }
   .donate-chips li { font-size: 0.84rem; padding: 8px 13px; }
@@ -2992,6 +3042,9 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 /* 폭을 꽉 채우는 사진 */
 .lt-figure { margin: var(--space-8) 0; }
 .lt-figure--wide { max-width: 900px; margin-inline: auto; }
+/* 세로형(포스터·표지)은 가로 사진과 같은 폭을 주면 화면을 통째로 차지한다.
+   폭을 좁혀 한 화면에 캡션까지 함께 들어오게 한다. */
+.lt-figure--poster { max-width: 420px; margin-inline: auto; }
 .lt-figure img { width: 100%; display: block; border-radius: 18px; }
 .lt-figure figcaption {
   margin-top: 12px; text-align: center;
@@ -3245,4 +3298,55 @@ a.lt-item:hover { transform: translateY(-3px); border-color: var(--c); box-shado
 @media (max-width: 767px) {
   .join-ch { height: 88px; }
   .join-ch img { max-height: 88px; }
+}
+
+/* ===================================================================
+   68. Responsive Typography System
+   사이트 전체에서 재사용하는 반응형 타이포그래피 규칙.
+   특정 화면에 맞춰 <br>을 넣는 대신, 브라우저가 의미 단위로 줄을 배분하게 한다.
+
+   - 제목: text-wrap: balance — 마지막 줄에 단어 하나만 남는 현상(orphan)을 줄인다.
+     미지원 브라우저는 이 속성을 무시할 뿐이라 항상 폴백이 보장된다(점진적 향상).
+   - 본문: text-wrap: pretty — 지원 브라우저에서 마지막 줄 orphan을 추가로 줄인다.
+   - 한국어는 이미 body 기본값(word-break: keep-all)이 어절 단위 줄바꿈을 보장한다.
+     keep-all은 비한글 문자에는 normal과 동일하게 동작하므로 영문 페이지에 섞인
+     한글 고유명사(법인명 등)도 함께 보호된다 — 언어별로 다른 규칙을 중복 선언할 필요가 없다.
+   =================================================================== */
+
+/* 제목 — 히어로부터 카드 소제목까지, 균형 잡힌 줄바꿈 */
+.hero h1, .hero--full h1, .page-hero h1, .about-name h2,
+.section-head h2, .about-head h2, .rp-col__head h2, .nl-box h2, .donate-cta h2,
+.card__body h3, .value h3, .mission-card h3, .story-step h3, .bias-card h3,
+.channel-card h3, .join-card h3, .donate-way h3, .org-purpose h3,
+.lt-cover h1, .lt-block__title, .post__title, .article-head h1,
+.whyblock__q, .about-cta__line, .about-quote, .iceberg__quote, .fact-closing {
+  text-wrap: balance;
+}
+
+/* 본문 — 지원 브라우저에서 문장 끝 외톨이 단어를 줄인다(향상된 기능이라 안전하게 전역 적용) */
+.prose p, .article p, .about-lead, .about-sub, .section-head p, .lead-2,
+.lt-block p, .tp-block__text p, .fact-lead, .fact-sub, .page-hero p,
+.bias-hero__txt p, .card__body p, .value p, .mission-card p, .reality-note,
+.donate-cta p, .whyblock__q, .an-mean__d, .flow__sub {
+  text-wrap: pretty;
+}
+
+/* 읽기 폭 유틸리티 — 화면이 넓어져도 본문 한 줄이 무한정 길어지지 않게 */
+.u-measure-body { max-width: var(--measure-body); }
+.u-measure-intro { max-width: var(--measure-intro); }
+.text-balance { text-wrap: balance; }
+.text-pretty { text-wrap: pretty; }
+
+/* 영문 페이지의 Mission/Values 카드 — 영어 문장은 한국어보다 길어
+   좁은 모바일 2열 그리드 안에서 어절이 조각조각 끊긴다. 실제 폭이 될 때까지 1열을 유지한다.
+   (한국어 페이지는 기존 2열 그리드를 그대로 유지 — 언어별 문장 길이 차이를 반영) */
+@media (max-width: 767px) {
+  html[lang="en"] .values, html[lang="en"] .mission-visual {
+    grid-template-columns: 1fr;
+  }
+}
+@media (min-width: 480px) and (max-width: 767px) {
+  html[lang="en"] .values, html[lang="en"] .mission-visual {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
