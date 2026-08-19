@@ -2415,16 +2415,21 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .an-logo__mark { width: 150px; height: auto; margin: 0 auto var(--space-4); display: block; background: #fff; border-radius: var(--radius); padding: 10px 14px; }
 .an-logo__lead { text-align: center; font-size: 0.98rem; line-height: 1.8; color: rgba(255,255,255,0.82); margin-bottom: var(--space-6); }
 .an-logo__lead strong { color: #fff; }
-/* 로고와 같은 2×2 배치 — 캐릭터 삽화 + 이름표 + 문구를 한 카드 안에 합쳤다.
-   (예전에는 이 배지 목록과 아래 삽화 갤러리가 같은 네 계절을 두 번 보여줘 중복이었다) */
-.season { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); list-style: none; padding: 0; margin: 0;
+/* 로고와 같은 2×2 배치.
+   캡션은 액자 '밖 아래'에 둔다 — 글이 그림 위를 덮지 않으므로 삽화를 액자 가득 키울 수 있고,
+   삽화마다 다른 여백에 캡션 위치가 좌우되지도 않는다. */
+.season { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5) var(--space-4);
+  list-style: none; padding: 0; margin: 0;
   max-width: 640px; margin-inline: auto; }
-.season__it { position: relative; border-radius: var(--radius-lg); overflow: hidden;
-  aspect-ratio: 1 / 1; box-shadow: var(--shadow); }
+.season__it { position: relative; }
+.season__frame {
+  position: relative; aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow);
+}
 .season__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* 이름은 액자 위(왼쪽 정렬), 문구는 액자 아래 — 그림과 겹치지 않게 바깥으로 뺀다.
-   (합성 이미지에서 위 21% / 아래 24%를 비워 두었다)
+/* 이름은 액자 안 왼쪽 위.
    한글은 굵게 앞세우고 영문은 흘림체로 뒤에 붙여, 계절 이름이 하나의 로고타입처럼 읽히게 한다. */
 .season__label {
   position: absolute; top: 5%; left: 7%; right: 7%; z-index: 2;
@@ -2443,24 +2448,27 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   color: rgba(255,255,255,0.58);
   text-shadow: 0 1px 4px rgba(0,0,0,0.28);
 }
-/* 삽화 PNG는 모서리가 투명하고 배경이 단색(로고 4색)이라, 카드 배경을 같은 색으로 맞추면
-   이미지를 확대·축소해도 이음매가 드러나지 않는다. 봄 삽화의 위치를 조정하기 위한 전제. */
-.season__it.s-summer { background: #3f8edc; }
-.season__it.s-fall   { background: #f06f2c; }
-.season__it.s-spring { background: #0b7a66; }
-.season__it.s-winter { background: #8455c9; }
+/* 삽화 PNG는 모서리가 투명하고 배경이 단색(로고 4색)이라, 액자 배경을 같은 색으로 맞추면
+   이미지를 확대·축소해도 이음매가 드러나지 않는다. 아래 확대 배치의 전제. */
+.s-summer .season__frame { background: #3f8edc; }
+.s-fall   .season__frame { background: #f06f2c; }
+.s-spring .season__frame { background: #0b7a66; }
+.s-winter .season__frame { background: #8455c9; }
 
-/* 여름·가을·겨울은 그림이 카드의 25~75% 구간에 들어와 아래 25%가 캡션 자리로 비어 있다.
-   봄 삽화만 '봄' 레터링(26~74%) 위에 인물(41~92%)이 겹친 구조라 인물이 캡션까지 내려온다.
-   레터링과 인물은 한 장에 그려져 있으므로 둘을 함께 축소·상향해,
-   레터링 위쪽은 라벨 아래에서 시작하고 인물 발끝은 캡션 위(72%)에서 끝나게 맞춘다. */
-.s-spring .season__img { transform: scale(0.70) translateY(-10.5%); }
+/* 원본 PNG는 그림이 가운데 25~75%에만 있고 위아래 25%씩이 빈 여백이다.
+   캡션을 액자 밖으로 뺐으니 그 여백을 쓸 이유가 없다 — 확대해 액자를 채운다.
+   가장자리는 단색이라 잘려도 액자 배경과 이어진다. */
+.season__img { transform: scale(1.2); }
+/* 봄만 '봄' 레터링(26~74%) 위에 인물(41~92%)이 겹쳐 아래로 더 내려온 구조라,
+   같은 배율을 주면 인물 발끝이 액자 밖으로 잘린다. 둘을 함께 축소·상향해
+   레터링과 인물이 액자 안 21~81%에 나란히 들어오게 맞춘다. */
+.s-spring .season__img { transform: scale(0.91) translateY(-7.9%); }
 
+/* 캡션 — 액자 밖이라 그림에 묻히지 않고, 어두운 섹션 배경 위에서 그대로 읽힌다 */
 .season__cap {
-  position: absolute; left: 6%; right: 6%; bottom: 5%; z-index: 3;
-  text-align: center;
-  font-weight: 700; font-size: clamp(0.72rem, 1.9vw, 0.96rem); line-height: 1.4;
-  color: #fff; text-shadow: 0 1px 5px rgba(0,0,0,0.42);
+  margin: 12px 4px 0; text-align: center;
+  font-weight: 700; font-size: clamp(0.78rem, 2vw, 0.98rem); line-height: 1.5;
+  color: rgba(255,255,255,0.92);
 }
 
 /* 계절 장식 — 카드 배경 위에 얇은 흰 선으로 얹는 계절 모티프.
@@ -2504,9 +2512,9 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
   .iceberg__art { max-width: 220px; margin: 0 auto; order: -1; }
   .iceberg .iceberg__quote { text-align: center; }
   .an-quote { font-size: 1.35rem; }
-  /* 위치는 % 기준(카드 크기에 따라 같이 줄어듦)이라 그대로 두고 폭만 줄인다 */
-  .season { max-width: 420px; gap: 12px; }
-  .season__cap { left: 5%; right: 5%; }
+  /* 라벨·장식은 % 기준이라 카드와 함께 줄어든다. 폭과 간격만 좁힌다 */
+  .season { max-width: 420px; gap: 18px 12px; }
+  .season__cap { margin-top: 9px; }
 }
 
 /* ===================================================================
