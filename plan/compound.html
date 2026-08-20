@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>복리 저축 플랜 | 적금과 나란히 놓고 비교하기</title>
+<meta name="description" content="같은 금액, 같은 기간. 단리 적금(세후)과 복리 4~5% 상품을 나란히 놓고 비교해 봅니다." />
+<meta name="theme-color" content="#070d18" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e0b775'/%3E%3Ctext x='32' y='46' font-size='38' font-family='serif' font-weight='700' text-anchor='middle' fill='%23241804'%3E%E2%82%A9%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" media="print" onload="this.media='all'" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&amp;display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&amp;display=swap" /></noscript>
+<link rel="stylesheet" href="assets/style.css?v=4" />
+</head>
+<body>
+<a href="#main" class="skip-link">본문 바로가기</a>
+<div class="progress" aria-hidden="true"><span class="progress__fill" id="scrollFill"></span></div>
+<header class="hdr">
+  <div class="wrap hdr__in">
+    <a href="index.html" class="brand">
+      <span class="brand__mark" aria-hidden="true">₩</span>
+      <span>머니 플랜<span class="brand__sub"> · 상품 안내</span></span>
+    </a>
+    <a href="#contact" class="btn btn--ghost btn--hdr" style="margin-left:auto">상담 신청</a>
+  </div>
+</header>
+<div class="wrap back-row"><a class="back" href="index.html" data-back>다른 관심사 보기</a></div>
+<main id="main">
+  <section class="wrap ask" style="padding-top:34px;text-align:left">
+    <span class="eyebrow">③ 적금 대신 복리</span>
+    <h1 style="max-width:16em">적금은 <em>단리</em>,<br />여긴 <em>복리</em>. 게다가 세금이 다릅니다.</h1>
+    <p class="ask__lead" style="margin-left:0">
+      같은 돈을 같은 기간 넣어도 결과가 갈리는 이유는 두 가지입니다.
+      <b>이자에 이자가 붙느냐</b>, 그리고 <b>이자에 세금을 떼느냐</b>.
+      아래에서 나란히 놓고 보세요.
+    </p>
+  </section>
+
+  <section class="sec sec--tight" id="calc">
+    <div class="wrap">
+      <div class="calc rv">
+        <div class="calc__in">
+          <p class="calc__t">같은 조건으로 비교하기</p>
+          <div class="ctrls ctrls--2">
+            <div>
+              <div class="ctrl__row"><label class="ctrl__l" for="prem">월 납입액</label><output class="ctrl__v num" id="premOut">50만원</output></div>
+              <input class="rng" type="range" id="prem" min="10" max="300" step="5" value="50" />
+            </div>
+            <div>
+              <div class="ctrl__row"><label class="ctrl__l" for="bank">비교할 은행 적금 금리</label><output class="ctrl__v num" id="bankOut">3.0%</output></div>
+              <input class="rng" type="range" id="bank" min="1.5" max="5" step="0.1" value="3.0" />
+            </div>
+            <div><p class="ctrl__l" id="termL">납입 기간</p><div class="seg" role="group" aria-labelledby="termL" id="termSeg"></div></div>
+            <div><p class="ctrl__l" id="rateL">이 상품의 적립이율</p><div class="seg seg--sm" role="group" aria-labelledby="rateL" id="rateSeg"></div></div>
+          </div>
+          <div style="margin-top:22px">
+            <p class="ctrl__l" id="whenL">언제 꺼낼까요</p>
+            <div class="seg seg--sm" role="group" aria-labelledby="whenL" id="whenSeg"></div>
+          </div>
+        </div>
+
+        <div class="calc__out">
+          <div class="headline">
+            <p class="headline__k" id="gapK">10년 뒤, 차이는</p>
+            <p class="headline__v num" id="gapV">—</p>
+            <p class="headline__s" id="gapS">—</p>
+          </div>
+
+          <div class="cmp">
+            <div class="cmp__row cmp__row--bank">
+              <span class="cmp__k">은행 적금<br /><span class="hint" id="bankK">세후</span></span>
+              <span class="cmp__track"><span class="cmp__fill" id="bankBar">—</span></span>
+            </div>
+            <div class="cmp__row cmp__row--ours">
+              <span class="cmp__k">이 상품<br /><span class="hint">비과세 요건 충족 시</span></span>
+              <span class="cmp__track"><span class="cmp__fill" id="oursBar">—</span></span>
+            </div>
+          </div>
+          <p class="cmp__gap" id="gapNote">—</p>
+
+          <div class="mini mini--4" style="margin-top:20px">
+            <div class="mini__it"><p class="mini__k">총 납입액</p><p class="mini__v num" id="mPaid">—</p><p class="mini__s" id="mPaidS">—</p></div>
+            <div class="mini__it"><p class="mini__k">적금 이자</p><p class="mini__v num" id="mInt">—</p><p class="mini__s" id="mIntS">—</p></div>
+            <div class="mini__it"><p class="mini__k">적금에서 떼는 세금</p><p class="mini__v num" id="mTax">—</p><p class="mini__s" id="mTaxS">—</p></div>
+            <div class="mini__it"><p class="mini__k">이 상품 환급률</p><p class="mini__v num" id="mPct">—</p><p class="mini__s">낸 돈 대비</p></div>
+          </div>
+
+          <div class="chart-box">
+            <p class="calc__t" style="margin-bottom:12px">시간이 갈수록 벌어지는 폭</p>
+            <svg class="rc" id="chCmp" role="img" aria-label="적금과 이 상품의 시점별 금액 비교"><defs><linearGradient id="rcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(224,183,117,.3)"/><stop offset="100%" stop-color="rgba(224,183,117,0)"/></linearGradient></defs></svg>
+            <div class="lgd"><span><i class="l-fund"></i>이 상품</span><span style="color:var(--sky)">— 은행 적금(세후)</span><span><i class="l-paid"></i>납입 누계</span></div>
+          </div>
+
+          <div class="tbl-wrap">
+            <table class="tbl"><thead><tr><th>시점</th><th>은행 적금(세후)</th><th>이 상품</th><th>차이</th><th>환급률</th></tr></thead>
+            <tbody id="cmpTbl"></tbody></table>
+          </div>
+
+          <p class="res__note" id="fairNote"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== 공통 특장점 ===== -->
+  <section class="sec" id="bene">
+    <div class="wrap">
+      <div class="sec__head rv">
+        <span class="eyebrow">이 상품의 특장점</span>
+        <h2 class="sec__title">숫자 말고도<br /><em>따라오는 것</em>들.</h2>
+        <p class="sec__lead">항목을 누르면 주의할 점까지 함께 보입니다.</p>
+      </div>
+      <div class="benes rv rv--d1" id="benefits"></div>
+    </div>
+  </section>
+
+  <!-- ===== 상담 ===== -->
+  <section class="sec" id="contact">
+    <div class="wrap">
+      <div class="sec__head rv">
+        <span class="eyebrow">마지막 단계</span>
+        <h2 class="sec__title">여기까지 보셨다면,<br /><em>정확한 숫자</em>를 받아볼 차례입니다.</h2>
+        <p class="sec__lead">계산하신 조건이 함께 전달되어, 실제 가입설계서 기준으로 비교해 드립니다.</p>
+      </div>
+      <div class="contact">
+        <aside class="contact__aside rv rv--d1">
+          <a class="btn btn--kakao btn--lg" id="kakaoBtn" href="#" target="_blank" rel="noopener">
+            <span aria-hidden="true">💬</span> 카카오톡으로 바로 물어보기
+          </a>
+          <ul class="contact__ways">
+            <li><a class="way" id="telWay" href="#"><span class="way__ico" aria-hidden="true">📞</span><span><span class="way__t" id="telTxt">전화 상담</span><span class="way__d">평일 09:00–18:00</span></span></a></li>
+            <li><a class="way" href="index.html" data-back><span class="way__ico" aria-hidden="true">↩️</span><span><span class="way__t">다른 관심사 보기</span><span class="way__d">처음 선택 화면으로</span></span></a></li>
+          </ul>
+          <p class="hint" style="margin-top:18px">남겨주신 정보는 상담 목적 외에 사용하지 않습니다.</p>
+        </aside>
+
+        <form class="card form rv rv--d2" id="leadForm" novalidate>
+          <div class="fld--2">
+            <div class="fld"><label class="fld__l" for="fName">성함 <span class="req">*</span></label>
+              <input id="fName" name="name" type="text" autocomplete="name" placeholder="홍길동" required /></div>
+            <div class="fld"><label class="fld__l" for="fPhone">연락처 <span class="req">*</span></label>
+              <input id="fPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-1234-5678" required /></div>
+          </div>
+          <div class="fld--2">
+            <div class="fld"><label class="fld__l" for="fTime">통화 가능 시간</label>
+              <select id="fTime" name="time"><option>아무 때나</option><option>오전 (09–12시)</option><option>오후 (12–18시)</option><option>저녁 (18–21시)</option></select></div>
+            <div class="fld"><label class="fld__l" for="fWay">선호 상담 방식</label>
+              <select id="fWay" name="way"><option>카카오톡</option><option>전화</option><option>문자</option></select></div>
+          </div>
+          <div class="fld"><label class="fld__l" for="fMemo">궁금한 점</label>
+            <textarea id="fMemo" name="memo" placeholder="예) 지금 있는 다른 보험이랑 겹치는지 보고 싶어요."></textarea>
+            <p class="form__pick" id="simPick">계산하신 조건이 함께 전달됩니다.</p></div>
+          <label class="agree">
+            <input type="checkbox" id="fAgree" required />
+            <span>상담을 위한 <b>개인정보(성함·연락처) 수집·이용</b>에 동의합니다. 수집한 정보는 상담 목적으로만 사용하고, 목적 달성 후 지체 없이 파기합니다. 동의를 거부하실 수 있으며, 이 경우 상담 연결이 제한됩니다.</span>
+          </label>
+          <button class="btn btn--gold btn--lg btn--block" type="submit" style="margin-top:18px">상담 신청하기</button>
+          <p class="form__msg" id="formMsg" hidden role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 유의사항 ===== -->
+  <section class="sec sec--tight">
+    <div class="wrap">
+      <div class="notice rv">
+        <h3><span aria-hidden="true">⚠️</span> 반드시 확인해 주세요</h3>
+        <ul>
+          <li>이 페이지의 계산은 <b>가정에 따른 예시</b>이며, 특정 보험회사·상품의 실제 보험료·해지환급금·연금액을 나타내지 않습니다. <b>미래 수익을 보장하지 않습니다.</b></li>
+          <li>공시이율은 매월 변동합니다. 이율이 내려가면 적립금과 수령액도 <b>줄어듭니다.</b> 최저보증이율은 하한선일 뿐 예상 수익률이 아닙니다.</li>
+          <li>계약 <b>중도 해지 시 해지환급금은 이미 납입한 보험료보다 적거나 없을 수 있습니다.</b> 특히 가입 초기 손실이 큽니다.</li>
+          <li>비과세·금융소득종합과세 제외·건강보험료 산정 제외 등은 <b>세법상 요건을 충족했을 때</b>만 적용되고, 법령 개정에 따라 달라질 수 있습니다.</li>
+          <li>납입면제·중도인출·연금 전환의 조건과 한도는 <b>약관</b>이 기준입니다. 인출하면 그만큼 적립금과 보장이 줄어듭니다.</li>
+          <li>가입 전 <b>계약 전 알릴 의무(고지의무)</b>를 성실히 이행해야 하며, 위반 시 보장이 제한되거나 계약이 해지될 수 있습니다.</li>
+        </ul>
+        <p class="notice__foot" id="assumeTxt"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__row"><strong>머니 플랜 상품 안내</strong><span id="ftrContact"></span></div>
+    <p class="ftr__cp">
+      본 페이지는 특정 보험회사의 공식 자료가 아니며, 상품 이해를 돕기 위한 참고용 안내 자료입니다.
+      계약에 관한 사항은 반드시 약관 및 상품설명서를 확인하시기 바랍니다.
+      <br />※ 실제 게시 전 소속 회사의 <b>광고 심의(준법감시인 심의필)</b> 절차를 반드시 거쳐 주세요.
+    </p>
+  </div>
+</footer>
+
+<div class="dock">
+  <div class="dock__in">
+    <div class="dock__txt">
+      <p class="dock__t">적금과 얼마나 차이 날까요?</p>
+      <p class="dock__s">계산 조건 그대로 상담으로 이어집니다</p>
+    </div>
+    <a class="btn btn--gold" href="#contact">상담 신청</a>
+  </div>
+</div>
+
+<script src="assets/data.js?v=3"></script>
+<script src="assets/calc.js?v=3"></script>
+<script src="assets/common.js?v=3"></script>
+<script src="assets/compound.js?v=3"></script>
+</body>
+</html>
