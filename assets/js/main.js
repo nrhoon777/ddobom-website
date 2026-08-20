@@ -101,24 +101,22 @@
   }
 
 
-  /* ---------- 활동 카드 아이콘 라인 드로잉 ----------
+  /* ---------- 아이콘 라인 드로잉 (활동 카드 · 미션/신뢰 아이콘) ----------
      화면에 들어올 때 아이콘 선이 그려지고, 뒤이어 듀오톤의 면이 채워진다.
-     선 길이는 브라우저마다 값이 달라 CSS로 못 박을 수 없으므로 여기서 잰다.
-     측정에 실패하면 dash를 지우고 클래스도 안 붙여, 아이콘이 처음부터 온전히 보이게 둔다. */
-  var cardIcons = document.querySelectorAll(".card__icon svg");
-  if (cardIcons.length && !reduceMotion && "IntersectionObserver" in window) {
-    var dio = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (en) {
-          if (!en.isIntersecting) return;
-          en.target.classList.add("is-drawn");
-          dio.unobserve(en.target);
-        });
-      },
-      { threshold: 0.35 }
-    );
 
-    cardIcons.forEach(function (svg, i) {
+     기본값은 '보이는 상태'다. dash를 미리 걸어두고 스크롤 때 푸는 방식이면,
+     관찰자가 한 번이라도 안 뜨는 순간 아이콘이 영영 사라진다.
+     그래서 화면에 가까워졌을 때(prep) 비로소 숨기고, 실제로 보일 때(play) 그린다.
+     둘 중 아무것도 안 뜨면 아이콘은 처음 그대로 온전히 보인다. */
+  var lineIcons = document.querySelectorAll(".card__icon svg, .value .ic svg");
+  if (lineIcons.length && !reduceMotion && "IntersectionObserver" in window) {
+
+    /* 선 길이는 브라우저마다 값이 달라 CSS로 못 박을 수 없으므로 여기서 잰다.
+       하나라도 못 재면 dash를 걸지 않고 그대로 둔다(= 온전히 보인다). */
+    var prepare = function (svg, i) {
+      if (svg.dataset.drawPrepped) return;
+      svg.dataset.drawPrepped = "1";
+
       var shapes = svg.querySelectorAll("path, circle, rect, line, polyline");
       var strokes = [];
       var ok = true;
@@ -138,10 +136,39 @@
         pair[0].style.strokeDasharray = pair[1];
         pair[0].style.strokeDashoffset = pair[1];
       });
-      /* 카드 네 장이 한꺼번에 그려지면 산만하다. 0.12초씩 흘려보낸다. */
+      /* 네 개가 한꺼번에 그려지면 산만하다. 0.12초씩 흘려보낸다. */
       svg.style.setProperty("--draw-delay", (i % 4) * 0.12 + "s");
       svg.classList.add("is-drawable");
-      dio.observe(svg);
+    };
+
+    /* 관찰자 콜백은 만든 순서대로 불린다. prep을 먼저 만들어,
+       처음부터 화면에 있는 아이콘도 숨겨진 뒤 그려지게 한다. */
+    var prepIo = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          prepare(en.target, Number(en.target.dataset.drawIndex) || 0);
+          prepIo.unobserve(en.target);
+        });
+      },
+      { rootMargin: "300px 0px 300px 0px" }
+    );
+
+    var playIo = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          en.target.classList.add("is-drawn");
+          playIo.unobserve(en.target);
+        });
+      },
+      { threshold: 0.35 }
+    );
+
+    lineIcons.forEach(function (svg, i) {
+      svg.dataset.drawIndex = i;
+      prepIo.observe(svg);
+      playIo.observe(svg);
     });
   }
 
