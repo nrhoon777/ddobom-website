@@ -436,25 +436,26 @@ button { font-family: inherit; cursor: pointer; }
   .value:hover .ic, .value:hover .ic svg { transform: none; }
 }
 
-/* ---------- 9-b. 미션 (메인) — 흐르는 색과 봄바람 ----------
-   네 색이 물결처럼 겹쳐 흐르고 아주 느리게 자리를 바꾼다. 한 자리에서
-   보이는 색이 계속 달라져 화면이 살아 있게 보인다.
+/* ---------- 9-b. 미션 (메인) — 로고처럼 2×2, 종이에 눌러 새긴 아이콘 ----------
+   로고가 네모 넷이므로 미션도 네 칸으로 놓고, 색 위치까지 로고와 맞춘다
+   (파랑↖ 주황↗ 청록↙ 보라↘).
 
-   구현 노트
-   - 색 덩어리는 radial-gradient를 얹은 빈 span이다. blur 필터는 큰 면적에서
-     모바일 GPU에 부담이라 쓰지 않았다 — 그라데이션 자체가 이미 부드럽다.
-   - 움직임은 transform/opacity만 쓴다(레이아웃 재계산 없음).
-   - 주기를 서로 어긋나게 둬서 네 덩어리가 절대 같이 움직이지 않는다.
-   - 글자는 크림 바탕 위 진한 먹색이라 밑에서 색이 흘러도 대비가 유지된다.
-     아이콘만 흰 유리판에 올려, 밑색이 무엇이든 형태가 읽히게 했다.
-   - 후원 페이지 신뢰 섹션은 위 9번 .value를 계속 쓴다. 여긴 메인 전용. */
+   아이콘은 종이에 눌러 새긴 것처럼 보이게 했다. 위쪽에 그늘, 아래쪽에
+   빛을 깔면 눈이 '파였다'고 읽는다. 획 색은 카드 바탕보다 조금 진한
+   같은 계열이라, 다른 색을 얹은 게 아니라 종이 자체가 눌린 것처럼 보인다.
+
+   움직임은 두 겹이다.
+   - 섹션 바탕: 네 색 덩어리가 아주 옅게 흐른다(카드 뒤라 옅게 깔았다).
+   - 카드 안: 저마다 다른 주기로 제 색이 천천히 번졌다 가라앉는다.
+   두 겹이 어긋나 돌아서 같은 화면이 반복되지 않는다. */
 .mission-flow {
   position: relative; overflow: hidden;
-  background: #fdfaf2;          /* 따뜻한 크림 — 네 색이 겹쳐도 탁해지지 않는 바탕 */
-  isolation: isolate;           /* multiply 블렌드가 섹션 밖으로 새지 않게 */
+  background: #f6f5f1;          /* 종이빛 바탕 — 파스텔 네 칸이 또렷하게 얹힌다 */
+  isolation: isolate;
 }
 .mission-flow > .container { position: relative; z-index: 1; }
 
+/* ---- 섹션 바탕: 아주 옅게 흐르는 네 색 ---- */
 .mflow-bg { position: absolute; inset: -14% -8%; z-index: 0; pointer-events: none; }
 .mflow-bg span {
   position: absolute; display: block; border-radius: 50%;
@@ -462,31 +463,29 @@ button { font-family: inherit; cursor: pointer; }
 }
 .mflow-bg .w1 {
   width: 86%; height: 58%; left: -18%; top: -2%;
-  background: radial-gradient(circle at 50% 50%, rgba(63,142,220,0.60), rgba(63,142,220,0) 68%);
+  background: radial-gradient(circle at 50% 50%, rgba(63,142,220,0.20), rgba(63,142,220,0) 68%);
   animation: mflow-a 37s ease-in-out infinite;
 }
 .mflow-bg .w2 {
   width: 78%; height: 56%; right: -16%; top: 12%;
-  background: radial-gradient(circle at 50% 50%, rgba(240,111,44,0.52), rgba(240,111,44,0) 68%);
+  background: radial-gradient(circle at 50% 50%, rgba(240,111,44,0.17), rgba(240,111,44,0) 68%);
   animation: mflow-b 43s ease-in-out infinite;
 }
 .mflow-bg .w3 {
   width: 84%; height: 60%; left: -14%; bottom: 4%;
-  background: radial-gradient(circle at 50% 50%, rgba(23,179,154,0.52), rgba(23,179,154,0) 68%);
+  background: radial-gradient(circle at 50% 50%, rgba(23,179,154,0.17), rgba(23,179,154,0) 68%);
   animation: mflow-c 31s ease-in-out infinite;
 }
 .mflow-bg .w4 {
   width: 80%; height: 58%; right: -12%; bottom: -6%;
-  background: radial-gradient(circle at 50% 50%, rgba(132,85,201,0.52), rgba(132,85,201,0) 68%);
+  background: radial-gradient(circle at 50% 50%, rgba(132,85,201,0.17), rgba(132,85,201,0) 68%);
   animation: mflow-d 47s ease-in-out infinite;
 }
-/* 한가운데를 천천히 지나며 네 색을 섞는 옅은 덩어리 */
 .mflow-bg .w5 {
   width: 62%; height: 46%; left: 20%; top: 26%;
-  background: radial-gradient(circle at 50% 50%, rgba(255,214,222,0.50), rgba(255,214,222,0) 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(255,214,222,0.20), rgba(255,214,222,0) 70%);
   animation: mflow-e 53s ease-in-out infinite;
 }
-
 @keyframes mflow-a {
   0%,100% { transform: translate3d(0,0,0) scale(1); }
   34%     { transform: translate3d(8%, 6%, 0) scale(1.09); }
@@ -515,7 +514,7 @@ button { font-family: inherit; cursor: pointer; }
 /* 봄바람에 날리는 꽃잎 — 순수 장식이라 reduced-motion에서는 아예 없앤다 */
 .mflow-petal {
   position: absolute; top: -8%; width: 13px; height: 9px;
-  background: rgba(255,178,192,0.72);
+  background: rgba(255,178,192,0.6);
   border-radius: 62% 38% 55% 45% / 60% 58% 42% 40%;
   will-change: transform, opacity;
 }
@@ -526,76 +525,106 @@ button { font-family: inherit; cursor: pointer; }
 .mflow-petal:nth-of-type(5) { left: 91%; animation: mflow-petal 34s linear -5s  infinite; }
 @keyframes mflow-petal {
   0%   { transform: translate3d(0, 0, 0) rotate(0deg);            opacity: 0; }
-  9%   { opacity: 0.9; }
-  50%  { transform: translate3d(-46px, 300px, 0) rotate(190deg);  opacity: 0.9; }
+  9%   { opacity: 0.85; }
+  50%  { transform: translate3d(-46px, 300px, 0) rotate(190deg);  opacity: 0.85; }
   92%  { opacity: 0; }
   100% { transform: translate3d(28px, 620px, 0) rotate(360deg);   opacity: 0; }
 }
 
-/* ---- 항목: 물결을 따라 좌우로 번갈아 놓인다 ---- */
-.mflow {
-  list-style: none; margin: clamp(30px, 5vw, 48px) auto 0; padding: 0;
-  max-width: 880px; display: flex; flex-direction: column;
-  gap: clamp(26px, 5vw, 46px);
+/* ---- 네 칸: 로고와 같은 자리, 같은 색 ---- */
+.mgrid {
+  list-style: none; margin: clamp(28px, 4.5vw, 44px) auto 0; padding: 0;
+  max-width: 880px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 20px);
 }
-.mflow__it {
-  display: flex; align-items: flex-start; gap: 18px;
-  max-width: 470px; --c: var(--brand-green);
+.mgrid__it {
+  position: relative; overflow: hidden; isolation: isolate;
+  border-radius: clamp(16px, 2.2vw, 24px);
+  padding: clamp(20px, 2.6vw, 28px);
+  min-height: clamp(190px, 24vw, 250px);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  background: var(--tint);
+  box-shadow: 0 1px 2px rgba(20,40,33,0.04), 0 14px 30px -22px rgba(20,40,33,0.30);
 }
-.mflow__it.is-1 { --c: #2f77bd; }
-.mflow__it.is-2 { --c: #d4590f; }
-.mflow__it.is-3 { --c: #0d7a66; }
-.mflow__it.is-4 { --c: #6b3fae; }
-.mflow__it:nth-child(even) { flex-direction: row-reverse; margin-left: auto; text-align: right; }
+/* 로고 배치 그대로 — 파랑↖ 주황↗ 청록↙ 보라↘ */
+.mgrid__it.is-1 { --tint: #dfeaf7; --line: #2f6ea8; --rule: #3f8edc; }
+.mgrid__it.is-2 { --tint: #fbe4d6; --line: #b35b23; --rule: #f06f2c; }
+.mgrid__it.is-3 { --tint: #d8efe8; --line: #17796a; --rule: #17b39a; }
+.mgrid__it.is-4 { --tint: #e7dff5; --line: #6a49a3; --rule: #8455c9; }
 
-/* flex 자식은 기본 min-width가 auto라 내용보다 좁아지지 않는다.
-   이걸 0으로 풀어야 좁은 화면에서 문단이 제 폭으로 줄바꿈된다. */
-.mflow__txt { flex: 1 1 auto; min-width: 0; }
+/* 종이 결 — 외부 파일 없이 SVG 노이즈를 그대로 얹는다 */
+.mgrid__it::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.10; mix-blend-mode: multiply;
+}
+/* 카드 안에서 제 색이 천천히 번졌다 가라앉는다 */
+.mgrid__it::after {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  width: 150%; height: 150%; left: -25%; top: -25%;
+  background: radial-gradient(circle at 50% 50%, var(--rule), transparent 62%);
+  opacity: 0.16; mix-blend-mode: multiply; will-change: transform;
+}
+.mgrid__it.is-1::after { animation: mgrid-breathe 29s ease-in-out infinite; }
+.mgrid__it.is-2::after { animation: mgrid-breathe 37s ease-in-out -6s infinite; }
+.mgrid__it.is-3::after { animation: mgrid-breathe 41s ease-in-out -14s infinite; }
+.mgrid__it.is-4::after { animation: mgrid-breathe 33s ease-in-out -22s infinite; }
+@keyframes mgrid-breathe {
+  0%,100% { transform: translate3d(-12%, -8%, 0) scale(0.9);  opacity: 0.10; }
+  50%     { transform: translate3d(14%, 10%, 0)  scale(1.25); opacity: 0.24; }
+}
 
-.mflow__ic {
-  flex: none; width: 72px; height: 72px;
-  display: grid; place-items: center;
-  border-radius: 23px; color: var(--c);
-  background: rgba(255, 255, 255, 0.68);
-  box-shadow: 0 8px 22px -12px rgba(20, 40, 33, 0.45), inset 0 1px 0 rgba(255,255,255,0.9);
-  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
+/* 눌러 새긴 아이콘 — 위 그늘 + 아래 빛으로 파인 느낌을 만든다 */
+.mgrid__ic {
+  position: absolute; z-index: 1; pointer-events: none;
+  top: clamp(10px, 1.6vw, 18px); right: clamp(10px, 1.6vw, 18px);
+  width: clamp(86px, 12vw, 122px); height: clamp(86px, 12vw, 122px);
+  color: var(--line); opacity: 0.62;
+  /* 위 그늘 + 아래 빛 = 종이가 눌려 파인 것처럼 보인다 */
+  filter: drop-shadow(0 -1.4px 0.8px rgba(0,0,0,0.30))
+          drop-shadow(0 2px 0.6px rgba(255,255,255,0.95));
+  transition: transform 0.45s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.45s ease;
 }
-@supports (backdrop-filter: blur(6px)) {
-  .mflow__ic { background: rgba(255,255,255,0.46); backdrop-filter: blur(7px); }
-}
-.mflow__ic svg {
-  width: 40px; height: 40px; display: block;
+.mgrid__ic svg {
+  width: 100%; height: 100%; display: block;
   fill: none; stroke: currentColor;
-  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
 }
-/* 반짝임 선은 조금 가늘게 — 본 형태를 이기면 안 된다 */
-.mflow__ic svg .spark { stroke-width: 1.3; opacity: 0.8; }
-.mflow__it:hover .mflow__ic { transform: translateY(-4px) scale(1.05); }
+.mgrid__ic svg .spark { stroke-width: 1; opacity: 0.8; }
+.mgrid__it:hover .mgrid__ic { transform: scale(1.06) rotate(-2deg); opacity: 0.82; }
 
-.mflow__it h3 {
-  font-size: clamp(1.12rem, 3.4vw, 1.34rem); font-weight: 800;
-  letter-spacing: -0.02em; color: #152019; line-height: 1.4;
+.mgrid__txt { position: relative; z-index: 1; }
+.mgrid__rule {
+  display: block; width: 26px; height: 3px; border-radius: 2px;
+  background: var(--rule); margin-bottom: 12px;
 }
-.mflow__it p { margin-top: 8px; font-size: 0.94rem; line-height: 1.72; color: #3b4842; }
+.mgrid__it h3 {
+  font-size: clamp(1.06rem, 2.6vw, 1.26rem); font-weight: 800;
+  letter-spacing: -0.02em; color: #16201c; line-height: 1.4;
+  /* 아이콘이 오른쪽 위를 먹으므로 제목이 그 밑으로 파고들지 않게 */
+  padding-right: clamp(0px, 3vw, 40px);
+}
+.mgrid__it p {
+  margin-top: 7px; font-size: clamp(0.85rem, 1.9vw, 0.92rem);
+  line-height: 1.7; color: #3d4a44;
+}
 
-@media (max-width: 639px) {
-  /* 좁은 화면에서 좌우 번갈이는 글줄 시작점이 흔들려 읽기 나쁘다. 전부 왼쪽으로. */
-  .mflow__it, .mflow__it:nth-child(even) {
-    flex-direction: row; text-align: left; margin-left: 0; max-width: none;
-  }
-  .mflow { gap: 22px; }
-  .mflow__ic { width: 60px; height: 60px; border-radius: 19px; }
-  .mflow__ic svg { width: 34px; height: 34px; }
-  .mflow__it p { font-size: 0.9rem; }
+@media (max-width: 479px) {
+  /* 아주 좁은 화면에서는 두 칸이 너무 눌린다. 한 칸씩 세로로.
+     카드가 낮아지면서 글이 아이콘 옆에 나란히 서므로,
+     아이콘이 차지하는 폭(아이콘 + 오른쪽 여백)만큼 글을 물려야 겹치지 않는다. */
+  .mgrid { grid-template-columns: 1fr; gap: 12px; }
+  .mgrid__it { min-height: 0; padding: 20px 18px; }
+  .mgrid__ic { top: 14px; right: 14px; width: 76px; height: 76px; }
+  .mgrid__it h3, .mgrid__it p { padding-right: 86px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mflow-bg span { animation: none; }
+  .mflow-bg span, .mgrid__it::after { animation: none; }
   .mflow-petal { display: none; }
-  .mflow__ic { transition: none; }
-  .mflow__it:hover .mflow__ic { transform: none; }
+  .mgrid__ic { transition: none; }
+  .mgrid__it:hover .mgrid__ic { transform: none; opacity: 0.62; }
 }
-
 
 /* ---------- 10. 후원 CTA ---------- */
 .donate-cta {
