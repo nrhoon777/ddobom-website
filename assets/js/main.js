@@ -101,6 +101,51 @@
   }
 
 
+  /* ---------- 활동 카드 아이콘 라인 드로잉 ----------
+     화면에 들어올 때 아이콘 선이 그려지고, 뒤이어 듀오톤의 면이 채워진다.
+     선 길이는 브라우저마다 값이 달라 CSS로 못 박을 수 없으므로 여기서 잰다.
+     측정에 실패하면 dash를 지우고 클래스도 안 붙여, 아이콘이 처음부터 온전히 보이게 둔다. */
+  var cardIcons = document.querySelectorAll(".card__icon svg");
+  if (cardIcons.length && !reduceMotion && "IntersectionObserver" in window) {
+    var dio = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          en.target.classList.add("is-drawn");
+          dio.unobserve(en.target);
+        });
+      },
+      { threshold: 0.35 }
+    );
+
+    cardIcons.forEach(function (svg, i) {
+      var shapes = svg.querySelectorAll("path, circle, rect, line, polyline");
+      var strokes = [];
+      var ok = true;
+
+      shapes.forEach(function (el) {
+        if (el.classList.contains("duo")) return;   // 면 레이어는 선이 없다
+        if (typeof el.getTotalLength !== "function") { ok = false; return; }
+        var len;
+        try { len = el.getTotalLength(); } catch (e) { ok = false; return; }
+        if (!len || !isFinite(len)) { ok = false; return; }
+        strokes.push([el, len]);
+      });
+
+      if (!ok || !strokes.length) return;
+
+      strokes.forEach(function (pair) {
+        pair[0].style.strokeDasharray = pair[1];
+        pair[0].style.strokeDashoffset = pair[1];
+      });
+      /* 카드 네 장이 한꺼번에 그려지면 산만하다. 0.12초씩 흘려보낸다. */
+      svg.style.setProperty("--draw-delay", (i % 4) * 0.12 + "s");
+      svg.classList.add("is-drawable");
+      dio.observe(svg);
+    });
+  }
+
+
   /* ---------- 가로 스크롤 캐러셀 (또봄 활동 · 소식) ----------
      스크롤 이벤트에 기대어 버튼을 비활성화하면, 그 이벤트가 오지 않는 환경에서
      '이전' 버튼이 잠겨 되돌아갈 수 없다. 화살표는 항상 눌리게 두고
