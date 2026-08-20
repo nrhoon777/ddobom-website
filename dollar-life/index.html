@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>달러 종신·연금 플랜 | 1분 예상 보험료 확인</title>
+<meta name="description" content="달러로 쌓고, 달러로 받는 종신·연금 플랜. 나이·월 납입액만 넣으면 예상 보험료와 노후 달러 연금액을 1분 만에 확인하고, 원하면 바로 상담까지." />
+<meta name="theme-color" content="#070d18" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="달러 종신·연금 플랜 — 1분 예상 보험료 확인" />
+<meta property="og:description" content="환율 시나리오까지 직접 움직여보는 인터랙티브 상품 안내." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e0b775'/%3E%3Ctext x='32' y='46' font-size='42' font-family='serif' font-weight='700' text-anchor='middle' fill='%23241804'%3E%24%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="assets/style.css?v=2" />
+</head>
+<body>
+<a href="#main" class="skip-link">본문 바로가기</a>
+
+<div class="progress" aria-hidden="true"><span class="progress__fill" id="scrollFill"></span></div>
+
+<!-- ===== 헤더 ===== -->
+<header class="hdr">
+  <div class="wrap hdr__in">
+    <a href="#top" class="brand">
+      <span class="brand__mark" aria-hidden="true">$</span>
+      <span>달러 종신·연금 플랜<span class="brand__sub"> · 상품 안내</span></span>
+    </a>
+
+    <div class="disc" id="disc" role="status" aria-live="polite">
+      <span class="disc__bar" aria-hidden="true"><i class="disc__fill" id="discFill"></i></span>
+      <span id="discTxt">알아본 것 0/7</span>
+    </div>
+
+    <a href="#contact" class="btn btn--ghost btn--hdr">상담 신청</a>
+  </div>
+</header>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- ===== 1. 히어로 ===== -->
+<section class="hero">
+  <div class="wrap hero__in">
+    <div>
+      <span class="eyebrow">DOLLAR LIFE &amp; PENSION</span>
+      <h1>원화로 벌어서<br /><span class="hl">달러로 남기는</span><br />평생 연금.</h1>
+      <p class="hero__lead">
+        한 계약 안에 <b>사망보장 · 달러 적립 · 노후 연금</b>이 함께 들어갑니다.
+        복잡한 설명 대신, 직접 눌러보고 숫자로 확인해 보세요.
+      </p>
+      <div class="hero__cta">
+        <a href="#sim" class="btn btn--gold btn--lg pulse" data-go="sim">1분 만에 예상 보험료 보기</a>
+        <a href="#why" class="btn btn--ghost btn--lg">왜 달러인가요?</a>
+      </div>
+      <ul class="hero__meta">
+        <li>가입 심사 전 참고용 예시</li>
+        <li>개인정보 입력 없이 계산</li>
+        <li>모바일 최적화</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="coin" aria-hidden="true"><span class="coin__sign">$</span></div>
+      <ul class="ticker" aria-label="참고 지표">
+        <li class="ticker__it"><span class="ticker__k">1997 IMF</span><span class="ticker__v num">1,960원</span></li>
+        <li class="ticker__it"><span class="ticker__k">2008 금융위기</span><span class="ticker__v num">1,570원</span></li>
+        <li class="ticker__it"><span class="ticker__k">최근 고점권</span><span class="ticker__v num">1,480원</span></li>
+      </ul>
+      <p class="hint" style="margin-top:10px;text-align:center">원/달러 장중 고점 기준 참고치입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. 체감 — 원화만 들고 있으면 ===== -->
+<section class="sec sec--tight" id="melt">
+  <div class="wrap">
+    <div class="sec__head rv">
+      <span class="eyebrow">잠깐, 슬라이더를 움직여 보세요</span>
+      <h2 class="sec__title">지금의 <em>1억 원</em>은<br />20년 뒤에 얼마일까요?</h2>
+    </div>
+
+    <div class="card melt rv rv--d1">
+      <div>
+        <div class="rng__row">
+          <label class="rng__lbl" for="meltYear">몇 년 뒤를 볼까요</label>
+          <output class="rng__val num" id="meltYearOut">20년 뒤</output>
+        </div>
+        <input class="rng" type="range" id="meltYear" min="5" max="35" step="1" value="20"
+               data-discover="melt" aria-describedby="meltDesc" />
+        <div class="rng__row" style="margin-top:14px">
+          <label class="rng__lbl" for="meltInf">연평균 물가상승률 가정</label>
+          <output class="rng__val num" id="meltInfOut">2.5%</output>
+        </div>
+        <input class="rng" type="range" id="meltInf" min="1" max="5" step="0.1" value="2.5" data-discover="melt" />
+        <p class="hint" style="margin-top:10px">한국은행 물가안정목표(2%)를 기준으로 위아래를 직접 움직여 보세요.</p>
+      </div>
+
+      <div>
+        <p class="hint" id="meltDesc">지금 1억 원의 <b>실질 구매력</b></p>
+        <p class="melt__big num" id="meltBig">6,103만 원</p>
+        <p class="melt__sub" id="meltSub">20년 뒤 1억 원으로 살 수 있는 것은 지금의 <b>61%</b>. 그동안 <b>3,897만 원</b>어치가 조용히 사라집니다.</p>
+        <div class="melt__bars" style="margin-top:22px">
+          <div class="mbar mbar--now"><span class="mbar__k">지금</span><span class="mbar__track"><span class="mbar__fill" style="width:100%">1억 원</span></span></div>
+          <div class="mbar mbar--krw"><span class="mbar__k">원화만</span><span class="mbar__track"><span class="mbar__fill" id="meltBarKrw" style="width:61%">6,103만</span></span></div>
+        </div>
+        <p class="hint" style="margin-top:14px">물가는 자산을 줄이지 않습니다. 자산의 <b>가치</b>를 줄일 뿐입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 왜 달러인가 ===== -->
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="sec__head rv">
+      <span class="eyebrow">왜 달러인가</span>
+      <h2 class="sec__title">위기가 올 때마다,<br /><em>달러는 늘 반대편</em>에 있었습니다.</h2>
+      <p class="sec__lead">카드를 눌러 뒤집어 보세요. 30초면 달러 자산의 성격이 잡힙니다.</p>
+    </div>
+
+    <div class="flips">
+      <button class="flip rv rv--d1" type="button" aria-pressed="false" data-discover="flip1">
+        <span class="flip__in">
+          <span class="flip__f">
+            <span class="flip__ico" aria-hidden="true">🛟</span>
+            <span><span class="flip__t">안전자산</span><br /><span class="flip__d">불안할수록 사람들이 찾는 돈</span></span>
+            <span class="flip__more">뒤집어 보기</span>
+          </span>
+          <span class="flip__b">
+            <span class="flip__t">위기 = 환율 상승</span>
+            <span class="flip__d">외환위기·금융위기·팬데믹 때마다 원/달러 환율은 급등했습니다. 국내 자산이 흔들릴 때 달러 자산은 원화 환산 가치가 오르며 충격을 상쇄합니다.</span>
+            <span class="flip__more">되돌리기</span>
+          </span>
+        </span>
+      </button>
+
+      <button class="flip rv rv--d2" type="button" aria-pressed="false" data-discover="flip2">
+        <span class="flip__in">
+          <span class="flip__f">
+            <span class="flip__ico" aria-hidden="true">⚖️</span>
+            <span><span class="flip__t">통화 분산</span><br /><span class="flip__d">내 자산의 100%가 원화라면?</span></span>
+            <span class="flip__more">뒤집어 보기</span>
+          </span>
+          <span class="flip__b">
+            <span class="flip__t">한 바구니에 담지 않기</span>
+            <span class="flip__d">집·예금·연금·퇴직금까지 대부분 원화 한 통화에 몰려 있습니다. 일부를 달러로 옮기는 것만으로 '원화가 약해질 때'의 위험이 나뉩니다.</span>
+            <span class="flip__more">되돌리기</span>
+          </span>
+        </span>
+      </button>
+
+      <button class="flip rv rv--d3" type="button" aria-pressed="false" data-discover="flip3">
+        <span class="flip__in">
+          <span class="flip__f">
+            <span class="flip__ico" aria-hidden="true">⏳</span>
+            <span><span class="flip__t">시간이 편</span><br /><span class="flip__d">길게 둘수록 유리해지는 구조</span></span>
+            <span class="flip__more">뒤집어 보기</span>
+          </span>
+          <span class="flip__b">
+            <span class="flip__t">복리 + 장기 유지</span>
+            <span class="flip__d">적립금은 공시이율로 매월 복리 부리되고, 최저보증이율이 바닥을 받칩니다. 오래 유지할수록 낸 돈 대비 적립금 곡선이 가팔라집니다.</span>
+            <span class="flip__more">되돌리기</span>
+          </span>
+        </span>
+      </button>
+    </div>
+
+    <div class="card fx rv" id="fx">
+      <div class="fx__top">
+        <span class="fx__t">원/달러 환율 30년</span>
+        <span class="tag">연평균 · 참고치</span>
+        <span class="hint" style="margin-left:auto">아래 사건을 눌러보세요</span>
+      </div>
+      <svg class="fx__chart" id="fxChart" viewBox="0 0 720 300" role="img"
+           aria-label="1995년부터 최근까지 원/달러 연평균 환율 추이. 외환위기와 금융위기 구간에서 크게 상승했습니다.">
+        <defs>
+          <linearGradient id="fxg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(224,183,117,.34)" />
+            <stop offset="100%" stop-color="rgba(224,183,117,0)" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="fx__hits" id="fxHits"></div>
+      <p class="fx__read" id="fxRead">
+        30년 동안 원/달러 환율은 등락을 반복했지만, <b>큰 위기 때마다 한 방향으로 크게 튀었습니다.</b>
+        환율은 오르내리는 것이므로 손실도 가능하다는 점은 아래 유의사항에서 반드시 확인해 주세요.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 상품 구조 ===== -->
+<section class="sec" id="structure">
+  <div class="wrap">
+    <div class="sec__head rv">
+      <span class="eyebrow">한 계약, 세 가지 얼굴</span>
+      <h2 class="sec__title">지금은 <em>보장</em>, 나중엔 <em>연금</em>,<br />끝까지 남으면 <em>상속</em>.</h2>
+      <p class="sec__lead">탭을 눌러 각각 어떤 역할인지 확인해 보세요.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="상품의 세 가지 역할">
+      <button class="tab" role="tab" id="tab-1" aria-controls="pan-1" aria-selected="true"  data-discover="tab1">① 지금 — 사망보장</button>
+      <button class="tab" role="tab" id="tab-2" aria-controls="pan-2" aria-selected="false" data-discover="tab2">② 쌓는 동안 — 달러 적립</button>
+      <button class="tab" role="tab" id="tab-3" aria-controls="pan-3" aria-selected="false" data-discover="tab3">③ 나중 — 달러 연금</button>
+    </div>
+
+    <div class="card panel" role="tabpanel" id="pan-1" aria-labelledby="tab-1" tabindex="0">
+      <h3 class="panel__t">가입 첫 달부터, 달러로 정해진 보장</h3>
+      <p class="panel__d">계약이 성립되면 그날부터 사망보험금이 <b>달러(USD)로 확정</b>됩니다. 낸 돈이 아직 적어도 보장액은 처음부터 그대로입니다.</p>
+      <ul class="panel__list">
+        <li>가족에게 남기는 금액이 원화 가치 변동과 분리됩니다.</li>
+        <li>보장액은 계약 시점에 확정 — 나중에 건강이 나빠져도 유지됩니다.</li>
+        <li>가장의 소득 공백을 메우는 가장 단순하고 확실한 장치입니다.</li>
+      </ul>
+    </div>
+
+    <div class="card panel" role="tabpanel" id="pan-2" aria-labelledby="tab-2" tabindex="0" hidden>
+      <h3 class="panel__t">보험료의 일부가 달러로 쌓입니다</h3>
+      <p class="panel__d">납입한 보험료에서 사업비와 위험보험료를 뺀 나머지가 <b>공시이율로 매월 복리</b> 적립됩니다. 이율이 아무리 떨어져도 <b>최저보증이율</b> 아래로는 내려가지 않습니다.</p>
+      <ul class="panel__list">
+        <li>초기에는 사업비 비중이 커서 해지환급금이 낸 돈보다 적습니다. (중요)</li>
+        <li>유지 기간이 길수록 적립금 곡선이 납입 누계선을 따라잡고 넘어섭니다.</li>
+        <li>필요하면 중도인출·약관대출로 달러 유동성을 활용할 수 있습니다.</li>
+      </ul>
+    </div>
+
+    <div class="card panel" role="tabpanel" id="pan-3" aria-labelledby="tab-3" tabindex="0" hidden>
+      <h3 class="panel__t">원할 때 연금으로 바꿔 받습니다</h3>
+      <p class="panel__d">약관에서 정한 시점 이후 <b>연금 전환</b>을 신청하면, 그동안 쌓인 달러 적립금이 매월 나오는 <b>달러 연금</b>으로 바뀝니다.</p>
+      <ul class="panel__list">
+        <li>확정기간형(예: 20년) 또는 종신형 등 수령 방식을 고를 수 있습니다.</li>
+        <li>전환하지 않고 그대로 두면 사망보험금이 그대로 남아 상속 재원이 됩니다.</li>
+        <li>전환 시 사망보장은 줄거나 종료됩니다 — 둘 중 하나를 고르는 구조입니다.</li>
+      </ul>
+    </div>
+
+    <div class="tl">
+      <div class="tl__track" aria-hidden="true"><span class="tl__done" id="tlDone"></span></div>
+      <ol class="tl__pts" id="tlPts">
+        <li class="tl__pt is-on"><span class="tl__dot">1</span><span class="tl__k">가입</span><span class="tl__s">보장 시작</span></li>
+        <li class="tl__pt"><span class="tl__dot">2</span><span class="tl__k">납입 기간</span><span class="tl__s">달러 적립</span></li>
+        <li class="tl__pt"><span class="tl__dot">3</span><span class="tl__k">완납·거치</span><span class="tl__s">복리 성장</span></li>
+        <li class="tl__pt"><span class="tl__dot">4</span><span class="tl__k">연금 or 상속</span><span class="tl__s">선택</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. 시뮬레이터 ===== -->
+<section class="sec" id="sim">
+  <div class="wrap">
+    <div class="sec__head sec__head--center rv">
+      <span class="eyebrow">1분 시뮬레이션</span>
+      <h2 class="sec__title">숫자로 보면<br /><em>이야기가 달라집니다.</em></h2>
+      <p class="sec__lead">이름도 연락처도 필요 없습니다. 다섯 번만 누르면 결과가 나옵니다.</p>
+    </div>
+
+    <div class="sim rv rv--d1" id="simBox">
+      <div class="sim__bar">
+        <div class="sim__steps" id="simSteps" aria-hidden="true">
+          <span class="sim__seg"><i></i></span><span class="sim__seg"><i></i></span>
+          <span class="sim__seg"><i></i></span><span class="sim__seg"><i></i></span>
+          <span class="sim__seg"><i></i></span>
+        </div>
+        <span class="sim__no" id="simNo">1 / 5</span>
+      </div>
+
+      <div id="simLive" role="status" aria-live="polite" class="visually-hidden" style="position:absolute;left:-9999px"></div>
+
+      <!-- step 1 : 나이 · 성별 -->
+      <div class="step" data-step="1">
+        <h3 class="step__q">먼저, 몇 살이신가요?</h3>
+        <p class="step__h">보험료는 나이에 가장 크게 좌우됩니다. 오늘이 가장 쌉니다.</p>
+        <div class="step__body">
+          <div class="bigval"><span class="bigval__n num" id="ageOut">40</span><span class="bigval__u">세</span></div>
+          <input class="rng" type="range" id="age" min="20" max="65" step="1" value="40" aria-label="나이" />
+          <div class="opts opts--2" style="margin-top:22px">
+            <button class="opt is-on" type="button" data-sex="M" aria-pressed="true">
+              <span class="opt__ico" aria-hidden="true">👤</span>
+              <span><span class="opt__t">남성</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt" type="button" data-sex="F" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">👤</span>
+              <span><span class="opt__t">여성</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+          </div>
+        </div>
+        <div class="step__nav">
+          <button class="btn btn--gold" type="button" data-next>다음</button>
+        </div>
+      </div>
+
+      <!-- step 2 : 목적 -->
+      <div class="step" data-step="2" hidden>
+        <h3 class="step__q">무엇을 위해 준비하시나요?</h3>
+        <p class="step__h">여러 개 골라도 됩니다. 결과 해석이 달라집니다.</p>
+        <div class="step__body">
+          <div class="opts opts--2" id="goals">
+            <button class="opt" type="button" data-goal="pension" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">🌴</span>
+              <span><span class="opt__t">노후에 달러로 받는 연금</span><span class="opt__d">국민연금 말고 하나 더</span></span>
+              <span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt" type="button" data-goal="family" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">🏠</span>
+              <span><span class="opt__t">가족을 위한 사망보장</span><span class="opt__d">내가 없을 때의 소득 공백</span></span>
+              <span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt" type="button" data-goal="legacy" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">🎁</span>
+              <span><span class="opt__t">상속·증여 재원</span><span class="opt__d">현금으로 남겨주고 싶다</span></span>
+              <span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt" type="button" data-goal="hedge" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">🌍</span>
+              <span><span class="opt__t">원화 자산 분산</span><span class="opt__d">환율·유학·해외 지출 대비</span></span>
+              <span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+          </div>
+        </div>
+        <div class="step__nav">
+          <button class="btn btn--gold" type="button" data-next>다음</button>
+          <button class="link-back" type="button" data-prev>← 이전</button>
+        </div>
+      </div>
+
+      <!-- step 3 : 월 납입액 -->
+      <div class="step" data-step="3" hidden>
+        <h3 class="step__q">매달 얼마까지 괜찮으세요?</h3>
+        <p class="step__h">끝까지 유지할 수 있는 금액이 가장 좋은 금액입니다.</p>
+        <div class="step__body">
+          <div class="bigval">
+            <span class="bigval__n num" id="premOut">30만</span><span class="bigval__u">원 / 월</span>
+            <p class="hint" style="margin-top:6px">약 <span class="num usd" id="premUsdOut">$217</span> (환율 1,380원 가정)</p>
+          </div>
+          <input class="rng" type="range" id="prem" min="10" max="200" step="5" value="30" aria-label="월 납입액(만원)" />
+          <div class="chips" id="premChips">
+            <button class="chip" type="button" data-prem="20">20만원</button>
+            <button class="chip is-on" type="button" data-prem="30">30만원</button>
+            <button class="chip" type="button" data-prem="50">50만원</button>
+            <button class="chip" type="button" data-prem="100">100만원</button>
+          </div>
+        </div>
+        <div class="step__nav">
+          <button class="btn btn--gold" type="button" data-next>다음</button>
+          <button class="link-back" type="button" data-prev>← 이전</button>
+        </div>
+      </div>
+
+      <!-- step 4 : 납입 기간 -->
+      <div class="step" data-step="4" hidden>
+        <h3 class="step__q">몇 년 동안 내시겠어요?</h3>
+        <p class="step__h">짧게 낼수록 월 보험료는 오르지만, 완납이 빨라 거치 기간이 길어집니다.</p>
+        <div class="step__body">
+          <div class="opts opts--3" id="terms">
+            <button class="opt" type="button" data-term="10" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">⚡</span>
+              <span><span class="opt__t">10년납</span><span class="opt__d">빠른 완납</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt" type="button" data-term="15" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">⚖️</span>
+              <span><span class="opt__t">15년납</span><span class="opt__d">중간</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt is-on" type="button" data-term="20" aria-pressed="true">
+              <span class="opt__ico" aria-hidden="true">🪶</span>
+              <span><span class="opt__t">20년납</span><span class="opt__d">부담 최소</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+          </div>
+        </div>
+        <div class="step__nav">
+          <button class="btn btn--gold" type="button" data-next>다음</button>
+          <button class="link-back" type="button" data-prev>← 이전</button>
+        </div>
+      </div>
+
+      <!-- step 5 : 연금 개시 -->
+      <div class="step" data-step="5" hidden>
+        <h3 class="step__q">언제부터 연금으로 받고 싶으세요?</h3>
+        <p class="step__h">늦게 시작할수록 더 오래 불어난 뒤 받게 됩니다.</p>
+        <div class="step__body">
+          <div class="opts opts--3" id="starts">
+            <button class="opt" type="button" data-start="60" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">6️⃣</span><span><span class="opt__t">60세부터</span><span class="opt__d">은퇴 직후</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt is-on" type="button" data-start="65" aria-pressed="true">
+              <span class="opt__ico" aria-hidden="true">6️⃣</span><span><span class="opt__t">65세부터</span><span class="opt__d">국민연금과 함께</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+            <button class="opt" type="button" data-start="70" aria-pressed="false">
+              <span class="opt__ico" aria-hidden="true">7️⃣</span><span><span class="opt__t">70세부터</span><span class="opt__d">최대한 키워서</span></span><span class="opt__chk" aria-hidden="true">✓</span>
+            </button>
+          </div>
+          <p class="hint" id="startHint" style="margin-top:14px"></p>
+        </div>
+        <div class="step__nav">
+          <button class="btn btn--gold btn--lg" type="button" data-calc data-discover="sim">결과 보기 →</button>
+          <button class="link-back" type="button" data-prev>← 이전</button>
+        </div>
+      </div>
+
+      <!-- 계산 중 -->
+      <div class="calcing" id="calcing" hidden>
+        <span class="calcing__ring" aria-hidden="true"></span>
+        <p class="calcing__t" id="calcingT">가정을 적용해 계산하는 중…</p>
+      </div>
+    </div>
+
+    <!-- ===== 결과 ===== -->
+    <div class="res" id="res" hidden tabindex="-1">
+      <div class="res__hd" style="margin-top:52px">
+        <span class="eyebrow" style="justify-content:center">YOUR SIMULATION</span>
+        <h3 id="resTitle">40세 남성 · 월 30만원 · 20년납</h3>
+        <p id="resSub">아래 숫자는 <b>가정에 근거한 예시</b>입니다. 실제 계약 조건은 심사 결과에 따라 달라집니다.</p>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi kpi--hero">
+          <p class="kpi__k">사망보험금 (가입 첫날부터)</p>
+          <p class="kpi__v num" id="kFace">$0</p>
+          <p class="kpi__s num" id="kFaceKrw">원화 환산 —</p>
+        </div>
+        <div class="kpi kpi--hero">
+          <p class="kpi__k" id="kPenK">65세부터 월 예상 연금</p>
+          <p class="kpi__v num" id="kPen">$0</p>
+          <p class="kpi__s num" id="kPenKrw">원화 환산 —</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__k">월 보험료</p>
+          <p class="kpi__v num" id="kPrem">$0</p>
+          <p class="kpi__s num" id="kPremKrw">—</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__k">총 납입액</p>
+          <p class="kpi__v num" id="kPaid">$0</p>
+          <p class="kpi__s num" id="kPaidSub">—</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__k">연금 개시 시 적립금</p>
+          <p class="kpi__v num" id="kFund">$0</p>
+          <p class="kpi__s num" id="kFundSub">—</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__k">낸 돈을 넘어서는 시점</p>
+          <p class="kpi__v num" id="kBe">—</p>
+          <p class="kpi__s">해지환급금 기준 예시</p>
+        </div>
+      </div>
+
+      <div class="card res__chart">
+        <div class="fx__top">
+          <span class="fx__t">낸 돈 vs 쌓인 달러</span>
+          <span class="tag">가정 기준 예시</span>
+        </div>
+        <svg class="rc" id="rcChart" viewBox="0 0 720 320" role="img" aria-label="납입 누계와 적립금 추이 비교 그래프">
+          <defs>
+            <linearGradient id="rcg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(224,183,117,.32)" />
+              <stop offset="100%" stop-color="rgba(224,183,117,0)" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="lgd">
+          <span><i class="l-fund"></i>적립금(해지환급금 예시)</span>
+          <span><i class="l-paid"></i>납입 누계</span>
+          <span style="color:var(--mint)">— 연금 개시 시점</span>
+        </div>
+      </div>
+
+      <div class="card sens" data-discover="sens">
+        <div>
+          <p class="sens__t">환율이 바뀌면? <span class="tag">직접 움직여 보세요</span></p>
+          <div class="rng__row">
+            <label class="rng__lbl" for="fxRate">연금 수령 시 환율 가정</label>
+            <output class="rng__val num" id="fxRateOut">1,380원</output>
+          </div>
+          <input class="rng" type="range" id="fxRate" min="1000" max="1800" step="10" value="1380" />
+          <p class="hint" style="margin-top:8px">환율이 오르면 원화 환산액이 커지고, 내리면 작아집니다. <b>양방향으로 움직입니다.</b></p>
+        </div>
+        <div>
+          <p class="sens__t">적립이율 가정</p>
+          <div class="chips" style="justify-content:flex-start" id="rateChips">
+            <button class="chip" type="button" data-rate="2.0">최저보증 2.0%</button>
+            <button class="chip is-on" type="button" data-rate="3.0">현재 공시 3.0%</button>
+            <button class="chip" type="button" data-rate="3.5">낙관 3.5%</button>
+          </div>
+          <p class="hint" style="margin-top:12px">공시이율은 매월 변동합니다. <b>최저보증이율</b>은 아무리 떨어져도 보장되는 하한선이며, 위 세 가지는 모두 <b>가정</b>입니다.</p>
+        </div>
+      </div>
+
+      <p class="res__note">
+        <b>꼭 보셔야 할 부분.</b> 초기에 해지하면 해지환급금이 낸 보험료보다 <b>적습니다</b>.
+        위 그래프에서 두 선이 만나는 지점 전에는 원금 손실 구간입니다. 이 상품은 <b>끝까지 유지할 수 있을 때</b>만 의미가 있습니다.
+      </p>
+
+      <div class="res__cta">
+        <a href="#contact" class="btn btn--gold btn--lg" data-discover="cta">이 조건으로 정확히 상담받기</a>
+        <button class="btn btn--ghost btn--lg" type="button" id="redo">조건 바꿔서 다시 보기</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. FAQ ===== -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="sec__head rv">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="sec__title">가장 많이 묻는<br /><em>불편한 질문</em>부터.</h2>
+      <p class="sec__lead">좋은 말만 적지 않았습니다. 하나씩 눌러 확인해 보세요.</p>
+    </div>
+    <div class="faq" id="faqList">
+      <div class="qa">
+        <button class="qa__q" type="button" aria-expanded="false" data-discover="faq">
+          <span class="qa__mark">Q</span><span>환율이 떨어지면 손해 아닌가요?</span><span class="qa__sign" aria-hidden="true">+</span>
+        </button>
+        <div class="qa__a"><div><p>맞습니다. 원화로 환산해 받는 시점의 환율이 낮으면 <b>원화 기준 손실이 날 수 있습니다.</b> 다만 이 상품은 달러로 내고 달러로 받는 구조라, 달러 기준으로는 환율과 무관하게 계약된 금액이 지급됩니다. 유학·해외 거주·해외 지출처럼 달러로 쓸 계획이 있다면 환율 위험 자체가 줄어듭니다. 한 번에 목돈으로 넣기보다 매월 나눠 내면 환율 평균 매입 효과도 생깁니다.</p></div></div>
+      </div>
+      <div class="qa">
+        <button class="qa__q" type="button" aria-expanded="false" data-discover="faq">
+          <span class="qa__mark">Q</span><span>중간에 해지하면 얼마나 손해인가요?</span><span class="qa__sign" aria-hidden="true">+</span>
+        </button>
+        <div class="qa__a"><div><p>초기 몇 년은 사업비 비중이 커서 <b>해지환급금이 낸 보험료보다 적습니다.</b> 가입 1~2년 차 해지는 손실이 상당히 큽니다. 그래서 "얼마를 넣을 수 있느냐"보다 <b>"끝까지 낼 수 있느냐"</b>가 훨씬 중요합니다. 부담되면 금액을 줄여 시작하는 편이 낫습니다. 자세한 해지환급금은 상품설명서의 예시표에서 연도별로 확인해야 합니다.</p></div></div>
+      </div>
+      <div class="qa">
+        <button class="qa__q" type="button" aria-expanded="false" data-discover="faq">
+          <span class="qa__mark">Q</span><span>은행 달러 예금과 뭐가 다른가요?</span><span class="qa__sign" aria-hidden="true">+</span>
+        </button>
+        <div class="qa__a"><div><p>달러 예금은 <b>보장이 없고 단기 유동성</b>이 강점입니다. 이 상품은 반대로 <b>가입 첫날부터 사망보장</b>이 붙고, 장기 유지 시 세제·연금 전환 같은 장치가 함께 갑니다. 단기에 쓸 돈은 예금, 20년 이상 묶어둘 돈은 보험 — 이렇게 나누는 것이 일반적입니다.</p></div></div>
+      </div>
+      <div class="qa">
+        <button class="qa__q" type="button" aria-expanded="false" data-discover="faq">
+          <span class="qa__mark">Q</span><span>비과세라고 하던데 정말인가요?</span><span class="qa__sign" aria-hidden="true">+</span>
+        </button>
+        <div class="qa__a"><div><p>보험차익 비과세는 <b>요건을 충족했을 때만</b> 적용됩니다. 계약 유지 기간, 월 납입 한도, 계약자·수익자 구성 등 조건이 정해져 있고 세법은 개정될 수 있습니다. "무조건 비과세"라는 설명은 정확하지 않습니다. 본인 상황에 맞는지는 가입 전 세부 요건을 반드시 확인하세요.</p></div></div>
+      </div>
+      <div class="qa">
+        <button class="qa__q" type="button" aria-expanded="false" data-discover="faq">
+          <span class="qa__mark">Q</span><span>연금으로 바꾸면 사망보장은 어떻게 되나요?</span><span class="qa__sign" aria-hidden="true">+</span>
+        </button>
+        <div class="qa__a"><div><p>연금으로 전환하면 그동안 쌓인 적립금을 연금 재원으로 쓰기 때문에 <b>사망보장은 줄거나 종료</b>됩니다. 즉 "연금으로 받기"와 "보장을 남기기"는 함께 최대치로 가져갈 수 없습니다. 전환 여부는 그때의 건강·자산 상황을 보고 결정하면 되며, 결정을 미룰 수 있다는 점 자체가 이 구조의 장점입니다.</p></div></div>
+      </div>
+      <div class="qa">
+        <button class="qa__q" type="button" aria-expanded="false" data-discover="faq">
+          <span class="qa__mark">Q</span><span>지금 계산된 금액 그대로 가입되나요?</span><span class="qa__sign" aria-hidden="true">+</span>
+        </button>
+        <div class="qa__a"><div><p>아닙니다. 이 페이지의 숫자는 <b>공개된 일반적 구조를 단순화한 예시 계산</b>입니다. 실제 보험료는 보험사·상품·특약·건강상태(고지 및 심사)·직업 등에 따라 달라지고, 적립금과 연금액은 공시이율 변동에 따라 매년 달라집니다. 정확한 금액은 실제 <b>가입설계서</b>로만 확인할 수 있습니다.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. 유의사항 ===== -->
+<section class="sec sec--tight">
+  <div class="wrap">
+    <div class="notice rv">
+      <h3><span aria-hidden="true">⚠️</span> 반드시 확인해 주세요</h3>
+      <ul>
+        <li>이 페이지는 <b>상품 이해를 돕기 위한 참고용 안내</b>이며, 청약·계약 체결의 효력이 없습니다. 계약의 모든 내용은 <b>약관 및 상품설명서</b>가 기준입니다.</li>
+        <li>시뮬레이션 수치는 아래 명시된 <b>가정에 따른 예시</b>로, 특정 보험회사·상품의 실제 보험료·해지환급금·연금액을 나타내지 않으며 <b>미래 수익을 보장하지 않습니다.</b></li>
+        <li>보험료 및 적립금이 <b>미국 달러(USD)로 표시</b>되는 상품의 경우 환율 변동에 따라 원화 환산 금액이 <b>납입한 원화 금액보다 적어질 수 있습니다.</b></li>
+        <li>공시이율은 매월 변동하며, 적용 시점의 이율에 따라 적립금과 연금액이 <b>줄어들 수 있습니다.</b> 최저보증이율은 하한선일 뿐 예상 수익률이 아닙니다.</li>
+        <li>계약 <b>중도 해지 시 해지환급금은 이미 납입한 보험료보다 적거나 없을 수 있습니다.</b> 특히 가입 초기에 손실이 큽니다.</li>
+        <li>가입 전 <b>계약 전 알릴 의무(고지의무)</b>를 성실히 이행해야 하며, 위반 시 보장이 제한되거나 계약이 해지될 수 있습니다.</li>
+        <li>보험차익 비과세 등 세제 혜택은 <b>세법상 요건 충족 시</b>에만 적용되고, 관련 법령 개정에 따라 달라질 수 있습니다.</li>
+        <li>예금자보호 여부 및 한도는 상품·보험회사에 따라 다르므로 개별 확인이 필요합니다.</li>
+      </ul>
+      <p class="notice__foot" id="assumeTxt">
+        <b>시뮬레이션 가정:</b> 표준체 기준 예시 요율 / 적립이율 연 3.0%(월 복리) / 사업비는 경과 연차별 차감으로 단순화 / 연금은 20년 확정 지급 / 환율 1,380원 가정.
+        실제 상품과 다를 수 있습니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. 상담 ===== -->
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="sec__head rv">
+      <span class="eyebrow">마지막 단계</span>
+      <h2 class="sec__title">여기까지 보셨다면,<br /><em>정확한 숫자</em>를 받아볼 차례입니다.</h2>
+      <p class="sec__lead">남겨주시면 실제 가입설계서 기준으로 비교해 드립니다. 부담되시면 카카오톡으로 편하게 물어보셔도 됩니다.</p>
+    </div>
+
+    <div class="contact">
+      <aside class="contact__aside rv rv--d1">
+        <a class="btn btn--kakao btn--lg" id="kakaoBtn" href="#" target="_blank" rel="noopener" data-discover="cta">
+          <span aria-hidden="true">💬</span> 카카오톡으로 바로 물어보기
+        </a>
+        <ul class="contact__ways">
+          <li><a class="way" id="telWay" href="#"><span class="way__ico" aria-hidden="true">📞</span><span><span class="way__t" id="telTxt">전화 상담</span><span class="way__d">평일 09:00–18:00</span></span></a></li>
+          <li><a class="way" href="#sim"><span class="way__ico" aria-hidden="true">🧮</span><span><span class="way__t">조건 다시 계산하기</span><span class="way__d">나이·납입액 바꿔보기</span></span></a></li>
+        </ul>
+        <p class="hint" style="margin-top:18px">남겨주신 정보는 상담 목적 외에 사용하지 않습니다.</p>
+      </aside>
+
+      <form class="card form rv rv--d2" id="leadForm" novalidate>
+        <div class="fld--2">
+          <div class="fld">
+            <label class="fld__l" for="fName">성함 <span class="req">*</span></label>
+            <input id="fName" name="name" type="text" autocomplete="name" placeholder="홍길동" required />
+          </div>
+          <div class="fld">
+            <label class="fld__l" for="fPhone">연락처 <span class="req">*</span></label>
+            <input id="fPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-1234-5678" required />
+          </div>
+        </div>
+        <div class="fld--2">
+          <div class="fld">
+            <label class="fld__l" for="fTime">통화 가능 시간</label>
+            <select id="fTime" name="time">
+              <option>아무 때나</option><option>오전 (09–12시)</option><option>오후 (12–18시)</option><option>저녁 (18–21시)</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="fld__l" for="fWay">선호 상담 방식</label>
+            <select id="fWay" name="way">
+              <option>카카오톡</option><option>전화</option><option>문자</option>
+            </select>
+          </div>
+        </div>
+        <div class="fld">
+          <label class="fld__l" for="fMemo">궁금한 점</label>
+          <textarea id="fMemo" name="memo" placeholder="예) 지금 가입한 다른 보험이랑 겹치는지 보고 싶어요."></textarea>
+          <p class="form__pick" id="simPick">시뮬레이션 결과를 함께 보내면 상담이 빨라집니다.</p>
+        </div>
+        <label class="agree">
+          <input type="checkbox" id="fAgree" required />
+          <span>상담을 위한 <b>개인정보(성함·연락처) 수집·이용</b>에 동의합니다. 수집한 정보는 상담 목적으로만 사용하고, 목적 달성 후 지체 없이 파기합니다. 동의를 거부하실 수 있으며, 이 경우 상담 연결이 제한됩니다.</span>
+        </label>
+        <button class="btn btn--gold btn--lg btn--block" type="submit" style="margin-top:18px">상담 신청하기</button>
+        <p class="form__msg" id="formMsg" hidden role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__row">
+      <strong>달러 종신·연금 플랜 안내</strong>
+      <span id="ftrContact"></span>
+    </div>
+    <p class="ftr__cp">
+      본 페이지는 특정 보험회사의 공식 자료가 아니며, 상품 이해를 돕기 위한 참고용 안내 자료입니다.
+      계약에 관한 사항은 반드시 약관 및 상품설명서를 확인하시기 바랍니다.
+      보험계약자는 청약 후 일정 기간 내에 청약을 철회할 수 있습니다.
+      <br />※ 실제 게시 전 소속 회사의 <b>광고 심의(준법감시인 심의필)</b> 절차를 반드시 거쳐 주세요.
+    </p>
+  </div>
+</footer>
+
+<!-- ===== 하단 스티키 ===== -->
+<div class="dock">
+  <div class="dock__in">
+    <div class="dock__txt">
+      <p class="dock__t" id="dockT">내 예상 보험료가 궁금하다면</p>
+      <p class="dock__s" id="dockS">개인정보 없이 1분이면 확인됩니다</p>
+    </div>
+    <a class="btn btn--gold" id="dockBtn" href="#sim">예상 보험료 확인</a>
+  </div>
+</div>
+
+<script src="assets/app.js?v=2"></script>
+</body>
+</html>
