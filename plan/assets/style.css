@@ -770,3 +770,16 @@ h2.sec__title{ font-family:var(--font-head); font-size:clamp(1.75rem,4.6vw,2.7re
 .headline__v .cur{ font-size:.62em; opacity:.75; margin-right:2px; }
 .headline__krw{ font-size:1rem; color:var(--muted); font-weight:700; margin-top:8px; }
 .mini__krw{ font-size:.74rem; color:var(--muted-2); margin-top:3px; }
+
+.warnt{ color:var(--warn); }
+.sub__p{ display:block; margin-top:10px; padding:5px 10px; border-radius:7px; font-size:.78rem; font-weight:700;
+  background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--muted); align-self:flex-start; }
+
+/* 이번 달 숫자 스트립 */
+.rates{ display:grid; gap:10px; grid-template-columns:1fr 1fr; margin-top:34px; }
+@media (min-width:860px){ .rates{ grid-template-columns:repeat(4,1fr); gap:14px; } }
+.rate{ padding:18px 14px; border-radius:var(--r-m); text-align:center;
+  border:1px solid rgba(224,183,117,.3); background:linear-gradient(165deg,rgba(224,183,117,.12),rgba(255,255,255,.02)); }
+.rate__k{ font-size:.76rem; color:var(--muted); font-weight:700; }
+.rate__v{ font-size:clamp(1.5rem,5vw,2.1rem); font-weight:800; color:var(--gold-1); margin-top:6px; letter-spacing:-.03em; }
+.rate__s{ font-size:.74rem; color:var(--muted-2); margin-top:5px; line-height:1.5; }

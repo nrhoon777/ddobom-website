@@ -1,69 +1,49 @@
 /* =====================================================================
-   계산 엔진 — 순수 계산만. 화면과 무관.
-   data.js 의 PRODUCTS 정의를 받아 동작하므로,
-   실제 상품 데이터를 넣으면 이 파일은 그대로 두면 됩니다.
+   계산 엔진 — 자료에 실제로 있는 수치만 근거로 씁니다.
+   자료에 없는 구간은 "공시이율로 연장한 추정"임을 화면에 표시합니다.
 ===================================================================== */
 var CALC = (function () {
   "use strict";
 
-  /* 경과 연차별 적립비율 (환급률 표가 없을 때만 사용) */
-  function credit(p, year) {
-    var t = p.credit || [[999, 0.9]];
-    for (var i = 0; i < t.length; i++) if (year <= t[i][0]) return t[i][1];
-    return t[t.length - 1][1];
-  }
+  /* 상품 표기 — CONFIG.showBrand 가 꺼져 있으면 일반 유형명 */
+  function label(p) { return CONFIG.showBrand ? p.name : p.generic; }
 
-  /* 그 시점까지 낸 보험료 누계 */
-  function paidBy(monthly, term, year) {
-    return monthly * 12 * Math.min(year, term);
-  }
-  function totalPaid(monthly, term) { return monthly * 12 * term; }
+  /* 기준 계약 대비 배율 (금액은 여기에 비례해 환산) */
+  function scale(baseAmount, amount) { return amount / baseAmount; }
 
-  /* 환급률 표 보간 — 가입설계서 표가 있으면 그것이 진실 */
-  function refundPct(p, term, year) {
-    if (!p.refund || !p.refund[term]) return null;
-    var tbl = p.refund[term];
-    var ys = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
+  /* {연차: 환급률%} 표 보간 — 표 안이면 실제값, 밖이면 null */
+  function tblAt(t, y) {
+    var ys = Object.keys(t).map(Number).sort(function (a, b) { return a - b; });
     if (!ys.length) return null;
-    if (year <= ys[0]) return (tbl[ys[0]] / ys[0]) * year;              // 0에서 첫 값까지 직선
+    if (y < ys[0]) return null;                       // 자료에 없는 초기 구간은 추정하지 않는다
+    if (y === ys[0]) return t[ys[0]];
     for (var i = 1; i < ys.length; i++) {
-      if (year <= ys[i]) {
+      if (y <= ys[i]) {
         var a = ys[i - 1], b = ys[i];
-        return tbl[a] + (tbl[b] - tbl[a]) * ((year - a) / (b - a));
+        return t[a] + (t[b] - t[a]) * ((y - a) / (b - a));
       }
     }
-    return null;                                                        // 표 밖 → fundAt 이 이율로 연장
+    return null;
   }
 
-  /* 경과 year 시점의 적립금(해지환급금 기준) */
-  function fundAt(p, monthly, term, year, rate) {
-    var r = rate / 100;
-    if (p.refund && p.refund[term]) {
-      var ys = Object.keys(p.refund[term]).map(Number).sort(function (a, b) { return a - b; });
-      var last = ys[ys.length - 1];
-      if (year <= last) {
-        return paidBy(monthly, term, year) * refundPct(p, term, year) / 100;
-      }
-      var base = paidBy(monthly, term, last) * p.refund[term][last] / 100;
-      return base * Math.pow(1 + r, year - last);                       // 표 마지막 이후는 이율로 연장
-    }
-    // 표가 없으면 월 단위 시뮬레이션 (사업비 차감 + 월복리)
-    var m = r / 12, fund = 0;
-    for (var k = 1; k <= Math.round(year * 12); k++) {
-      var y = Math.ceil(k / 12);
-      fund *= (1 + m);
-      if (y <= term) fund += monthly * credit(p, y);
-    }
-    return fund;
+  /* 표 밖 구간을 공시이율로 연장 (추정) */
+  function refund(t, rate, y) {
+    var v = tblAt(t, y);
+    if (v != null) return { pct: v, est: false };
+    var ys = Object.keys(t).map(Number).sort(function (a, b) { return a - b; });
+    var last = ys[ys.length - 1], first = ys[0];
+    if (y > last) return { pct: t[last] * Math.pow(1 + rate / 100, y - last), est: true };
+    // 표의 첫 시점보다 앞 — 확정이율 곡선으로 역산
+    var k = t[first] / Math.pow(1 + rate / 100, first);
+    return { pct: k * Math.pow(1 + rate / 100, y), est: true };
   }
 
-  /* 연차별 곡선 (그래프용) */
-  function curve(p, monthly, term, years, rate) {
-    var out = [];
-    for (var y = 0; y <= years; y++) {
-      out.push({ y: y, paid: paidBy(monthly, term, y), fund: y ? fundAt(p, monthly, term, y, rate) : 0 });
-    }
-    return out;
+  /* 이율확정형 거치 곡선 — 만기 환급률에서 사업비 계수를 역산해 전 구간을 그린다.
+     (10년형 158.1% / 20년형 282.0% 모두 계수 ≈ 0.90 으로 일관되게 맞는다) */
+  function deferAt(finalPct, rate, years, y) {
+    var r = 1 + rate / 100;
+    var k = finalPct / Math.pow(r, years);
+    return k * Math.pow(r, y);
   }
 
   /* 확정기간 연금 월 수령액 */
@@ -73,78 +53,42 @@ var CALC = (function () {
     return fund * r / (1 - Math.pow(1 + r, -months));
   }
 
-  /* 원금을 헐지 않고 이자만 받는 고정 수령 (즉시 지급형) */
-  function interestOnly(fund, payoutRate) {
-    return fund * (payoutRate / 100) / 12;
-  }
+  /* 원금을 헐지 않고 이자만 받는 고정 수령 */
+  function interestOnly(fund, rate) { return fund * (rate / 100) / 12; }
 
-  /* ── 스노볼 인출 시뮬레이션 ────────────────────────────────────
-     개시 시점부터 매년 draw 만큼 빼고, 남은 돈은 계속 굴린다.      */
-  function withdraw(p, monthly, term, startYear, draw, rate, horizon) {
-    var r = rate / 100;
-    var fund = fundAt(p, monthly, term, startYear, rate);
-    var paid = totalPaid(monthly, term);
-    var rows = [{ y: startYear, fund: fund, drawn: 0, pct: (fund / paid) * 100 }];
-    var drawn = 0;
-    for (var y = startYear + 1; y <= startYear + horizon; y++) {
-      fund = Math.max(0, fund - draw) * (1 + r);
-      // 납입기간이 아직 남아 있으면 계속 납입분도 쌓인다
-      if (y <= term) fund += monthly * 12 * credit(p, y);
-      drawn += draw;
-      rows.push({ y: y, fund: fund, drawn: drawn, pct: (fund / paid) * 100, total: (fund + drawn) / paid * 100 });
-    }
-    return { rows: rows, paid: paid };
-  }
-
-  /* 목표 금액을 만들려면 월 얼마? — 이분 탐색 */
-  function solveMonthly(p, term, targetYear, goal, rate) {
-    // 상한은 "이자가 전혀 없을 때 필요한 월 납입액" — 통화와 무관하게 성립한다
-    var lo = 0, hi = goal / (12 * term) * 1.2, mid;
-    for (var i = 0; i < 80; i++) {
-      mid = (lo + hi) / 2;
-      if (fundAt(p, mid, term, targetYear, rate) < goal) lo = mid; else hi = mid;
-    }
-    return hi;
-  }
-
-  /* 은행 적금 만기 (정액적립식·단리, 이자소득세 차감) */
-  function bankSavings(monthly, years, bankRate, taxPct) {
-    var n = years * 12, principal = monthly * n, interest = 0;
-    for (var i = 1; i <= n; i++) interest += monthly * (bankRate / 100) * ((n - i + 1) / 12);
-    var tax = interest * (taxPct / 100);
-    return { principal: principal, interest: interest, tax: tax, net: principal + interest - tax };
-  }
-
-  /* 일시납(거치) 적립금 — 목돈을 넣고 그대로 두었을 때 */
-  function lump(p, principal, year, rate) {
-    var c = credit(p, 1);                       // 일시납도 초기 사업비를 한 번 차감
-    return principal * c * Math.pow(1 + rate / 100, year);
-  }
-
-  /* 자유 입출금 시뮬레이션 — 해지하지 않고 빼 쓰고 다시 채우는 경우
-     events: [{ y: 경과연차, amount: 음수=인출 / 양수=추가납입 }]        */
-  function flex(p, startFund, rate, events, years) {
-    var r = rate / 100, fund = startFund, rows = [{ y: 0, fund: fund, ev: 0 }];
+  /* 자유 입출금 — 해지하지 않고 빼 쓰고 다시 채우는 경우
+     events: [{ y: 경과연차, amount: 음수=인출 / 양수=추가납입 }] */
+  function flex(startFund, rate, events, years) {
+    var r = rate / 100, fund = startFund, rows = [{ y: 0, fund: fund }];
     for (var y = 1; y <= years; y++) {
       var ev = 0;
       (events || []).forEach(function (e) { if (e.y === y) ev += e.amount; });
       fund = Math.max(0, fund + ev) * (1 + r);
-      rows.push({ y: y, fund: fund, ev: ev });
+      rows.push({ y: y, fund: fund });
     }
     return rows;
   }
 
-  /* 목표 금액을 만들려면 일시납으로 얼마? */
-  function solveLump(p, targetYear, goal, rate) {
-    var c = credit(p, 1);
-    return goal / (c * Math.pow(1 + rate / 100, targetYear));
+  /* 사망배수 — 표에 없는 나이는 앞뒤 값으로 보간 */
+  function multipleAt(tbl, age) {
+    var ages = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
+    if (age <= ages[0]) return tbl[ages[0]];
+    if (age >= ages[ages.length - 1]) return tbl[ages[ages.length - 1]];
+    for (var i = 1; i < ages.length; i++) {
+      if (age <= ages[i]) {
+        var a = ages[i - 1], b = ages[i];
+        return tbl[a] + (tbl[b] - tbl[a]) * ((age - a) / (b - a));
+      }
+    }
+    return tbl[ages[0]];
   }
 
+  /* 목표 금액을 만들려면 얼마를 넣어야 하나 — 환급률 표 기준 역산 */
+  function needFor(goal, pct) { return goal / (pct / 100); }
+
   return {
-    lump: lump, flex: flex, solveLump: solveLump,
-    credit: credit, paidBy: paidBy, totalPaid: totalPaid,
-    refundPct: refundPct, fundAt: fundAt, curve: curve,
-    annuity: annuity, interestOnly: interestOnly,
-    withdraw: withdraw, solveMonthly: solveMonthly, bankSavings: bankSavings
+    label: label, scale: scale, tblAt: tblAt, refund: refund, deferAt: deferAt,
+    annuity: annuity, interestOnly: interestOnly, flex: flex,
+    multipleAt: multipleAt, needFor: needFor
   };
 })();

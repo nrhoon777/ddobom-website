@@ -1,35 +1,28 @@
-/* ===== 목돈 만들기 — short(단기 목표 역산) / long(길게 불리기) ========= */
+/* ===== 불리기 — short(짧게 넣고 10년 뒤) / long(목돈을 길게) ========= */
 (function () {
   "use strict";
   var $ = UI.$;
-  var P = BASE;
-  var mode = (location.search.match(/m=(\w+)/) || [])[1] === "short" ? "short" : "long";
-  var S = { age: 45, way: "monthly", prem: 100, goal: 10000, term: mode === "short" ? 7 : 20, rate: P.rate.current };
+  var mode = (location.search.match(/m=(\w+)/) || [])[1] === "long" ? "long" : "short";
+  var P = mode === "long" ? PRODUCTS.lumpAnnuity : PRODUCTS.shortWhole;
+  var FX0 = CONFIG.fx.now;
+  var S = { age: 40, amt: mode === "long" ? 69000 : 500, plan: "20", type: "plus", year: mode === "long" ? 20 : 10 };
 
   var COPY = {
-    short: { eyebrow: "목돈 만들기 · 단기 목표", title: "정해둔 금액까지,<br /><em>얼마씩</em> 넣으면 될까요?",
-             lead: "목표 금액과 기간을 정해두면 매달 넣을 금액을 거꾸로 계산해 드립니다. 달러로 쌓이고, 요건을 채우면 이자에 세금이 붙지 않습니다." },
-    long:  { eyebrow: "목돈 만들기 · 길게", title: "지금 넣어두면<br /><em>그때 얼마</em>가 되어 있을까요?",
-             lead: "길게 둘수록 복리가 일합니다. 10년, 15년, 20년 뒤에 손에 쥐는 달러 금액을 확인해 보세요." }
+    short: { eyebrow: "불리기 · 짧게 넣고 10년 뒤", title: "7년만 넣고,<br />10년 뒤에 <em>찾습니다.</em>",
+             lead: "짧게 내고 오래 두는 구조입니다. 내는 동안 암 진단을 받으면 남은 보험료는 면제되고, 그래도 환급률은 그대로 갑니다." },
+    long:  { eyebrow: "불리기 · 목돈을 길게", title: "가입 시점 이율로<br /><em>10년·20년을 확정</em>합니다.",
+             lead: "지금 있는 목돈을 넣으면 가입 시점의 공시이율로 만기까지 확정 운영됩니다. 이후 시장 금리가 내려가도 그대로 갑니다." }
   }[mode];
   $("#pgEyebrow").textContent = COPY.eyebrow;
   $("#pgTitle").innerHTML = COPY.title;
   $("#pgLead").textContent = COPY.lead;
-  document.title = (mode === "short" ? "단기 목표 자금" : "10~20년 뒤 목돈") + " | 달러 플랜";
+  document.title = (mode === "long" ? "목돈을 길게 묻어두기" : "짧게 넣고 10년 뒤") + " | 달러 플랜";
 
-  if (mode === "short") { $("#goalWrap").hidden = false; $("#premWrap").hidden = true; }
-
-  function yFmt(v) { return v >= 1000 ? "$" + Math.round(v / 1000) + "k" : "$" + Math.round(v); }
   function U(v) { return "$" + UI.n(v); }
   function K(v) { return UI.krw(UI.toKrw(v)); }
   function fx() { return UI.getFx(); }
-  /* 납입액은 가입 시점 환율로 달러 환산해 고정한다.
-     그래야 아래 환율 슬라이더가 "받을 때의 환율"만 움직여 환차익이 눈에 보인다. */
-  var FX0 = CONFIG.fx.now;
-  function monthlyUsd() { return S.prem * 10000 / FX0; }
-  function lumpUsd()    { return S.prem * 10000 / FX0; }
+  function yFmt(v) { return v >= 1000 ? "$" + Math.round(v / 1000) + "k" : "$" + Math.round(v); }
 
-  /* ── 세그먼트 ─────────────────────────────────────────────── */
   function seg(host, items, get, set) {
     host.innerHTML = "";
     items.forEach(function (it) {
@@ -40,113 +33,78 @@
       host.appendChild(b);
     });
   }
-  var TERMS = mode === "short" ? [5, 7, 10] : [10, 15, 20];
-  function buildSegs() {
-    seg($("#waySeg"), [{ value: "monthly", label: "월납" }, { value: "lump", label: "일시납" }],
-      function () { return S.way; }, function (v) { S.way = v; syncWay(); run(); });
-    seg($("#termSeg"), TERMS.map(function (t) { return { value: t, label: t + "년" }; }),
-      function () { return S.term; }, function (v) { S.term = v; run(); });
-    seg($("#rateSeg"), P.rate.options.map(function (r) {
-      return { value: r, label: (r === P.rate.min ? "최저보증 " : "") + r.toFixed(1) + "%" };
-    }), function () { return S.rate; }, function (v) { S.rate = v; run(); });
-  }
-  function syncWay() {
-    var r = $("#prem");
-    if (S.way === "lump") { $("#premL").textContent = "일시납 금액"; r.min = 5000; r.max = 250000; r.step = 5000; if (S.prem < 5000) S.prem = 70000; }
-    else { $("#premL").textContent = "월 납입액"; r.min = 10; r.max = 300; r.step = 5; if (S.prem > 300) S.prem = 100; }
-    r.value = S.prem;
-  }
 
-  $("#age").addEventListener("input", function () { S.age = +this.value; run(); });
-  $("#prem").addEventListener("input", function () { S.prem = +this.value; run(); });
-  $("#goal").addEventListener("input", function () { S.goal = +this.value; run(); });
+  /* ── 현재 조건이 만들어내는 수치 ─────────────────────────────── */
+  function plan() { return P.plans ? P.plans[S.plan] : null; }
+  function rate()  { return plan() ? plan().rate : P.rate; }
+  function payTerm() { return P.base.payTerm; }
+  function paid()  { return mode === "long" ? S.amt : S.amt * 12 * payTerm(); }
+
+  function pctAt(y) {
+    if (mode === "long") {
+      var pl = plan(), fin = pl.defer[S.type];
+      if (y === pl.years) return { pct: fin, est: false };
+      return { pct: CALC.deferAt(fin, pl.rate, pl.years, y), est: true };
+    }
+    return CALC.refund(P.refund[payTerm()], P.rate, y);
+  }
+  function fundAt(y) { return paid() * pctAt(y).pct / 100; }
 
   /* ── 실행 ─────────────────────────────────────────────────── */
-  function fundAt(y, monthly, lumpAmt) {
-    return S.way === "lump" ? CALC.lump(P, lumpAmt, y, S.rate)
-                            : CALC.fundAt(P, monthly, S.term, y, S.rate);
-  }
-  function paidAt(y, monthly, lumpAmt) {
-    return S.way === "lump" ? lumpAmt : CALC.paidBy(monthly, S.term, y);
-  }
-
   function run() {
     buildSegs();
-    UI.paintRange($("#age")); UI.paintRange($("#prem")); UI.paintRange($("#goal"));
+    UI.paintRange($("#age")); UI.paintRange($("#prem"));
     $("#ageOut").textContent = S.age + "세";
-    $("#premOut").innerHTML = UI.n(S.prem) + "만원 <span class='hint'>≈ $" + UI.n(monthlyUsd()) + "</span>";
-    $("#goalOut").innerHTML = "$" + UI.n(S.goal) + " <span class='hint'>≈ " + UI.krw(S.goal * fx()) + "</span>";
+    $("#premOut").innerHTML = mode === "long"
+      ? "$" + UI.n(S.amt) + " <span class='hint'>≈ " + UI.krw(S.amt * FX0) + "</span>"
+      : "$" + UI.n(S.amt) + " <span class='hint'>월 ≈ " + UI.krw(S.amt * FX0) + "</span>";
 
-    if (mode === "short") short(); else long();
+    var r = pctAt(S.year), f = fundAt(S.year), p = paid();
+    $("#hK").innerHTML = mode === "long"
+      ? plan().years + "년 뒤 (만 " + (S.age + plan().years) + "세) 확정 환급금"
+      : "10년 + 1일차에 찾으면";
+    UI.count($("#hV"), f, U);
+    $("#hKrw").textContent = "오늘 환율로 " + UI.krw(f * fx());
+    $("#hS").innerHTML = "낸 돈 <b>" + U(p) + "</b> 대비 <b>" + UI.pct(r.pct) + "</b>" +
+      (r.est ? " <span class='bene__chk'>추정</span>" : " <span class='tag'>자료값</span>");
 
-    /* 비과세 한도 */
-    var krwAmt = mode === "short" ? solveKrw() : S.prem * 10000;
-    var chk = UI.taxCheck(S.way === "lump" ? "lump" : "monthly", krwAmt);
+    var g = $("#miniGrid"); g.className = "mini mini--4"; g.innerHTML = "";
+    mini(g, mode === "long" ? "넣는 돈" : "총 납입액", U(p), UI.krw(p * FX0) +
+      (mode === "short" ? " · 월 " + U(S.amt) + " × " + payTerm() + "년" : ""));
+    mini(g, "불어난 부분", U(f - p), K(f - p));
+    mini(g, "적용 이율", rate().toFixed(2) + "%", mode === "long" ? plan().years + "년 확정" : "공시이율");
+    if (mode === "long" && S.type === "plus")
+      mini(g, "연금개시 추가 보너스", "+" + plan().bonus + "%", "연금강화형에 한함");
+    else if (mode === "short")
+      mini(g, "암 진단 시", "납입면제", "환급률 변동 없음");
+    else
+      mini(g, "매달 이자만 받으면", U(CALC.interestOnly(f, rate())), "원금은 그대로");
+
+    table(); chart(); notes();
+
+    var chk = UI.taxCheck(mode === "long" ? "lump" : "monthly",
+      mode === "long" ? S.amt * FX0 : S.amt * FX0);
     var bar = $("#limitBar"); bar.className = "limitbar" + (chk.over ? " is-over" : ""); bar.innerHTML = chk.html;
 
-    $("#assumeTxt").innerHTML = "<b>계산 가정:</b> 달러 공시이율 연 " + S.rate.toFixed(1) +
-      "%(복리) · 사업비는 경과 연차별 차감으로 단순화 · 적용환율 " + UI.n(fx()) + "원" +
-      (P.refund ? " · 환급률은 제공된 가입설계서 표 기준" : " · 환급률은 <b>예시 모델</b>로 추정(실제 가입설계서 표로 교체 예정)") +
-      " · 기준일 " + CONFIG.asOf + ".";
     $("#simPick").innerHTML = "상담 신청 시 <b>" + summary() + "</b> 조건이 함께 전달됩니다.";
   }
 
-  function solveUsd() {
-    return S.way === "lump" ? CALC.solveLump(P, S.term, S.goal, S.rate)
-                            : CALC.solveMonthly(P, S.term, S.term, S.goal, S.rate);
-  }
-  function solveKrw() { return solveUsd() * FX0; }
-
-  /* 단기 목표 역산 */
-  function short() {
-    var need = solveUsd();
-    $("#hK").innerHTML = S.term + "년 뒤 <b>$" + UI.n(S.goal) + "</b>을 만들려면 " + (S.way === "lump" ? "지금" : "매달");
-    UI.count($("#hV"), need, U);
-    $("#hKrw").textContent = "오늘 환율로 " + UI.krw(need * fx());
-    var paid = S.way === "lump" ? need : need * 12 * S.term;
-    $("#hS").innerHTML = S.way === "lump"
-      ? "한 번에 넣고 " + S.term + "년 두면 됩니다."
-      : S.term + "년 동안 총 <b>$" + UI.n(paid) + "</b>을 넣게 됩니다.";
-
-    var g = $("#miniGrid"); g.className = "mini mini--3"; g.innerHTML = "";
-    mini(g, S.way === "lump" ? "넣은 돈" : "총 납입액", U(paid), UI.krw(paid * FX0));
-    mini(g, "내가 넣지 않은 돈", U(Math.max(0, S.goal - paid)), "이자로 붙는 부분");
-    mini(g, "환급률", UI.pct(S.goal / paid * 100), "낸 돈 대비");
-
-    table(need, need);
-    chart(need, need, S.term);
-    $("#mainNote").innerHTML = "<b>기간을 바꿔보세요.</b> 같은 $" + UI.n(S.goal) +
-      "이라도 짧게 낼수록 총 납입액이 커지고, 길게 둘수록 이자가 더 일합니다. " +
-      "비과세는 <b>유지 " + TAX.holdYears + "년</b>을 채워야 하므로, " + (S.term < TAX.holdYears
-        ? "지금 고르신 " + S.term + "년은 요건에 <b>미달</b>합니다. 찾는 시점을 " + TAX.holdYears + "년 이후로 두시면 이자에 세금이 붙지 않습니다."
-        : "지금 조건은 요건을 충족합니다.");
-  }
-
-  /* 길게 불리기 */
-  function long() {
-    var monthly = monthlyUsd(), lumpAmt = lumpUsd();
-    var f = fundAt(S.term, monthly, lumpAmt), paid = paidAt(S.term, monthly, lumpAmt);
-    $("#hK").textContent = S.term + "년 뒤 (만 " + (S.age + S.term) + "세) 손에 쥐는 달러";
-    UI.count($("#hV"), f, U);
-    $("#hKrw").textContent = "오늘 환율로 " + UI.krw(f * fx());
-    $("#hS").innerHTML = (S.way === "lump" ? "한 번에 " : "매달 ") + UI.n(S.prem) +
-      "만원씩 넣었을 때입니다. 낸 돈 대비 <b>" + UI.pct(f / paid * 100) + "</b>.";
-
-    var g = $("#miniGrid"); g.className = "mini mini--4"; g.innerHTML = "";
-    mini(g, S.way === "lump" ? "넣은 돈" : "총 납입액", U(paid), UI.krw(paid * FX0));
-    mini(g, "불어난 부분", U(f - paid), K(f - paid));
-    mini(g, "환급률", UI.pct(f / paid * 100), "낸 돈 대비");
-    mini(g, "매달 이자만 받으면", U(CALC.interestOnly(f, S.rate)), "원금은 그대로 두고");
-
-    table(monthly, lumpAmt);
-    chart(monthly, lumpAmt, S.term);
-
-    var be = null;
-    for (var y = 1; y <= 40; y++) if (fundAt(y, monthly, lumpAmt) >= paidAt(y, monthly, lumpAmt)) { be = y; break; }
-    $("#mainNote").innerHTML = (be
-      ? "<b>낸 돈을 넘어서는 시점은 " + be + "년차입니다.</b> 그 전에 해지하면 낸 돈보다 적게 돌려받습니다. 초기 해지 손실이 이 상품의 가장 큰 위험입니다."
-      : "<b>가정한 이율에서는 40년 안에 낸 돈을 넘어서지 못합니다.</b> 조건을 다시 보셔야 합니다.") +
-      " 여기에 <b>환율</b>이 더해집니다 — 위 슬라이더로 오르내릴 때를 꼭 함께 보세요.";
+  function buildSegs() {
+    if (mode === "long") {
+      seg($("#termSeg"), [
+        { value: "10", label: "10년 확정 <span class='hint'>" + P.plans["10"].rate.toFixed(2) + "%</span>" },
+        { value: "20", label: "20년 확정 <span class='hint'>" + P.plans["20"].rate.toFixed(2) + "%</span>" }
+      ], function () { return S.plan; }, function (v) { S.plan = v; S.year = P.plans[v].years; run(); });
+      seg($("#rateSeg"), [
+        { value: "basic", label: "기본형" },
+        { value: "plus",  label: "연금강화형 <span class='hint'>+" + plan().bonus + "% 보너스</span>" }
+      ], function () { return S.type; }, function (v) { S.type = v; run(); });
+    } else {
+      seg($("#termSeg"), [{ value: 7, label: payTerm() + "년납" }], function () { return payTerm(); }, function () {});
+      seg($("#rateSeg"), [10, 15, 20, 30].map(function (y) {
+        return { value: y, label: y + "년" + (y === 10 ? " <span class='hint'>+1일</span>" : "") };
+      }), function () { return S.year; }, function (v) { S.year = v; run(); });
+    }
   }
 
   function mini(g, k, v, s) {
@@ -155,44 +113,69 @@
     g.appendChild(d);
   }
 
-  function table(monthly, lumpAmt) {
+  function table() {
     var tb = $("#mainTbl"); tb.innerHTML = "";
-    var pts = mode === "short" ? [Math.round(S.term / 2), S.term, TAX.holdYears, S.term + 10]
-                               : [5, 10, TAX.holdYears, S.term, S.term + 10];
-    pts.filter(function (v, i, a) { return v > 0 && a.indexOf(v) === i; }).sort(function (a, b) { return a - b; })
-      .forEach(function (y) {
-        var f = fundAt(y, monthly, lumpAmt), p = paidAt(y, monthly, lumpAmt);
-        var tr = document.createElement("tr");
-        tr.innerHTML = "<td>" + y + "년 뒤 (만 " + (S.age + y) + "세)" +
-          (y === TAX.holdYears ? " <span class='tag'>비과세 요건</span>" : "") + "</td>" +
-          "<td>" + U(p) + "</td><td class='hi'>" + U(f) + "</td><td>" + K(f) + "</td>" +
-          "<td class='" + (f >= p ? "up" : "") + "'>" + UI.pct(f / p * 100) + "</td>";
-        tb.appendChild(tr);
-      });
-  }
-
-  function chart(monthly, lumpAmt, term) {
-    var horizon = Math.max(term + 10, TAX.holdYears + 5), f = [], p = [];
-    for (var y = 0; y <= horizon; y++) {
-      f.push({ x: y, y: y ? fundAt(y, monthly, lumpAmt) : (S.way === "lump" ? lumpAmt : 0) });
-      p.push({ x: y, y: paidAt(y, monthly, lumpAmt) });
-    }
-    UI.draw($("#chMain"), {
-      series: [{ pts: f, cls: "l-gold", area: true }, { pts: p, cls: "l-dash" }],
-      marks: [{ x: TAX.holdYears, label: "비과세 " + TAX.holdYears + "년" }],
-      yFmt: yFmt
+    var pts = mode === "long" ? [3, 5, 7, plan().years, plan().years + 5] : [10, 15, 20, 30];
+    pts.filter(function (v, i, a) { return a.indexOf(v) === i; }).forEach(function (y) {
+      var r = pctAt(y), f = paid() * r.pct / 100;
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + y + "년" + (y === 10 && mode === "short" ? " + 1일" : " 뒤") +
+        " (만 " + (S.age + y) + "세)" + (y === S.year ? " <span class='tag'>선택</span>" : "") + "</td>" +
+        "<td>" + U(paid()) + "</td><td class='hi'>" + U(f) + "</td><td>" + K(f) + "</td>" +
+        "<td class='" + (r.pct >= 100 ? "up" : "") + "'>" + UI.pct(r.pct) +
+        (r.est ? " <span class='hint'>추정</span>" : "") + "</td>";
+      tb.appendChild(tr);
     });
   }
 
+  function chart() {
+    var horizon = mode === "long" ? plan().years + 5 : 30, f = [], p = [];
+    for (var y = 0; y <= horizon; y++) {
+      f.push({ x: y, y: y ? paid() * pctAt(y).pct / 100 : (mode === "long" ? paid() : 0) });
+      p.push({ x: y, y: mode === "long" ? paid() : S.amt * 12 * Math.min(y, payTerm()) });
+    }
+    UI.draw($("#chMain"), {
+      series: [{ pts: f, cls: "l-gold", area: true }, { pts: p, cls: "l-dash" }],
+      marks: [{ x: TAX.holdYears, label: "비과세 " + TAX.holdYears + "년" }], yFmt: yFmt
+    });
+  }
+
+  function notes() {
+    var base = "<b>" + CALC.label(P) + "</b> · " + P.baseNote + " 기준 (공시이율 " + CONFIG.asOfSrc + ").";
+    var ageWarn = S.age !== P.base.age
+      ? " <b class='warnt'>표기 수치는 만 " + P.base.age + "세 " + P.base.sex + "자 기준입니다. 나이·성별이 다르면 실제 값이 달라지니 설계서로 확인하세요.</b>"
+      : "";
+    var extra = mode === "long"
+      ? " 만기 시점 환급률은 <b>자료의 확정값</b>이고, 중간 연차는 확정 공시이율로 그린 <b>추정</b>입니다. " + P.bonusNote
+      : " 10년+1일과 20년 시점은 <b>자료의 값</b>이고, 그 사이와 이후는 공시이율로 연장한 <b>추정</b>입니다. " +
+        "20년 시점 162.8%는 장기유지 보너스를 반영한 값입니다.";
+    $("#mainNote").innerHTML = base + extra + ageWarn;
+
+    $("#assumeTxt").innerHTML = "<b>계산 근거:</b> " + P.baseNote + " / 적용 이율 " + rate().toFixed(2) + "% · " +
+      "금액은 기준 계약에 <b>비례 환산</b>했습니다 · 적용환율 " + UI.n(fx()) + "원 · 기준일 " + CONFIG.asOf + ". " +
+      "실제 보험료·환급금은 나이·성별·심사 결과에 따라 달라집니다.";
+  }
+
   function summary() {
-    return (mode === "short" ? "단기 목표" : "장기 목돈") + " / " + S.age + "세 / " +
-      (S.way === "lump" ? "일시납" : "월납") + " " +
-      (mode === "short" ? "목표 $" + UI.n(S.goal) : UI.n(S.prem) + "만원") +
-      " / " + S.term + "년 / 이율 " + S.rate.toFixed(1) + "% / 환율 " + UI.n(fx());
+    return (mode === "long"
+      ? CALC.label(P) + " " + plan().years + "년 확정 " + (S.type === "plus" ? "연금강화형" : "기본형") + " / 일시납 $" + UI.n(S.amt)
+      : CALC.label(P) + " " + payTerm() + "년납 / 월 $" + UI.n(S.amt) + " / " + S.year + "년 시점") +
+      " / " + S.age + "세 / 환율 " + UI.n(fx());
   }
   UI.setSummary(summary);
 
+  /* 입력 */
+  var pr = $("#prem");
+  if (mode === "long") { pr.min = P.minAmount; pr.max = P.maxAmount; pr.step = P.step; $("#premL").textContent = "일시납 금액"; }
+  else { pr.min = P.minMonthly; pr.max = P.maxMonthly; pr.step = P.step; $("#premL").textContent = "월 보험료"; }
+  pr.value = S.amt;
+  $("#age").addEventListener("input", function () { S.age = +this.value; run(); });
+  pr.addEventListener("input", function () { S.amt = +this.value; run(); });
+  $("#waySeg").closest("div").hidden = true;
+  $("#goalWrap").hidden = true; $("#premWrap").hidden = false;
+  $("#termL").textContent = mode === "long" ? "확정 기간" : "납입 기간";
+  $("#rateL").innerHTML = mode === "long" ? "형태" : "언제 찾을까요";
+
   UI.boot();
-  syncWay();
   UI.wireFx(run);
 })();
