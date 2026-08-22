@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>제휴 정산 콘솔 | 또봄 한국청년암협회</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260820d" />
+  <style>
+    /* 제휴 콘솔 전용 보조 스타일 */
+    .chk { font-weight: 700; }
+    .chk.on { color: #17b39a; }
+    .chk.off { color: #c8ccd4; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:999px; font-size:0.78rem; font-weight:700; }
+    .badge.requested { background:#eef3fb; color:#3f8edc; }
+    .badge.visited   { background:#e7f7f3; color:#0f8f7a; }
+    .badge.no_show   { background:#fdeeee; color:#d0524b; }
+    .badge.canceled  { background:#f2f3f5; color:#7a808a; }
+    .badge.locked    { background:#f5efff; color:#8455c9; }
+    .toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px; }
+    .toolbar .field { margin:0; min-width:130px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.86rem; }
+    .warnbox { border-left:4px solid #f06f2c; background:#fff6f0; padding:14px 16px; border-radius:8px; margin:14px 0; font-size:0.9rem; }
+    .diffrow { background:#fffaf3; }
+    .sum-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:16px 0; }
+    .sum-cell { border:1px solid #e6e8ec; border-radius:10px; padding:14px; }
+    .sum-cell b { display:block; font-size:1.35rem; margin-top:4px; }
+    .sum-label { font-size:0.82rem; color:var(--color-ink-soft); }
+  </style>
+</head>
+<body class="admin-body">
+  <a href="#partner-main" class="skip-link">본문 바로가기</a>
+
+  <header class="admin-topbar">
+    <a href="index.html" class="logo" aria-label="또봄 홈으로">
+      <img src="assets/img/logo.png" alt="또봄 한국청년암협회" class="logo__img" />
+    </a>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="admin-demo-badge">제휴 정산 콘솔</span>
+      <span id="meName" style="font-size:0.9rem; color:var(--color-ink-soft)"></span>
+      <button class="btn btn--ghost logoutBtn" style="min-height:40px; padding:8px 16px; display:none;" id="topLogout">로그아웃</button>
+      <a href="index.html" class="btn btn--ghost" style="min-height:40px; padding:8px 16px;">사이트로</a>
+    </div>
+  </header>
+
+  <!-- 0) Firebase 설정 필요 -->
+  <div id="pSetup" class="admin-gate" hidden>
+    <div class="admin-section" style="max-width:640px;">
+      <h2>⚙️ Firebase 설정이 필요합니다</h2>
+      <p style="color:var(--color-ink-soft); margin:10px 0;">
+        <code>assets/js/firebase-config.js</code>에 Firebase 설정을 입력하세요.
+        자세한 방법은 <code>FIREBASE_SETUP.md</code> 참고.
+      </p>
+    </div>
+  </div>
+
+  <!-- 1) 로그인 -->
+  <div id="pLogin" class="admin-gate" hidden>
+    <div class="admin-section" style="max-width:420px; text-align:center;">
+      <img src="assets/img/logo-square.png" alt="" style="height:90px; margin:0 auto 16px;" />
+      <h2>제휴 정산 콘솔</h2>
+      <p style="color:var(--color-ink-soft); margin:10px 0 20px;">또봄 운영진 · 제휴 병원 담당자 전용입니다.</p>
+      <button id="loginBtn" class="btn btn--primary btn--lg" style="width:100%;">구글 계정으로 로그인</button>
+    </div>
+  </div>
+
+  <!-- 2) 권한 없음 -->
+  <div id="pDenied" class="admin-gate" hidden>
+    <div class="admin-section" style="max-width:480px; text-align:center;">
+      <h2>🔒 접근 권한이 없습니다</h2>
+      <p style="color:var(--color-ink-soft); margin:12px 0;">
+        <strong id="deniedEmail"></strong> 계정에는 제휴 콘솔 권한이 없습니다.<br />
+        또봄 최고관리자에게 이 이메일로 권한 부여를 요청하세요.
+      </p>
+      <button class="btn btn--ghost logoutBtn">다른 계정으로 로그인</button>
+    </div>
+  </div>
+
+  <!-- 3) 콘솔 -->
+  <div id="pApp" class="admin-shell" hidden>
+    <nav class="admin-side" aria-label="제휴 콘솔 메뉴">
+      <a href="#pdash" class="active">📊 현황</a>
+      <a href="#plist">🧾 소개 건 대장</a>
+      <a href="#pmatch">⚖️ 대사 · 불일치</a>
+      <a href="#psettle">💳 월 정산</a>
+      <a href="#ppartners" data-need="ttobom">🏥 제휴처 · 코드</a>
+      <a href="#paudit">🗂️ 변경 이력</a>
+    </nav>
+
+    <main class="admin-main" id="partner-main">
+
+      <!-- 현황 -->
+      <section id="pdash">
+        <h1>제휴 현황</h1>
+        <p class="sub" id="dashSub">양쪽이 각각 확인한 건만 정산에 올라갑니다.</p>
+        <div class="kpi-grid">
+          <div class="kpi k1"><div class="kpi-label">이번 달 소개</div><div class="kpi-num" id="kpiNew">0</div></div>
+          <div class="kpi k2"><div class="kpi-label">내원 확인</div><div class="kpi-num" id="kpiVisited">0</div></div>
+          <div class="kpi k3"><div class="kpi-label">양측 확인 완료</div><div class="kpi-num" id="kpiBoth">0</div></div>
+          <div class="kpi k4"><div class="kpi-label">확인 불일치</div><div class="kpi-num" id="kpiDiff">0</div></div>
+        </div>
+        <div class="admin-section">
+          <h2>최근 소개 건</h2>
+          <table class="admin-table">
+            <thead><tr><th>접수일</th><th>제휴처</th><th>대상</th><th>상태</th><th>또봄</th><th>병원</th></tr></thead>
+            <tbody id="recentBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 소개 건 대장 -->
+      <section id="plist">
+        <h1>소개 건 대장</h1>
+        <p class="sub">진료 내용은 저장하지 않습니다. 상태 · 방문일 · 매출액만 기록합니다.</p>
+        <div class="admin-section">
+          <div class="toolbar">
+            <div class="field"><label for="fMonth">귀속월</label><input type="month" id="fMonth" /></div>
+            <div class="field"><label for="fPartner">제휴처</label><select id="fPartner"><option value="">전체</option></select></div>
+            <div class="field"><label for="fStatus">상태</label>
+              <select id="fStatus">
+                <option value="">전체</option>
+                <option value="requested">접수</option>
+                <option value="visited">내원</option>
+                <option value="no_show">미내원</option>
+                <option value="canceled">취소</option>
+              </select>
+            </div>
+            <button type="button" id="btnReload" class="btn btn--ghost">새로고침</button>
+            <button type="button" id="btnCsv" class="btn btn--ghost">CSV 내려받기</button>
+            <button type="button" id="btnManual" class="btn btn--secondary" data-need="ttobom">소개 건 직접 등록</button>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>접수일</th><th>제휴처</th><th>대상</th><th>연락처</th>
+                <th>상태</th><th>방문일</th><th>매출액</th><th>또봄</th><th>병원</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="listBody"></tbody>
+          </table>
+          <p class="sub" id="listEmpty" style="display:none; padding:18px 0;">해당 조건의 소개 건이 없습니다.</p>
+        </div>
+      </section>
+
+      <!-- 대사 · 불일치 -->
+      <section id="pmatch">
+        <h1>대사 · 불일치</h1>
+        <p class="sub">한쪽만 확인했거나 금액이 비어 있는 건입니다. 여기가 0이 되어야 월 마감이 됩니다.</p>
+        <div class="admin-section">
+          <table class="admin-table">
+            <thead><tr><th>접수일</th><th>제휴처</th><th>대상</th><th>사유</th><th>또봄</th><th>병원</th></tr></thead>
+            <tbody id="matchBody"></tbody>
+          </table>
+          <p class="sub" id="matchEmpty" style="display:none; padding:18px 0;">불일치 건이 없습니다. 마감 가능합니다.</p>
+        </div>
+      </section>
+
+      <!-- 월 정산 -->
+      <section id="psettle">
+        <h1>월 정산</h1>
+        <p class="sub">양측이 각각 서명해야 확정됩니다. 확정 후에는 해당 월 건이 잠깁니다.</p>
+        <div class="admin-section">
+          <div class="toolbar">
+            <div class="field"><label for="sMonth">정산월</label><input type="month" id="sMonth" /></div>
+            <div class="field"><label for="sPartner">제휴처</label><select id="sPartner"></select></div>
+            <button type="button" id="btnCalc" class="btn btn--primary">집계</button>
+          </div>
+          <div id="settleResult" hidden>
+            <div class="sum-grid">
+              <div class="sum-cell"><span class="sum-label">정산 대상 건수</span><b id="sCount">0</b></div>
+              <div class="sum-cell"><span class="sum-label">확인 매출 합계</span><b id="sRevenue">0원</b></div>
+              <div class="sum-cell"><span class="sum-label">적용 요율</span><b id="sRate">0%</b></div>
+              <div class="sum-cell"><span class="sum-label">산정 금액</span><b id="sAmount">0원</b></div>
+            </div>
+            <div id="settleWarn" class="warnbox" hidden></div>
+            <table class="admin-table">
+              <thead><tr><th>방문일</th><th>대상</th><th>매출액</th><th>또봄</th><th>병원</th></tr></thead>
+              <tbody id="settleBody"></tbody>
+            </table>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; align-items:center;">
+              <button type="button" id="btnSignTtobom" class="btn btn--primary" data-need="ttobom">또봄 확인 서명</button>
+              <button type="button" id="btnSignHospital" class="btn btn--primary" data-need="hospital">병원 확인 서명</button>
+              <button type="button" id="btnPaid" class="btn btn--secondary" data-need="ttobom">입금 완료 처리</button>
+              <span id="signState" class="sub" style="margin-left:6px;"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 제휴처 관리 -->
+      <section id="ppartners" data-need="ttobom">
+        <h1>제휴처 · 추천코드</h1>
+        <p class="sub">추천코드가 곧 소개 링크입니다. 코드가 없으면 누가 소개했는지 증명할 수 없습니다.</p>
+        <div class="admin-section">
+          <table class="admin-table">
+            <thead><tr><th>코드</th><th>제휴처</th><th>정산 방식</th><th>소개 링크</th><th>상태</th><th></th></tr></thead>
+            <tbody id="partnersBody"></tbody>
+          </table>
+          <div class="toolbar" style="margin-top:18px;">
+            <div class="field"><label for="npCode">추천코드</label><input type="text" id="npCode" placeholder="TTB-EYE01" /></div>
+            <div class="field" style="flex:1;"><label for="npName">제휴처 이름</label><input type="text" id="npName" placeholder="○○안과의원" /></div>
+            <div class="field"><label for="npMode">정산 방식</label>
+              <select id="npMode">
+                <option value="revenue_share">매출 연동 %</option>
+                <option value="fixed">월 정액</option>
+                <option value="donation">병원 기부(성과 무관)</option>
+                <option value="none">정산 없음(실적 기록만)</option>
+              </select>
+            </div>
+            <div class="field" style="max-width:120px;"><label for="npRate">요율/금액</label><input type="number" id="npRate" placeholder="10" /></div>
+            <button type="button" id="btnAddPartner" class="btn btn--secondary">제휴처 등록</button>
+          </div>
+          <div class="toolbar" style="margin-top:8px;">
+            <div class="field" style="flex:1;"><label for="npEmail">병원 담당자 이메일(구글 계정)</label><input type="email" id="npEmail" placeholder="desk@hospital.co.kr" /></div>
+            <div class="field"><label for="npEmailCode">연결 제휴처</label><select id="npEmailCode"></select></div>
+            <button type="button" id="btnAddHospitalUser" class="btn btn--secondary">병원 계정 권한 부여</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 변경 이력 -->
+      <section id="paudit">
+        <h1>변경 이력</h1>
+        <p class="sub">모든 확인 · 수정은 지워지지 않게 기록됩니다. 분쟁 시 이 기록이 근거가 됩니다.</p>
+        <div class="admin-section">
+          <table class="admin-table">
+            <thead><tr><th>일시</th><th>계정</th><th>구분</th><th>행위</th><th>대상</th></tr></thead>
+            <tbody id="auditBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="assets/js/partners.js?v=1"></script>
+</body>
+</html>

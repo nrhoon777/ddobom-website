@@ -48,13 +48,19 @@ about.html          또봄 소개 (설립 스토리·미션 카드·연혁 타�
 programs.html       사업·활동 (또봄클래스·앎·Cheer UP·또또봄TV, 이미지 포함)
 donate.html         후원하기 (무기명/로그인 후원, 금액 선택, 신뢰 섹션)
 admin.html / console.html   관리자 콘솔(Firebase 연동. console.html은 캐시우회용 동일 사본)
+partners.html               제휴 병원 연계·정산 콘솔 (또봄/병원 공용, 역할별 화면 분기)
+refer.html                  제휴 병원 상담 신청 폼 (공개, ?code=제휴처코드)
+assets/js/partners.js       제휴 콘솔 로직 (이중 확인·대사·월 정산 서명)
+assets/js/refer.js          소개 신청 폼 로직 (동의·마스킹·해시키)
+tests/                      firestore.rules 보안 규칙 테스트 (에뮬레이터, 49건)
+PARTNER_SETTLEMENT.md       제휴 정산 시스템 설계·운영·법적 주의사항
 assets/css/style.css        디자인 시스템 전체 (섹션 번호 주석 0~27로 구성)
 assets/js/main.js           네비·스크롤 리빌·카운터·후원폼 토글
 assets/js/admin.js          관리자: 로그인·권한·게시글 CRUD·대시보드
 assets/js/news-loader.js    홈 소식을 Firestore 발행글로 동적 로드
 assets/js/firebase-config.js  ★계정 종속 유일 파일 (Firebase 설정)
 assets/img/ , assets/video/   로고·사진·영상
-firestore.rules             Firestore 보안 규칙 (roles 이메일ID: owner/editor/viewer)
+firestore.rules             Firestore 보안 규칙 (roles 이메일ID: owner/editor/viewer/hospital)
 KYCA_홈페이지_리뉴얼_기획서.md  기획/디자인/개발 교차검증 기획서 (배경·IA·페르소나)
 FIREBASE_SETUP.md / MIGRATION.md / AI_HANDOFF.md(이 문서)
 ```

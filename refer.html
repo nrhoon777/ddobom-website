@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>제휴 병원 상담 신청 | 또봄 한국청년암협회</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260820d" />
+  <style>
+    .refer-wrap { max-width: 560px; margin: 0 auto; padding: 32px 20px 64px; }
+    .refer-card { background:#fff; border:1px solid #e6e8ec; border-radius:16px; padding:26px; box-shadow:0 6px 24px rgba(20,30,50,.06); }
+    .refer-code { display:inline-block; background:#e7f7f3; color:#0f8f7a; border-radius:999px; padding:5px 14px; font-size:.85rem; font-weight:700; }
+    .consent { border:1px solid #e6e8ec; border-radius:10px; padding:14px; font-size:.86rem; color:var(--color-ink-soft); max-height:170px; overflow:auto; margin-bottom:10px; }
+    .consent dt { font-weight:700; color:var(--color-ink); margin-top:8px; }
+    .refer-note { font-size:.84rem; color:var(--color-ink-soft); margin-top:14px; line-height:1.6; }
+    .refer-done { text-align:center; padding:34px 10px; }
+    .refer-done .mark { font-size:2.6rem; }
+    .err { color:#d0524b; font-size:.86rem; margin-top:8px; }
+  </style>
+</head>
+<body>
+  <a href="#refer-main" class="skip-link">본문 바로가기</a>
+  <main class="refer-wrap" id="refer-main">
+    <div style="text-align:center; margin-bottom:22px;">
+      <a href="index.html"><img src="assets/img/logo.png" alt="또봄 한국청년암협회" style="height:52px;" /></a>
+    </div>
+
+    <!-- 잘못된 코드 -->
+    <div class="refer-card" id="badCode" hidden>
+      <h1 style="font-size:1.3rem;">연결이 확인되지 않았습니다</h1>
+      <p style="color:var(--color-ink-soft); margin-top:10px;">
+        유효한 제휴 링크가 아닙니다. 또봄에서 안내받은 링크나 QR을 다시 확인해 주세요.
+      </p>
+      <a href="index.html" class="btn btn--ghost" style="margin-top:16px;">또봄 홈으로</a>
+    </div>
+
+    <!-- 신청 폼 -->
+    <form class="refer-card" id="referForm" hidden>
+      <span class="refer-code" id="codeBadge"></span>
+      <h1 style="font-size:1.35rem; margin:12px 0 6px;">제휴 병원 상담 신청</h1>
+      <p style="color:var(--color-ink-soft); font-size:.92rem; margin-bottom:20px;" id="introText">
+        신청하시면 제휴 병원에서 예약 안내를 위해 연락드립니다.
+      </p>
+
+      <div class="field">
+        <label for="rName">이름 <span style="color:#d0524b">*</span></label>
+        <input type="text" id="rName" autocomplete="name" required placeholder="홍길동" />
+      </div>
+      <div class="field">
+        <label for="rPhone">연락처 <span style="color:#d0524b">*</span></label>
+        <input type="tel" id="rPhone" autocomplete="tel" required placeholder="010-1234-5678" inputmode="numeric" />
+      </div>
+      <div class="field">
+        <label for="rWhen">희망 연락 시간대</label>
+        <select id="rWhen">
+          <option value="">상관없음</option>
+          <option value="오전">오전 (09~12시)</option>
+          <option value="오후">오후 (13~18시)</option>
+          <option value="저녁">저녁 (18시 이후)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="rMemo">남기실 말 (선택)</label>
+        <textarea id="rMemo" rows="3" maxlength="200" placeholder="증상이나 진료 내용은 적지 마시고, 일정 관련 요청만 적어주세요."></textarea>
+      </div>
+
+      <!-- 스팸 방지용 (사람에게는 보이지 않음) -->
+      <div style="position:absolute; left:-9999px;" aria-hidden="true">
+        <label for="rNick">닉네임</label><input type="text" id="rNick" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <h2 style="font-size:1rem; margin:22px 0 10px;">개인정보 제3자 제공 동의 (필수)</h2>
+      <div class="consent">
+        <dl style="margin:0;">
+          <dt>제공받는 자</dt><dd id="cProvider">제휴 병원</dd>
+          <dt>제공 목적</dt><dd>예약 · 상담 안내 연락</dd>
+          <dt>제공 항목</dt><dd>이름, 연락처, 희망 연락 시간대</dd>
+          <dt>보유 · 이용 기간</dt><dd>상담 종료 후 3개월 이내 파기 (정산 확인용으로는 이름 · 연락처를 지운 식별 불가 기록만 보관)</dd>
+          <dt>동의 거부 권리</dt><dd>동의를 거부하실 수 있으며, 이 경우 제휴 병원 연결 서비스 이용이 어렵습니다.</dd>
+        </dl>
+      </div>
+      <label style="display:flex; gap:10px; align-items:flex-start; font-size:.92rem; cursor:pointer;">
+        <input type="checkbox" id="rConsent" style="margin-top:3px; width:20px; height:20px;" />
+        <span>위 내용을 확인했고, 개인정보 제3자 제공에 동의합니다.</span>
+      </label>
+
+      <button type="submit" class="btn btn--primary btn--lg" id="rSubmit" style="width:100%; margin-top:20px;">상담 신청하기</button>
+      <p class="err" id="rErr" hidden></p>
+      <p class="refer-note">
+        또봄은 진료 내용이나 검사 결과를 받지 않습니다. 신청 접수 사실과 방문 여부만 병원과 함께 확인합니다.
+      </p>
+    </form>
+
+    <!-- 완료 -->
+    <div class="refer-card refer-done" id="referDone" hidden>
+      <div class="mark">🌱</div>
+      <h1 style="font-size:1.3rem; margin:10px 0;">신청이 접수되었습니다</h1>
+      <p style="color:var(--color-ink-soft);">
+        접수번호 <strong id="doneNo" class="mono"></strong><br />
+        제휴 병원에서 곧 연락드립니다.
+      </p>
+      <a href="index.html" class="btn btn--ghost" style="margin-top:18px;">또봄 홈으로</a>
+    </div>
+  </main>
+
+  <script type="module" src="assets/js/refer.js?v=1"></script>
+</body>
+</html>
