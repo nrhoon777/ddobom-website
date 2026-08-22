@@ -627,6 +627,51 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ---------- 10. 후원 CTA ---------- */
+/* ---------- 후원 밴드 — 모든 페이지 footer 바로 위, 같은 자리 같은 모양 ----------
+   페이지마다 후원 유도가 제각각 다른 모양·다른 자리에 있었다. 어떤 곳은
+   둥근 카드, 어떤 곳은 연회색 섹션 안. 자리와 모양을 하나로 못 박고
+   안의 문구만 페이지마다 바꾼다.
+
+   폭을 100%로 두는 이유: 컨테이너 안 둥근 카드로 두면 '페이지의 한 요소'로
+   읽히지만, 화면을 가로질러 깔면 본문이 끝나고 행동을 청하는 자리로 읽힌다.
+   바로 아래 어두운 footer와 맞물려 페이지가 확실히 닫힌다. */
+.donate-band {
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  color: #fff; text-align: center;
+  padding: var(--space-9) var(--space-5);
+}
+.donate-band__inner { max-width: 720px; margin: 0 auto; }
+.donate-band h2 {
+  color: #fff; font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -0.02em; line-height: 1.35;
+}
+.donate-band p {
+  color: rgba(255, 255, 255, 0.94); margin-top: var(--space-4);
+  font-size: 1.02rem; line-height: 1.8;
+}
+.donate-band .donate-chips { justify-content: center; margin-top: var(--space-5); }
+.donate-band .hero__actions { justify-content: center; margin-top: var(--space-6); }
+
+/* 밴드가 청록이라 기본 버튼(청록)은 배경에 묻힌다.
+   주 버튼은 라임 — 헤더 후원 버튼과 같은 색이라 '라임 = 후원'이 한 번 더 각인된다.
+   보조 버튼은 흰 테두리로 위계를 낮춘다. */
+.donate-band .btn--primary {
+  background: var(--color-lime); color: var(--color-lime-ink);
+  box-shadow: 0 3px 0 rgba(22, 36, 26, 0.18);
+}
+.donate-band .btn--primary:hover { background: var(--color-lime-dark); color: var(--color-lime-ink); }
+.donate-band .btn--ghost {
+  background: transparent; color: #fff; border: 1.5px solid rgba(255, 255, 255, 0.7);
+}
+.donate-band .btn--ghost:hover { background: rgba(255, 255, 255, 0.14); color: #fff; border-color: #fff; }
+/* 밴드 바로 뒤에 오는 footer의 위 여백은 밴드가 이미 만들어 준다 */
+.donate-band + .footer { padding-top: var(--space-7); }
+
+@media (max-width: 767px) {
+  .donate-band { padding: var(--space-8) var(--space-4); }
+  .donate-band .hero__actions { flex-direction: column; align-items: stretch; }
+}
+
 .donate-cta {
   background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
   color: #fff; border-radius: var(--radius-lg);
@@ -769,6 +814,20 @@ button { font-family: inherit; cursor: pointer; }
 .breadcrumb a:hover, .breadcrumb a:focus-visible { color: var(--color-primary-dark); text-decoration: underline; }
 
 .prose { max-width: 760px; margin: 0 auto; }
+
+/* 사업·활동 페이지 — 한 페이지 안에서 폭이 두 가지로 갈려 있었다.
+   설명 글은 .prose(760px)인데 포스터 격자는 컨테이너 전체(1200px)라,
+   글의 왼쪽 끝이 포스터보다 220px 안쪽에서 시작해 어긋나 보였다.
+   페이지 전체를 한 폭(960px)으로 모으고, 프로그램 소개 글은
+   또봄 소개 페이지처럼 가운데로 정렬한다. */
+.prog-page .container { max-width: 960px; }
+.prog-page .container.prose { max-width: 960px; text-align: center; }
+.prog-page .container.prose > h2 { justify-content: center; }
+.prog-page .container.prose > p { margin-left: auto; margin-right: auto; max-width: 34em; }
+.prog-page .prog-points,
+.prog-page .class-tags { justify-content: center; }
+.prog-page .prog-img { margin-left: auto; margin-right: auto; }
+.prog-page .prog-quote { text-align: left; max-width: 34em; margin-left: auto; margin-right: auto; }
 .prose h2 { font-size: var(--fs-h2); margin: var(--space-7) 0 var(--space-3); }
 .prose h3 { font-size: var(--fs-h3); margin: var(--space-5) 0 var(--space-2); color: var(--color-primary-dark); }
 .prose p { color: var(--color-ink-soft); margin-bottom: var(--space-4); }
@@ -3255,7 +3314,10 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 /* ===========================================================
    63. 뉴스레터 구독 영역
    =========================================================== */
+/* 소식 목록(.posts)이 880px인데 이 상자만 컨테이너를 꽉 채워(1200px)
+   같은 페이지에서 두 폭이 어긋나 보였다. 목록과 같은 폭으로 맞춘다. */
 .nl-box {
+  max-width: 880px; margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 200px;
   align-items: center;
