@@ -98,8 +98,9 @@ var CALC = (function () {
 
   /* 목표 금액을 만들려면 월 얼마? — 이분 탐색 */
   function solveMonthly(p, term, targetYear, goal, rate) {
-    var lo = 1000, hi = 100000000, mid;
-    for (var i = 0; i < 60; i++) {
+    // 상한은 "이자가 전혀 없을 때 필요한 월 납입액" — 통화와 무관하게 성립한다
+    var lo = 0, hi = goal / (12 * term) * 1.2, mid;
+    for (var i = 0; i < 80; i++) {
       mid = (lo + hi) / 2;
       if (fundAt(p, mid, term, targetYear, rate) < goal) lo = mid; else hi = mid;
     }
@@ -114,7 +115,33 @@ var CALC = (function () {
     return { principal: principal, interest: interest, tax: tax, net: principal + interest - tax };
   }
 
+  /* 일시납(거치) 적립금 — 목돈을 넣고 그대로 두었을 때 */
+  function lump(p, principal, year, rate) {
+    var c = credit(p, 1);                       // 일시납도 초기 사업비를 한 번 차감
+    return principal * c * Math.pow(1 + rate / 100, year);
+  }
+
+  /* 자유 입출금 시뮬레이션 — 해지하지 않고 빼 쓰고 다시 채우는 경우
+     events: [{ y: 경과연차, amount: 음수=인출 / 양수=추가납입 }]        */
+  function flex(p, startFund, rate, events, years) {
+    var r = rate / 100, fund = startFund, rows = [{ y: 0, fund: fund, ev: 0 }];
+    for (var y = 1; y <= years; y++) {
+      var ev = 0;
+      (events || []).forEach(function (e) { if (e.y === y) ev += e.amount; });
+      fund = Math.max(0, fund + ev) * (1 + r);
+      rows.push({ y: y, fund: fund, ev: ev });
+    }
+    return rows;
+  }
+
+  /* 목표 금액을 만들려면 일시납으로 얼마? */
+  function solveLump(p, targetYear, goal, rate) {
+    var c = credit(p, 1);
+    return goal / (c * Math.pow(1 + rate / 100, targetYear));
+  }
+
   return {
+    lump: lump, flex: flex, solveLump: solveLump,
     credit: credit, paidBy: paidBy, totalPaid: totalPaid,
     refundPct: refundPct, fundAt: fundAt, curve: curve,
     annuity: annuity, interestOnly: interestOnly,

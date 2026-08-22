@@ -22,7 +22,12 @@ var UI = (function () {
   }
   function usd(v) { return "$" + n(v); }
   function money(p, v) { return p && p.currency === "USD" ? usd(v) : krw(v); }
-  function moneySub(p, v) { return p && p.currency === "USD" ? "약 " + krw(v * CONFIG.fxDefault) : ""; }
+  /* 달러 금액 → 원화 환산 (환율 시나리오 반영) */
+  var fxRate = CONFIG.fx.now;
+  function setFx(v) { fxRate = v; }
+  function getFx() { return fxRate; }
+  function toKrw(usdV) { return usdV * fxRate; }
+  function moneySub(p, v) { return p && p.currency === "USD" ? "약 " + krw(v * fxRate) : ""; }
   function pct(v, d) { return (Math.round(v * Math.pow(10, d || 1)) / Math.pow(10, d || 1)).toLocaleString("ko-KR") + "%"; }
 
   /* ── 스크롤 진행선 · 등장 애니메이션 ───────────────────────── */
@@ -158,6 +163,20 @@ var UI = (function () {
     if (t) { t.href = "tel:" + CONFIG.tel.replace(/[^0-9+]/g, ""); var tt = $("#telTxt"); if (tt) tt.textContent = "전화 상담 " + CONFIG.tel; }
     var f = $("#ftrContact"); if (f) f.textContent = CONFIG.consultant + " · " + CONFIG.tel;
 
+    /* 문자 — 계산 결과를 그대로 담아 보냅니다 (iOS/안드로이드 공통 형식) */
+    var sms = $("#smsBtn");
+    if (sms) sms.addEventListener("click", function (e) {
+      e.preventDefault();
+      var body = "[상담 요청]\n" + (summaryFn ? summaryFn() : "") + "\n\n위 조건으로 상담 부탁드립니다.";
+      location.href = "sms:" + CONFIG.tel.replace(/[^0-9+]/g, "") + "?&body=" + encodeURIComponent(body);
+    });
+
+    /* 기준일 배지 — 공시이율이 매월 15일 바뀌므로 늘 노출한다 */
+    $$("[data-asof]").forEach(function (el) {
+      el.innerHTML = '<b>' + CONFIG.asOf.replace(/-/g, ".") + ' 기준</b> · 공시이율은 매월 15일 변경됩니다. ' +
+        '화면의 숫자는 <b>예시</b>이며, 정확한 수치는 만나서 설계서로 알려드립니다.';
+    });
+
     var form = $("#leadForm"); if (!form) return;
     var msg = $("#formMsg");
     function say(html, ok) {
@@ -215,8 +234,43 @@ var UI = (function () {
     });
   }
 
+  /* ── 비과세 한도 판정 ────────────────────────────────────────
+     mode: "monthly"(월적립) | "lump"(일시납) · amount 는 원화        */
+  function taxCheck(mode, amountKrw) {
+    var lim = mode === "lump" ? TAX.lumpLimit : TAX.monthlyLimit;
+    var over = amountKrw > lim;
+    var label = mode === "lump" ? "일시납" : "월납";
+    return {
+      over: over, limit: lim,
+      html: over
+        ? '<b>' + label + " 비과세 한도(" + krw(lim) + ")를 넘었습니다.</b> 넘는 부분은 과세 대상입니다. " +
+          "다만 <b>종신형 연금으로 개시</b>하면 한도와 무관하게 비과세가 적용됩니다."
+        : "현재 " + label + " 비과세 한도(" + krw(lim) + ") 안입니다. 여유 " +
+          "<b>" + krw(lim - amountKrw) + "</b>. 유지 " + TAX.holdYears + "년 요건도 함께 채워야 합니다."
+    };
+  }
+
+  /* ── 환율 시나리오 슬라이더 ─────────────────────────────────── */
+  function wireFx(onChange) {
+    var el = $("#fxRange"); if (!el) return;
+    el.min = CONFIG.fx.min; el.max = CONFIG.fx.max; el.step = 5; el.value = CONFIG.fx.now;
+    var apply = function () {
+      setFx(+el.value); paintRange(el);
+      var d = +el.value - CONFIG.fx.now;
+      $("#fxOut").textContent = n(+el.value) + "원";
+      var note = $("#fxNote");
+      if (note) note.innerHTML = Math.abs(d) < 1
+        ? "오늘 환율 그대로입니다. 슬라이더를 움직이면 <b>원화 금액만</b> 바뀝니다 — 달러 금액은 그대로예요."
+        : (d > 0 ? "오늘보다 <b>" + n(d) + "원 오른</b> 경우입니다. 달러 금액은 그대로인데 원화로는 늘어납니다."
+                 : "오늘보다 <b>" + n(-d) + "원 내린</b> 경우입니다. 원화로 바꾸면 그만큼 줄어듭니다.");
+      if (onChange) onChange();
+    };
+    el.addEventListener("input", apply); apply();
+  }
+
   return {
     $: $, $$: $$, n: n, krw: krw, usd: usd, money: money, moneySub: moneySub, pct: pct,
+    toKrw: toKrw, setFx: setFx, getFx: getFx, wireFx: wireFx, taxCheck: taxCheck,
     boot: boot, draw: draw, count: count, setSummary: setSummary, paintRange: paintRange, reduce: reduce
   };
 })();

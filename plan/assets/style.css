@@ -683,3 +683,90 @@ h2.sec__title{ font-family:var(--font-head); font-size:clamp(1.75rem,4.6vw,2.7re
 .saved__v{ font-size:clamp(1.9rem,7vw,2.8rem); font-weight:800; color:var(--mint); letter-spacing:-.03em; margin-top:6px; }
 .saved__s{ font-size:.9rem; color:var(--muted-2); margin-top:8px; }
 .rc .l-sky{ fill:none; stroke:var(--sky); stroke-width:2.2; }
+
+/* =====================================================================
+   19  핵심 메시지 팩트 · 근거 기사
+   20  2단계 선택 · 자유 입출금
+   21  환율 시나리오 · 한도 배너
+===================================================================== */
+.hdr__act{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+/* ── 19. 팩트 ─────────────────────────────────────────────────── */
+.facts{ display:grid; gap:12px; grid-template-columns:1fr; margin-top:34px; }
+@media (min-width:760px){ .facts{ grid-template-columns:repeat(3,1fr); gap:16px; } }
+.fact{ padding:22px 18px; border-radius:var(--r-l); border:1px solid var(--line);
+  background:rgba(255,255,255,.04); text-align:center; }
+.fact--hi{ border-color:rgba(224,183,117,.5); background:linear-gradient(160deg,rgba(224,183,117,.16),rgba(255,255,255,.02)); }
+.fact__k{ font-size:.83rem; color:var(--muted); font-weight:700; }
+.fact__v{ font-size:clamp(1.35rem,4.6vw,1.85rem); font-weight:800; color:var(--gold-1); margin-top:7px; letter-spacing:-.02em; }
+.fact__div{ opacity:.4; margin:0 7px; font-weight:400; }
+.fact__s{ font-size:.8rem; color:var(--muted-2); margin-top:6px; }
+.fact__s .hi{ color:var(--gold-1); font-weight:800; }
+
+/* ── 근거 기사 ────────────────────────────────────────────────── */
+.news{ display:grid; gap:12px; grid-template-columns:1fr; }
+@media (min-width:900px){ .news{ grid-template-columns:repeat(3,1fr); } }
+.newsit{ display:flex; flex-direction:column; gap:9px; padding:22px 20px; text-decoration:none;
+  border-radius:var(--r-l); border:1px solid var(--line); background:rgba(255,255,255,.035); transition:.2s; }
+.newsit:hover{ border-color:rgba(239,154,106,.5); background:rgba(239,154,106,.07); transform:translateY(-3px); }
+.newsit__top{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+.newsit__tag{ padding:3px 9px; border-radius:6px; font-size:.72rem; font-weight:800;
+  background:rgba(239,154,106,.18); color:var(--warn); border:1px solid rgba(239,154,106,.34); }
+.newsit__meta{ font-size:.76rem; color:var(--muted-2); }
+.newsit__t{ font-weight:800; font-size:1.02rem; line-height:1.45; }
+.newsit__d{ font-size:.88rem; color:var(--muted); line-height:1.6; }
+.newsit__go{ margin-top:auto; padding-top:8px; font-size:.83rem; font-weight:700; color:var(--warn); }
+
+/* ── 20. 2단계 ────────────────────────────────────────────────── */
+.step-badge{ display:inline-block; padding:6px 14px; border-radius:999px; font-size:.76rem; font-weight:800;
+  letter-spacing:.1em; background:rgba(224,183,117,.16); color:var(--gold-1);
+  border:1px solid rgba(224,183,117,.34); margin-bottom:14px; }
+.picks .pick{ cursor:pointer; }
+.pick.is-on{ border-color:var(--gold); background:linear-gradient(165deg,rgba(224,183,117,.2),rgba(255,255,255,.03)); }
+.pick.is-on .pick__go::after{ transform:translateX(5px); }
+
+.subs{ display:grid; gap:14px; grid-template-columns:1fr; }
+@media (min-width:820px){ .subs{ grid-template-columns:1fr 1fr; gap:18px; } }
+.sub{ display:flex; gap:16px; align-items:stretch; padding:26px 24px; text-decoration:none;
+  border-radius:var(--r-xl); border:1px solid rgba(224,183,117,.28);
+  background:linear-gradient(160deg,rgba(224,183,117,.1),rgba(255,255,255,.025)); transition:.22s; }
+.sub:hover{ transform:translateY(-4px); border-color:var(--gold); box-shadow:0 22px 48px rgba(0,0,0,.4); }
+.sub__ico{ font-size:1.7rem; flex:none; line-height:1; }
+.sub__body{ display:flex; flex-direction:column; flex:1; }
+.sub__t{ display:block; font-family:var(--font-head); font-size:1.24rem; font-weight:700; letter-spacing:-.02em; }
+.sub__d{ display:block; margin-top:7px; font-size:.92rem; color:var(--muted); line-height:1.6; }
+.sub__go{ display:block; margin-top:14px; font-size:.9rem; font-weight:800; color:var(--gold); }
+
+/* ── 자유 입출금 ──────────────────────────────────────────────── */
+.flexbox{ display:grid; gap:28px; grid-template-columns:1fr; padding:32px 26px; border-radius:var(--r-xl);
+  border:1px solid var(--line); background:rgba(255,255,255,.03); }
+@media (min-width:900px){ .flexbox{ grid-template-columns:1fr 1fr; gap:44px; padding:40px 38px; align-items:center; } }
+.flexlist{ display:grid; gap:14px; list-style:none; }
+.flexlist li{ display:flex; gap:14px; align-items:flex-start; padding:16px 18px; border-radius:var(--r-m);
+  border:1px solid var(--line); background:rgba(255,255,255,.04); }
+.flexlist span[aria-hidden]{ font-size:1.2rem; color:var(--gold-1); flex:none; font-weight:800; }
+.flexlist b{ font-size:.98rem; }
+.flexlist p{ margin-top:5px; font-size:.88rem; color:var(--muted); line-height:1.6; }
+
+/* ── 21. 환율 · 한도 배너 ─────────────────────────────────────── */
+.asof{ display:block; padding:13px 18px; border-radius:var(--r-m); font-size:.85rem; line-height:1.6;
+  background:rgba(239,154,106,.1); border:1px solid rgba(239,154,106,.28); color:var(--muted); }
+.asof b{ color:var(--warn); }
+
+.fxbox{ margin-top:22px; padding:22px 20px; border-radius:var(--r-l);
+  border:1px solid rgba(90,210,194,.28); background:rgba(90,210,194,.07); }
+.fxbox .ctrl__v{ color:var(--mint); }
+.fxbox .rng{ --rng:var(--mint); }
+.fxbox__note{ margin-top:12px; font-size:.87rem; color:var(--muted); line-height:1.62; }
+.fxbox__note b{ color:var(--mint); }
+
+.limitbar{ margin-top:16px; padding:15px 18px; border-radius:var(--r-m); font-size:.9rem; line-height:1.62;
+  border:1px solid rgba(90,210,194,.3); background:rgba(90,210,194,.1); }
+.limitbar.is-over{ border-color:rgba(239,154,106,.4); background:rgba(239,154,106,.11); }
+.limitbar b{ color:var(--mint); }
+.limitbar.is-over b{ color:var(--warn); }
+
+/* 달러 크게 + 원화 작게 */
+.headline__v .cur{ font-size:.62em; opacity:.75; margin-right:2px; }
+.headline__krw{ font-size:1rem; color:var(--muted); font-weight:700; margin-top:8px; }
+.mini__krw{ font-size:.74rem; color:var(--muted-2); margin-top:3px; }
