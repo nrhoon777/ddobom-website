@@ -12,7 +12,7 @@
   <link rel="alternate" hreflang="en" href="https://nrhoon777.github.io/ddobom-website/en/index.html" />
   <link rel="alternate" hreflang="x-default" href="https://nrhoon777.github.io/ddobom-website/index.html" />
   <link rel="icon" type="image/png" href="assets/img/logo-square.png" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260821f" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260821g" />
 </head>
 <body>
   <a href="#main" class="skip-link">본문 바로가기</a>
@@ -359,14 +359,29 @@
               <li>알아두면 도움이 되는 것들</li>
               <li>또봄이 한 일과, 후원금이 쓰인 곳</li>
             </ul>
-            <p class="nl-soon">
-              <strong>2026 여름호가 나왔습니다.</strong>
-              메일 구독은 준비 중이라, 지금은 홈페이지에서 읽으실 수 있습니다.
-            </p>
+            <p class="nl-soon"><strong>2026 여름호가 나왔습니다.</strong> 지금은 홈페이지에서 읽으실 수 있습니다.</p>
+            <form class="nl-sub" data-nl-subscribe="home">
+              <div class="nl-sub__row">
+                <label class="sr-only" for="nlEmail-home">메일 주소</label>
+                <input id="nlEmail-home" type="email" name="email" inputmode="email"
+                       autocomplete="email" placeholder="메일 주소를 남겨주세요" required />
+                <button type="submit" class="btn btn--primary">편지 받기</button>
+              </div>
+              <label class="nl-sub__agree">
+                <input type="checkbox" required />
+                <span>메일 주소 수집·이용에 동의합니다. 또봄 편지 발송에만 쓰고,
+                  구독을 그만두시면 지웁니다. <a href="policy.html#privacy">개인정보처리방침</a></span>
+              </label>
+              <p class="nl-sub__msg" data-nl-msg role="status" aria-live="polite"></p>
+            </form>
             <p class="nl-actions">
               <a href="letter-2026-summer.html" class="btn btn--primary">여름호 읽어보기</a>
               <a href="letters.html" class="btn btn--ghost">지난 편지 모두 보기</a>
             </p>
+            <button type="button" class="nl-share" data-nl-share="letter-2026-summer.html">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 15V3"/><path d="m7.5 7.5 4.5-4.5 4.5 4.5"/></svg>
+              <span class="nl-share__label">편지 공유하기</span>
+            </button>
           </div>
           <div class="nl-box__mark" aria-hidden="true">
             <svg viewBox="0 0 120 96">
@@ -436,7 +451,8 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js?v=20260821f"></script>
+  <script src="assets/js/main.js?v=20260821g"></script>
+  <script src="assets/js/newsletter.js?v=20260821g"></script>
   <script type="module" src="assets/js/news-loader.js?v=20260807f"></script>
 </body>
 </html>

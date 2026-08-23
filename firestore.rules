@@ -26,6 +26,27 @@ service cloud.firestore {
       allow create, update, delete: if isEditor();
     }
 
+    // 편지 구독자: 누구나 신청(생성)만 가능, 열람·수정·삭제는 운영진만
+    // 공개 쓰기라 스팸이 들어올 수 있으므로 규칙에서 최대한 조인다.
+    //  - 필드는 아래 넷만 허용(다른 값을 끼워 넣지 못하게)
+    //  - 이메일 형식과 길이 검사
+    //  - agreed는 반드시 true (동의 없이 저장되지 않게)
+    //  - createdAt은 서버 시각만 허용(과거·미래 날짜 위조 방지)
+    //  - update/delete를 막아 남이 남의 신청을 건드리지 못하게
+    match /subscribers/{docId} {
+      allow create: if request.resource.data.keys().hasOnly(['email', 'agreed', 'source', 'createdAt'])
+        && request.resource.data.email is string
+        && request.resource.data.email.size() >= 5
+        && request.resource.data.email.size() <= 200
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+[.][^@\\s]+$')
+        && request.resource.data.agreed == true
+        && request.resource.data.source is string
+        && request.resource.data.source.size() <= 40
+        && request.resource.data.createdAt == request.time;
+      allow read: if isAdmin();
+      allow update, delete: if isOwner();
+    }
+
     // 권한: 운영진만 조회, 최고관리자만 변경
     match /roles/{email} {
       allow read: if isAdmin();
