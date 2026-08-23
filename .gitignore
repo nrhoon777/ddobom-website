@@ -13,5 +13,13 @@ desktop.ini
 node_modules/
 .cache/
 
-# Claude Code local settings
-.claude/
+# Claude Code
+# .claude/skills, .claude/commands, .claude/settings.json 은 팀 공용이므로 커밋한다.
+# (커밋해두어야 Claude Code 웹/클라우드 세션과 Claude in Slack 에서도 그대로 인식된다)
+# 개인 설정과 자격증명만 제외한다.
+.claude/settings.local.json
+.claude/*.local.json
+.claude/channels/
+.env
+.env.*
+!.env.example

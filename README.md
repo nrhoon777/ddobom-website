@@ -35,5 +35,20 @@ python -m http.server 8000
 # http://localhost:8000
 ```
 
+## AI 작업 환경 연동
+
+이 저장소는 Claude Code에서 바로 쓸 수 있게 한국형 스킬(k-skill) 15개와
+Slack·Notion·Discord 연동, 그리고 결과물을 **내 카카오톡·텔레그램으로 보내는** 경로가
+붙어 있습니다. 자세한 내용은 [INTEGRATIONS.md](INTEGRATIONS.md) 참고.
+
+```bash
+bash scripts/sync-k-skills.sh   # 스킬 최신본으로 갱신
+cp .env.example .env            # 카카오톡·텔레그램 토큰 자리 (커밋되지 않음)
+bash scripts/install-global.sh  # 스킬·/보내기를 다른 업무 폴더에서도 쓰기
+```
+
+메신저로 보내기는 말투로 부르거나(`이거 카톡으로 보내줘`) `/보내기` 명령을 씁니다.
+설정 절차는 [INTEGRATIONS.md 7절](INTEGRATIONS.md#7-카카오톡--텔레그램--내게-보내기).
+
 ## 기술 스택 (초안)
 순수 HTML / CSS / JavaScript (정적). 향후 기획서에 따라 Next.js + 헤드리스 CMS + 후원 결제 백엔드로 확장 예정.
