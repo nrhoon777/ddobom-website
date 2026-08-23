@@ -1242,6 +1242,9 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .tl-item li {
   position: relative; padding-left: 13px;
   color: var(--color-ink-soft); font-size: 1rem; line-height: 1.62; margin-bottom: 0;
+  /* 마지막 줄에 한 단어만 떨어지는 걸 브라우저가 알아서 피하게 한다.
+     (미지원 브라우저는 기존대로 흘려보내므로 안전하다) */
+  text-wrap: pretty;
 }
 .tl-item li::before {
   content: ""; position: absolute; left: 0; top: 0.62em;
@@ -2781,7 +2784,13 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 
 /* ---------- 로고 사계절 ---------- */
 .an-logo { max-width: 720px; margin: var(--space-8) auto 0; text-align: center; }
-.an-logo__mark { width: 150px; height: auto; margin: 0 auto var(--space-4); display: block; background: #fff; border-radius: var(--radius); padding: 10px 14px; }
+/* logo-square.png 자체에 사방 16~18% 흰 여백이 들어 있어, 흰 상자 안에서
+   로고가 실제보다 훨씬 작아 보였다. 이미지의 여백을 잘라내고(372x328)
+   상자도 조금 키워 로고가 자리를 채우게 했다. */
+.an-logo__mark {
+  width: 176px; height: auto; margin: 0 auto var(--space-4); display: block;
+  background: #fff; border-radius: var(--radius); padding: 14px 16px;
+}
 .an-logo__lead { text-align: center; font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,0.82); margin-bottom: var(--space-6); }
 .an-logo__lead strong { color: #fff; }
 /* 로고와 같은 2×2 배치.
