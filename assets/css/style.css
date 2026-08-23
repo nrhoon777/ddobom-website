@@ -1235,7 +1235,18 @@ a.video-more { display: grid; place-items: center; text-align: center; color: #f
 .tl-item { position: relative; padding: 0 0 26px 30px; }
 .tl-item::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--color-primary); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--color-line); }
 .tl-year { font-family: var(--font-point); color: var(--color-primary-dark); font-size: 1.15rem; margin-bottom: 4px; }
-.tl-item li { color: var(--color-ink-soft); font-size: 1rem; margin-bottom: 3px; }
+/* 항목이 두 줄로 넘어가면, 줄바꿈 간격(line-height 1.7 ≒ 27px)과 항목 사이
+   간격(3px)이 뒤집혀 어디서 한 항목이 끝나는지 읽히지 않았다.
+   항목 사이를 벌리고 앞에 점을 찍어, 두 줄짜리도 한 덩어리로 묶이게 한다. */
+.tl-item ul { display: grid; gap: 10px; }
+.tl-item li {
+  position: relative; padding-left: 13px;
+  color: var(--color-ink-soft); font-size: 1rem; line-height: 1.62; margin-bottom: 0;
+}
+.tl-item li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em;
+  width: 4px; height: 4px; border-radius: 50%; background: #b6c4be;
+}
 
 /* 지난 클래스 태그 */
 .class-tags { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 24px; }
