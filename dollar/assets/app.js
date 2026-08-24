@@ -10,19 +10,17 @@
   var reduce = matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var P = PRODUCTS[0];                       // 선택된 상품 (심사 유형)
-  var S = { pid: P.id, age: P.base.age, prem: P.base.monthly, add: 0, rate: P.rate,
-            drawPct: 45, fork: "ann", ann: "life10" };
+  var S = { pid: P.id, sex: "M", age: 40, term: 20, annAge: 75,
+            prem: 350, add: 0, rate: P.rate, drawPct: 45, fork: "ann", ann: "life10" };
   var FX = CONFIG.fx.now;
   var lastHash = location.hash;
   var END = 100;
-  function TERMv() { return P.base.payTerm; }
+  function TERMv() { return S.term; }
   function pickProduct(id) {
     var f = PRODUCTS.filter(function (x) { return x.id === id; })[0];
     if (!f) return;
-    var wasBase = Math.abs(S.prem - P.base.monthly) < 0.01;   // 기본값이면 새 상품 기본값으로
     P = f; S.pid = f.id;
     if (P.rateOptions.indexOf(S.rate) < 0) S.rate = P.rate;
-    if (wasBase) { S.prem = P.base.monthly; $("#prem").value = S.prem; }
   }
 
   /* ── 포맷 ─────────────────────────────────────────────────── */
@@ -39,34 +37,54 @@
   function pct(v, d) { var p = Math.pow(10, d == null ? 1 : d); return (Math.round(v * p) / p).toLocaleString("ko-KR") + "%"; }
   function label() { return CONFIG.showBrand ? P.name : P.generic; }
 
-  /* ── 자료 비례 환산 ───────────────────────────────────────── */
-  function ratio() { return S.prem / P.base.monthly; }
-  function set() { return S.add ? P.add : P; }                    // 추가납입 여부에 따른 표
-  function paidAt(y) {
-    var t = set().paidAt, keys = Object.keys(t).map(Number).sort(function (a, b) { return a - b; });
-    var v = t[y] != null ? t[y] : t[keys[keys.length - 1]];
-    return v * ratio();
+  /* ── 실측 표 기반 계산 ─────────────────────────────────────────
+     환급률은 납입기간이 결정하고, 나이·성별은 보험료율(=받는 가입금액)에 작용한다.
+     10건의 실제 가입설계에서 뽑은 표를 그대로 쓴다.                    */
+  function premRate() {                      // 가입금액 $1,000당 월 보험료
+    var c = (PREM_RATE[S.term] || PREM_RATE[20])[S.sex];
+    return Math.max(0.5, c.v + c.slope * (S.age - c.at));
   }
-  function refundAt(y) {                                          // 환급률(%) — 자료값 / 사이는 보간
-    var t = set().refund, ks = Object.keys(t).map(Number).sort(function (a, b) { return a - b; });
-    if (y <= ks[0]) return { v: t[ks[0]] * (y / ks[0]), est: true };
-    for (var i = 1; i < ks.length; i++) if (y <= ks[i]) {
-      var a = ks[i - 1], b = ks[i];
-      return { v: t[a] + (t[b] - t[a]) * ((y - a) / (b - a)), est: y !== a && y !== b };
+  function premRateEst() { return !!(PREM_RATE[S.term] && PREM_RATE[S.term][S.sex] || {}).est; }
+  function face() { return S.prem / premRate() * 1000; }      // 가입금액 = 기본 사망보험금
+
+  function interp(tbl, k) {                  // {키: 값} 표 보간 (밖은 양끝 값)
+    var ks = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
+    if (k <= ks[0]) return tbl[ks[0]];
+    if (k >= ks[ks.length - 1]) return tbl[ks[ks.length - 1]];
+    for (var i = 1; i < ks.length; i++) if (k <= ks[i]) {
+      var lo = ks[i - 1], hi = ks[i];
+      return tbl[lo] + (tbl[hi] - tbl[lo]) * ((k - lo) / (hi - lo));
     }
-    return { v: t[ks[ks.length - 1]], est: true };
+    return tbl[ks[0]];
+  }
+
+  function paidAt(y) {
+    var base = S.prem * 12 * Math.min(y, S.term);
+    return base + (S.add ? ADD_PLAN.monthly * 12 * Math.min(y, ADD_PLAN.years) : 0);
+  }
+  function refundAt(y) {
+    var tbl = REFUND_BY_TERM[S.term] || REFUND_BY_TERM[20];
+    var ks = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
+    var v = y < ks[0] ? tbl[ks[0]] * (y / ks[0]) : interp(tbl, y);
+    if (S.add) v *= interp(ADD_PLAN.mult, y);
+    return { v: v, est: ks.indexOf(y) < 0 };
   }
   function fundAt(y) { return paidAt(y) * refundAt(y).v / 100; }
-  function deathAt(y) {
-    var t = S.add ? P.add.death : P.deathAt, ks = Object.keys(t).map(Number).sort(function (a, b) { return a - b; });
-    var v = t[y];
-    if (v == null) { for (var i = 0; i < ks.length; i++) if (y <= ks[i]) { v = t[ks[i]]; break; } }
-    return (v == null ? t[ks[ks.length - 1]] : v) * ratio();
-  }
-  function startFund() { return fundAt(TERMv()); }
-  function safeDraw() { return startFund() * (S.rate / 100) / 12; }
-  function startAge() { return S.age + TERMv(); }
 
+  /* 사망보험금 = 가입금액 · 적립액×103% · 이미 낸 보험료 중 큰 금액 (약관) */
+  function deathAt(y) { return Math.max(face(), fundAt(y) * 1.03, paidAt(y)); }
+
+  function startAge() { return S.age + S.term; }
+  function startFund() { return fundAt(S.term); }
+  function safeDraw() { return startFund() * (S.rate / 100) / 12; }
+
+  /* 연금 — 전환일시금(그 시점 해약환급금) × 개시 나이별 지급률 */
+  function annYears() { return Math.max(S.term, S.annAge - S.age); }
+  function annLump() { return fundAt(annYears()); }
+  function annRate() { return interp(ANNUITY_RATE[S.sex] || ANNUITY_RATE.F, S.annAge); }
+  function annMonthly() { return annLump() * (annRate() / 100) / 12; }
+
+  /* 인출 시뮬레이션 — 개시 시점부터 매년 draw*12 를 빼고 나머지는 굴린다 */
   function sim(monthlyDraw) {
     var e = S.rate / 100, rows = [], f = startFund(), cum = 0, dry = null;
     rows.push({ age: startAge(), draw: 0, cum: 0, fund: f });
@@ -190,10 +208,17 @@
   function run() {
     seg($("#uwSeg"), PRODUCTS.map(function (x) { return { value: x.id, label: x.tab }; }),
       function () { return S.pid; }, function (v) { pickProduct(v); run(); });
+    seg($("#sexSeg"), [{ value: "M", label: "남성" }, { value: "F", label: "여성" }],
+      function () { return S.sex; }, function (v) { S.sex = v; run(); });
+    seg($("#termSeg"), (P.terms || [15, 20]).map(function (x) { return { value: x, label: x + "년납" }; }),
+      function () { return S.term; }, function (v) { S.term = v; if (S.annAge < S.age + v) S.annAge = S.age + v; run(); });
+    seg($("#annSeg"), (P.annuityAges || [65, 70, 75, 80]).filter(function (x) { return x >= S.age + S.term; })
+      .map(function (x) { return { value: x, label: x + "세" }; }),
+      function () { return S.annAge; }, function (v) { S.annAge = v; run(); });
     $("#uwDesc").innerHTML = "<b>" + label() + "</b> · " + P.desc;
     seg($("#addSeg"), [
       { value: 0, label: "기본만" },
-      { value: 1, label: "월 $" + P.add.monthly + " 더" }
+      { value: 1, label: "월 $" + ADD_PLAN.monthly + " 더" }
     ], function () { return S.add; }, function (v) { S.add = v; run(); });
     seg($("#rateSeg"), P.rateOptions.map(function (r) {
       var tag = r === P.rate ? " <span class='hint'>현재</span>"
@@ -204,7 +229,7 @@
     ["age", "prem", "draw", "fxNow"].forEach(function (id) { paintRange($("#" + id)); });
     $("#ageOut").textContent = S.age + "세";
     $("#premOut").innerHTML = U(S.prem) + " <small>≈ " + krw(S.prem) + "</small>" +
-      (S.add ? " <small style='color:var(--gold-l)'>+ $" + P.add.monthly + "</small>" : "");
+      (S.add ? " <small style='color:var(--gold-l)'>+ $" + ADD_PLAN.monthly + "</small>" : "");
 
     var sf = startFund(), safe = safeDraw(), pd = paidAt(TERMv());
     var maxDraw = Math.max(1, safe * 2), drawM = Math.round(maxDraw * S.drawPct / 100);
@@ -219,25 +244,27 @@
     $("#asOf").textContent = "공시이율 " + S.rate.toFixed(2) + "% 유지 가정 · 매월 변동 · 실제 금액은 상담에서 설계서로";
 
     /* 1막 */
-    $("#fillWhen").textContent = "만 " + S.age + "세 → " + startAge() + "세 · " + TERMv() + "년납";
+    $("#fillWhen").textContent = "만 " + S.age + "세 → " + startAge() + "세 · " + S.term + "년납 · " +
+      (S.sex === "M" ? "남성" : "여성");
     var fs = $("#fillStats"); fs.innerHTML = "";
     stat(fs, "총 납입액", U(pd), krw(pd));
     stat(fs, startAge() + "세 적립금", U(sf), "환급률 " + pct(refundAt(TERMv()).v));
-    stat(fs, "사망보험금", U(deathAt(TERMv())), krw(deathAt(TERMv())) + " · 첫 달부터");
+    stat(fs, "가입금액(사망보험금)", U(face()), krw(face()) + " · 첫 달부터" + (premRateEst() ? " · 추정" : ""));
     stat(fs, "불어난 부분", U(sf - pd), krw(sf - pd));
 
     var ft = $("#fillTbl"); ft.innerHTML = "";
-    [5, 10, 20, 30, 40, 50].forEach(function (y) {
+    [5, 10, S.term, 20, 30, 50].filter(function (v, i, a) { return a.indexOf(v) === i; })
+      .sort(function (x, y2) { return x - y2; }).forEach(function (y) {
       var r = refundAt(y), f = paidAt(y) * r.v / 100;
       var tr = document.createElement("tr");
-      tr.innerHTML = "<td>" + y + "년 (만 " + (S.age + y) + "세)" + (y === TERMv() ? " <span class='tag'>완납</span>" : "") + "</td>" +
-        "<td>" + (y <= TERMv() ? U(paidAt(y)) : "—") + "</td>" +
+      tr.innerHTML = "<td>" + y + "년 (만 " + (S.age + y) + "세)" + (y === S.term ? " <span class='tag'>완납</span>" : "") + "</td>" +
+        "<td>" + U(paidAt(Math.min(y, S.term))) + "</td>" +
         "<td>" + U(f) + "<span class='krw'>" + krw(f) + "</span></td>" +
         "<td class='" + (r.v >= 100 ? "up" : "dn") + "'>" + pct(r.v) + "</td>" +
         "<td>" + U(deathAt(y)) + "</td>";
       ft.appendChild(tr);
     });
-    $("#fillNote").innerHTML = COMMON.longBonus + " " + "5년 시점 환급률이 <b>" + pct(P.refund[5]) +
+    $("#fillNote").innerHTML = COMMON.longBonus + " " + "5년 시점 환급률이 <b>" + pct(refundAt(5).v) +
       "</b>입니다. 그 전에 해지하면 낸 돈의 절반 남짓만 돌아옵니다. " +
       "낸 돈을 넘어서는 건 <b>10년 무렵</b>이고, 진짜 힘이 붙는 건 그 뒤입니다.";
 
@@ -246,13 +273,14 @@
     $("#minRateTxt").innerHTML = P.minRate != null
       ? "<b>연복리 " + P.minRate.toFixed(2) + "%</b>입니다. 다만 " + COMMON.minCashNote
       : "<b class='warnt'>상품별로 다릅니다</b> <span class='chk'>확인 필요</span>";
-    $("#y5Txt").textContent = pct(P.refund[5]);
+    $("#y5Txt").textContent = pct(refundAt(5).v);
     $("#reduceTip").innerHTML = COMMON.reduceTip;
-    $("#assume").innerHTML = "<b>계산 근거:</b> " + label() + " · " + P.baseNote +
-      " 가입설계 자료를 <b>월납입액에 비례 환산</b>했습니다. 표의 5·10·20·30·40·50년 시점은 " +
-      "<b>자료의 값</b>이고 그 사이는 보간한 값입니다. 적용환율 " + n(FX) + "원." +
-      (S.age !== P.base.age ? " <b class='warnt'>기준 계약이 만 " + P.base.age +
-        "세라, 나이가 다르면 실제 보험료와 환급금이 달라집니다. 반드시 설계서로 확인하세요.</b>" : "");
+    $("#assume").innerHTML = "<b>계산 근거:</b> " + label() + " · <b>실제 가입설계 " + REFUND_SAMPLES.length +
+      "건</b>(만 27~54세 · 남녀 · 15/20년납)에서 뽑은 표를 씁니다. " +
+      "<b>환급률</b>은 납입기간이 결정하고(7건 모두 같은 범위), <b>나이·성별</b>은 보험료율에 작용해 " +
+      "같은 보험료로 받는 <b>가입금액</b>을 바꿉니다. <b>연금</b>은 개시 나이별 지급률(현재 연 " +
+      annRate().toFixed(2) + "%)을 적용했습니다. 적용환율 " + n(FX) + "원 · 공시이율 " + S.rate.toFixed(2) + "% 가정. " +
+      "<b class='warnt'>실제 보험료·가입금액·환급금은 심사 결과와 시점에 따라 달라지므로 반드시 설계서로 확인하세요.</b>";
     $("#dockT").textContent = "만 " + startAge() + "세부터 매달 " + U(safe);
     saveUrl();
   }
@@ -260,11 +288,13 @@
   /* ── 추가납입 비교 ────────────────────────────────────────── */
   function addBars() {
     var host = $("#addBars"); host.innerHTML = "";
-    var pA = P.paidAt[20] * ratio(), fA = pA * P.refund[20] / 100;
-    var pB = P.add.paidAt[20] * ratio(), fB = pB * P.add.refund[20] / 100;
+    var wasAdd = S.add;
+    S.add = 0; var pA = paidAt(20), fA = fundAt(20);
+    S.add = 1; var pB = paidAt(20), fB = fundAt(20);
+    S.add = wasAdd;
     var max = Math.max(fA, fB);
-    [["a", "기본만<br><span class='hint'>월 $" + n(S.prem) + "</span>", pA, fA, P.refund[20]],
-     ["b", "추가납입<br><span class='hint'>+ $" + P.add.monthly + " × " + P.add.years + "년</span>", pB, fB, P.add.refund[20]]
+    [["a", "기본만<br><span class='hint'>월 $" + n(S.prem) + "</span>", pA, fA, fA / pA * 100],
+     ["b", "추가납입<br><span class='hint'>+ $" + ADD_PLAN.monthly + " × " + ADD_PLAN.years + "년</span>", pB, fB, fB / pB * 100]
     ].forEach(function (r) {
       var d = document.createElement("div"); d.className = "cbar__row cbar__row--" + r[0];
       d.innerHTML = "<span class='cbar__k'>" + r[1] + "</span>" +
@@ -275,8 +305,8 @@
     $("#addLead").innerHTML = "20년 시점 기준입니다. 추가로 넣은 돈은 <b>" + U(pB - pA) +
       "</b>인데, 돌아오는 돈은 <b>" + U(fB - fA) + "</b> 늘었습니다.";
     var g = document.createElement("p"); g.className = "cbar__gap";
-    g.innerHTML = "환급률이 <b>" + pct(P.refund[20]) + " → " + pct(P.add.refund[20]) +
-      "</b>로 올라갑니다. " + COMMON.addNote + " 위 <b>'월 $" + P.add.monthly +
+    g.innerHTML = "환급률이 <b>" + pct(fA / pA * 100) + " → " + pct(fB / pB * 100) +
+      "</b>로 올라갑니다. " + COMMON.addNote + " 위 <b>'월 $" + ADD_PLAN.monthly +
       " 더'</b> 버튼을 눌러 전체 숫자가 어떻게 바뀌는지 보세요.";
     host.appendChild(g);
     $("#addNote").innerHTML = COMMON.flex.withdrawFrom + " " + COMMON.flex.withdrawLimit +
@@ -326,22 +356,21 @@
   function forkAct(sf, safe) {
     var box = $("#forkExtra"); box.innerHTML = "";
     if (S.fork === "ann") {
-      $("#forkLead").innerHTML = "만 " + P.base.annuityAge + "세에 연금으로 바꾸면 이렇게 됩니다. <b>눌러서 비교해 보세요.</b>";
-      var wrap = document.createElement("div"); wrap.className = "anns";
-      P.annuity.forEach(function (a) {
-        var el = document.createElement("button");
-        el.type = "button"; el.className = "ann" + (S.ann === a.key ? " on" : "");
-        el.innerHTML = "<span class='ann__t'>" + a.t + "<small>" + a.s + "</small></span>" +
-          "<span class='ann__v'>" + U2(a.mo * ratio()) + "<small>/월 · " + krw(a.mo * ratio()) + "</small></span>" +
-          (a.mo10 ? "<span class='ann__x'>10년차엔 " + U2(a.mo10 * ratio()) + "/월</span>" : "") +
-          "<span class='ann__x'>총 " + U(a.total * ratio()) + " · 낸 돈의 " + a.x.toFixed(2) + "배</span>" +
-          (a.lump ? "<span class='ann__x'>사망 시 일시금 " + U(a.lump * ratio()) + "</span>" : "") +
-          "<span class='ann__d'>" + a.d + "</span>";
-        el.addEventListener("click", function () { S.ann = a.key; run(); });
-        wrap.appendChild(el);
-      });
-      box.appendChild(wrap);
-      $("#forkNote").innerHTML = COMMON.annuityNote + ". 연금으로 바꾸면 <b>사망보험금은 줄거나 종료</b>됩니다. " +
+      var lump = annLump(), mo = annMonthly(), yrs = Math.max(1, 100 - S.annAge);
+      $("#forkLead").innerHTML = "만 <b>" + S.annAge + "세</b>에 연금으로 바꾸면, 그때 적립금 <b>" + U(lump) +
+        "</b>이 연금 재원이 됩니다. 개시 나이를 올릴수록 매달 받는 금액이 커집니다.";
+      var g3 = document.createElement("div"); g3.className = "stats stats--3";
+      stat(g3, "매달 받는 돈", U2(mo), krw(mo) + " · 종신 10년보증");
+      stat(g3, "100세까지 총", U(mo * 12 * yrs), krw(mo * 12 * yrs));
+      stat(g3, "낸 돈의", (mo * 12 * yrs / paidAt(S.term)).toFixed(2) + "배", "총 납입액 대비");
+      box.appendChild(g3);
+      var note = document.createElement("p");
+      note.className = "hint"; note.style.marginTop = "12px";
+      note.innerHTML = "개시 나이별 지급률(연 " + annRate().toFixed(2) + "%)은 실제 가입설계 " +
+        "7건에서 뽑았습니다. <b>체증형·확정형·상속연금형</b> 등 다른 지급 방식도 있고, " +
+        "방식마다 매달 받는 금액과 총 수령액이 달라집니다 — 상담에서 함께 비교해 드립니다.";
+      box.appendChild(note);
+      $("#forkNote").innerHTML = "만 " + S.annAge + "세 개시 · 100세까지 수령 기준. 연금으로 바꾸면 <b>사망보험금은 줄거나 종료</b>됩니다. " +
         "<b>더 많이 받는 방법이 따로 있습니다</b> — 연금으로 바꾸지 않고 감액으로 꺼내는 방식인데, " +
         "계약마다 셈이 달라 <b>상담에서 직접 보여드립니다.</b> " + COMMON.annuityCond;
     } else if (S.fork === "cash") {
@@ -411,8 +440,8 @@
 
   /* ── 링크 공유 ────────────────────────────────────────────── */
   function saveUrl() {
-    var q = "u=" + S.pid + "&a=" + S.age + "&p=" + S.prem + "&x=" + S.add +
-            "&r=" + S.rate + "&d=" + S.drawPct + "&f=" + FX;
+    var q = "u=" + S.pid + "&g=" + S.sex + "&a=" + S.age + "&t=" + S.term + "&n=" + S.annAge +
+            "&p=" + S.prem + "&x=" + S.add + "&r=" + S.rate + "&d=" + S.drawPct + "&f=" + FX;
     history.replaceState(null, "", location.pathname + "#" + q);
     lastHash = location.hash;
   }
@@ -421,7 +450,10 @@
     var o = {}; h.split("&").forEach(function (kv) { var x = kv.split("="); o[x[0]] = x[1]; });
     if (!o.a) return false;
     if (o.u) { var f = PRODUCTS.filter(function (z) { return z.id === o.u; })[0]; if (f) { P = f; S.pid = f.id; } }
+    if (o.g === "M" || o.g === "F") S.sex = o.g;
     S.age = +o.a; S.prem = o.p ? +o.p : S.prem; S.add = +o.x || 0;
+    if (o.t) S.term = +o.t;
+    if (o.n) S.annAge = +o.n;
     S.rate = o.r ? +o.r : S.rate; S.drawPct = o.d != null ? +o.d : S.drawPct;
     if (o.f) { FX = +o.f; fxEl.value = FX; }
     $("#age").value = S.age; $("#prem").value = S.prem; $("#draw").value = S.drawPct;
@@ -439,8 +471,10 @@
 
   /* ── 연락 ─────────────────────────────────────────────────── */
   function summary() {
-    return "[달러로 짓는 우물]\n" + S.age + "세 · 월 $" + n(S.prem) + (S.add ? " + 추가납입 $" + P.add.monthly : "") +
-      " · " + TERMv() + "년납 · 공시이율 " + S.rate.toFixed(2) + "% 가정\n" +
+    return "[달러로 짓는 우물]\n" + (S.sex === "M" ? "남성" : "여성") + " " + S.age + "세 · 월 $" + n(S.prem) +
+      (S.add ? " + 추가납입 $" + ADD_PLAN.monthly : "") +
+      " · " + S.term + "년납 · 연금개시 " + S.annAge + "세 · 공시이율 " + S.rate.toFixed(2) + "% 가정\n" +
+      "가입금액(사망보험금) $" + n(face()) + "\n" +
       startAge() + "세 적립금 $" + n(startFund()) + " (환급률 " + pct(refundAt(TERMv()).v) + ")\n" +
       "원금 안 줄이는 인출액: 매달 $" + n(safeDraw()) + " (환율 " + n(FX) + "원 기준 " + krw(safeDraw()) + ")\n" +
       "조건 링크: " + location.href;
