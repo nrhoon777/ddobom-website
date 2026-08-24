@@ -25,7 +25,7 @@
     if ((P.kind === "lump") !== wasLump) {          // 월납 ↔ 일시납 전환 시 금액 단위가 다르다
       var pr = $("#prem");
       if (P.kind === "lump") { pr.min = P.premRange[0]; pr.max = P.premRange[1]; pr.step = P.premStep; S.prem = P.premDefault; }
-      else { pr.min = 100; pr.max = 1500; pr.step = 10; S.prem = 350; }
+      else { pr.min = 100; pr.max = 1500; pr.step = 5; S.prem = 350; }
       pr.value = S.prem;
     }
   }
@@ -49,9 +49,24 @@
      10건의 실제 가입설계에서 뽑은 표를 그대로 쓴다.                    */
   function premRate() {                      // 가입금액 $1,000당 월 보험료
     var c = (PREM_RATE[S.term] || PREM_RATE[20])[S.sex];
-    return Math.max(0.5, c.v + c.slope * (S.age - c.at));
+    var ks = Object.keys(c).filter(function (k) { return !isNaN(+k); })
+               .map(Number).sort(function (x, y) { return x - y; });
+    var lo = ks[0], hi = ks[ks.length - 1];
+    if (S.age < lo) {                        // 끝 구간 기울기로 연장
+      var s1 = (c[ks[1]] - c[lo]) / (ks[1] - lo);
+      return Math.max(0.5, c[lo] + s1 * (S.age - lo));
+    }
+    if (S.age > hi) {
+      var s2 = (c[hi] - c[ks[ks.length - 2]]) / (hi - ks[ks.length - 2]);
+      return Math.max(0.5, c[hi] + s2 * (S.age - hi));
+    }
+    return Math.max(0.5, interp(c, S.age));
   }
-  function premRateEst() { return !!(PREM_RATE[S.term] && PREM_RATE[S.term][S.sex] || {}).est; }
+  function premRateEst() {
+    var c = (PREM_RATE[S.term] || PREM_RATE[20])[S.sex] || {};
+    var ks = Object.keys(c).filter(function (k) { return !isNaN(+k); }).map(Number);
+    return !!c.est || S.age < Math.min.apply(null, ks) || S.age > Math.max.apply(null, ks);
+  }
   function face() {
     if (isLump()) return S.prem * interp(P.mult[S.sex] || P.mult.M, S.age);   // 일시납 × 사망배수
     return S.prem / premRate() * 1000;
