@@ -62,10 +62,11 @@
     }
     return Math.max(0.5, interp(c, S.age));
   }
-  function premRateEst() {
+  function premRateEst() {                   // 실측점 범위 밖이면 환산값이라 표시한다
     var c = (PREM_RATE[S.term] || PREM_RATE[20])[S.sex] || {};
-    var ks = Object.keys(c).filter(function (k) { return !isNaN(+k); }).map(Number);
-    return !!c.est || S.age < Math.min.apply(null, ks) || S.age > Math.max.apply(null, ks);
+    var ms = c.measured || [];
+    if (!ms.length) return true;
+    return S.age < Math.min.apply(null, ms) || S.age > Math.max.apply(null, ms);
   }
   function face() {
     if (isLump()) return S.prem * interp(P.mult[S.sex] || P.mult.M, S.age);   // 일시납 × 사망배수
