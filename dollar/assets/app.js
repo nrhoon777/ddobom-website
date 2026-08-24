@@ -19,8 +19,15 @@
   function pickProduct(id) {
     var f = PRODUCTS.filter(function (x) { return x.id === id; })[0];
     if (!f) return;
+    var wasLump = P.kind === "lump";
     P = f; S.pid = f.id;
     S.rate = P.rate;
+    if ((P.kind === "lump") !== wasLump) {          // 월납 ↔ 일시납 전환 시 금액 단위가 다르다
+      var pr = $("#prem");
+      if (P.kind === "lump") { pr.min = P.premRange[0]; pr.max = P.premRange[1]; pr.step = P.premStep; S.prem = P.premDefault; }
+      else { pr.min = 100; pr.max = 1500; pr.step = 10; S.prem = 350; }
+      pr.value = S.prem;
+    }
   }
 
   /* ── 포맷 ─────────────────────────────────────────────────── */
@@ -45,7 +52,10 @@
     return Math.max(0.5, c.v + c.slope * (S.age - c.at));
   }
   function premRateEst() { return !!(PREM_RATE[S.term] && PREM_RATE[S.term][S.sex] || {}).est; }
-  function face() { return S.prem / premRate() * 1000; }      // 가입금액 = 기본 사망보험금
+  function face() {
+    if (isLump()) return S.prem * interp(P.mult[S.sex] || P.mult.M, S.age);   // 일시납 × 사망배수
+    return S.prem / premRate() * 1000;
+  }
 
   function interp(tbl, k) {                  // {키: 값} 표 보간 (밖은 양끝 값)
     var ks = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
@@ -58,15 +68,18 @@
     return tbl[ks[0]];
   }
 
+  function isLump() { return P.kind === "lump"; }
   function paidAt(y) {
+    if (isLump()) return S.prem;                       // 일시납은 처음 한 번이 전부
     var base = S.prem * 12 * Math.min(y, S.term);
     return base + (S.add ? ADD_PLAN.monthly * 12 * Math.min(y, ADD_PLAN.years) : 0);
   }
   function refundAt(y) {
-    var tbl = REFUND_BY_TERM[S.term] || REFUND_BY_TERM[20];
+    var tbl = isLump() ? (P.refundBySex[S.sex] || P.refundBySex.M)
+                       : (REFUND_BY_TERM[S.term] || REFUND_BY_TERM[20]);
     var ks = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
     var v = y < ks[0] ? tbl[ks[0]] * (y / ks[0]) : interp(tbl, y);
-    if (S.add) v *= interp(ADD_PLAN.mult, y);
+    if (S.add && !isLump()) v *= interp(ADD_PLAN.mult, y);
     return { v: v, est: ks.indexOf(y) < 0 };
   }
   function fundAt(y) { return paidAt(y) * refundAt(y).v / 100; }
@@ -74,8 +87,8 @@
   /* 사망보험금 = 가입금액 · 적립액×103% · 이미 낸 보험료 중 큰 금액 (약관) */
   function deathAt(y) { return Math.max(face(), fundAt(y) * 1.03, paidAt(y)); }
 
-  function startAge() { return S.age + S.term; }
-  function startFund() { return fundAt(S.term); }
+  function startAge() { return S.age + (isLump() ? 10 : S.term); }   // 일시납은 10년 지나야 연금 전환
+  function startFund() { return fundAt(isLump() ? 10 : S.term); }
   function safeDraw() { return startFund() * (S.rate / 100) / 12; }
 
   /* 연금 — 전환일시금(그 시점 해약환급금) × 개시 나이별 지급률 */
@@ -231,28 +244,39 @@
     ], function () { return S.add; }, function (v) { S.add = v; run(); });
     S.rate = P.rate;                      // 공시이율은 현재값 하나로 고정 (선택지를 두면 헷갈린다)
 
+    var lump = isLump();
+    $("#termL").closest("div").hidden = lump;
+    $("#addL").closest("div").hidden = lump;
+    document.querySelector("label[for='prem']").textContent = lump ? "한 번에 넣을 돈" : "매달 넣을 돈";
     ["age", "prem", "draw", "fxNow"].forEach(function (id) { paintRange($("#" + id)); });
     $("#ageOut").textContent = S.age + "세";
     $("#premOut").innerHTML = U(S.prem) + " <small>≈ " + krw(S.prem) + "</small>" +
-      (S.add ? " <small style='color:var(--gold-l)'>+ $" + ADD_PLAN.monthly + "</small>" : "");
+      (S.add && !lump ? " <small style='color:var(--gold-l)'>+ $" + ADD_PLAN.monthly + "</small>" : "");
 
     var sf = startFund(), safe = safeDraw(), pd = paidAt(TERMv());
     var maxDraw = Math.max(1, safe * 2), drawM = Math.round(maxDraw * S.drawPct / 100);
     $("#draw").value = S.drawPct; paintRange($("#draw"));
 
     /* 히어로 */
-    $("#ansK").textContent = "만 " + startAge() + "세부터, 원금을 한 푼도 헐지 않고 매달";
-    $("#ansV").innerHTML = "<span class='cur'>$</span>" + n(safe);
-    $("#ansKrw").textContent = "환율 " + n(FX) + "원으로 약 " + krw(safe);
-    $("#ansS").innerHTML = "그러고도 <b>" + U(sf) + "</b>은 그대로 남습니다. 이자 안에서만 꺼내기 때문입니다." +
-      (S.add ? " 추가납입을 함께 하셔서 <b>" + pct(refundAt(TERMv()).v, 0) + "</b>까지 쌓였습니다." : "");
+    $("#ansK").textContent = isLump()
+      ? "지금 넣으면 곧바로 확정되는 사망보험금"
+      : "만 " + startAge() + "세부터, 원금을 한 푼도 헐지 않고 매달";
+    var heroV = isLump() ? face() : safe;
+    $("#ansV").innerHTML = "<span class='cur'>$</span>" + n(heroV);
+    $("#ansKrw").textContent = "환율 " + n(FX) + "원으로 약 " + krw(heroV);
+    $("#ansS").innerHTML = isLump()
+      ? "일시납 <b>" + U(S.prem) + "</b> 한 번으로 <b>" + interp(P.mult[S.sex] || P.mult.M, S.age).toFixed(2) +
+        "배</b>가 됩니다. 20년간 확정이고, 그 뒤로는 적립금을 따라 더 올라갑니다."
+      : "그러고도 <b>" + U(sf) + "</b>은 그대로 남습니다. 이자 안에서만 꺼내기 때문입니다." +
+        (S.add ? " 추가납입을 함께 하셔서 <b>" + pct(refundAt(S.term).v, 0) + "</b>까지 쌓였습니다." : "");
     $("#asOf").textContent = "공시이율 " + S.rate.toFixed(2) + "% 유지 가정 · 매월 변동 · 실제 금액은 상담에서 설계서로";
 
     /* 1막 */
-    $("#fillWhen").textContent = "만 " + S.age + "세 → " + startAge() + "세 · " + S.term + "년납 · " +
-      (S.sex === "M" ? "남성" : "여성");
+    $("#fillWhen").textContent = isLump()
+      ? "만 " + S.age + "세 · 일시납 · " + (S.sex === "M" ? "남성" : "여성")
+      : "만 " + S.age + "세 → " + startAge() + "세 · " + S.term + "년납 · " + (S.sex === "M" ? "남성" : "여성");
     var fs = $("#fillStats"); fs.innerHTML = "";
-    stat(fs, "총 납입액", U(pd), krw(pd));
+    stat(fs, isLump() ? "한 번에 넣는 돈" : "총 납입액", U(pd), krw(pd));
     stat(fs, startAge() + "세 적립금", U(sf), "환급률 " + pct(refundAt(TERMv()).v));
     stat(fs, "가입금액(사망보험금)", U(face()), krw(face()) + " · 첫 달부터" + (premRateEst() ? " · 추정" : ""));
     stat(fs, "불어난 부분", U(sf - pd), krw(sf - pd));
@@ -294,8 +318,8 @@
   function lookTable() {
     var tb = $("#lookTbl"); tb.innerHTML = "";
     var years = [];
-    for (var y = 5; y <= 50; y += 5) years.push(y);
-    if (years.indexOf(S.term) < 0) years.push(S.term);
+    if (isLump()) years = Object.keys(P.refundBySex[S.sex] || P.refundBySex.M).map(Number);
+    else { for (var y = 5; y <= 50; y += 5) years.push(y); if (years.indexOf(S.term) < 0) years.push(S.term); }
     years.sort(function (x, y2) { return x - y2; });
     var anyEst = false;
     years.forEach(function (y) {
@@ -306,7 +330,7 @@
       if (ar && ar.est) anyEst = true;
       var tr = document.createElement("tr");
       tr.innerHTML =
-        "<td><b>" + age + "세</b>" + (y === S.term ? " <span class='tag'>완납</span>" : "") + "</td>" +
+        "<td><b>" + age + "세</b>" + (!isLump() && y === S.term ? " <span class='tag'>완납</span>" : "") + "</td>" +
         "<td>" + y + "년</td>" +
         "<td>" + U(pd2) + "</td>" +
         "<td>" + U(f) + "<span class='krw'>" + krw(f) + "</span></td>" +
@@ -318,8 +342,10 @@
       tb.appendChild(tr);
     });
     $("#lookLead").innerHTML = "<b>" + (S.sex === "M" ? "남성" : "여성") + " 만 " + S.age + "세</b>가 " +
-      "월 <b>" + U(S.prem) + "</b>(" + krw(S.prem) + ")씩 <b>" + S.term + "년</b> 넣었을 때입니다." +
-      (S.add ? " 추가납입 $" + ADD_PLAN.monthly + "도 함께 계산했습니다." : "") +
+      (isLump()
+        ? "<b>" + U(S.prem) + "</b>(" + krw(S.prem) + ")을 한 번에 넣었을 때입니다."
+        : "월 <b>" + U(S.prem) + "</b>(" + krw(S.prem) + ")씩 <b>" + S.term + "년</b> 넣었을 때입니다." +
+          (S.add ? " 추가납입 $" + ADD_PLAN.monthly + "도 함께 계산했습니다." : "")) +
       " 위에서 조건을 바꾸면 이 표가 통째로 다시 계산됩니다.";
     $("#lookNote").innerHTML = "연금은 <b>계약 10년 이상 유지 + 만 45~80세</b>에 개시할 수 있어 그 밖은 비워뒀습니다. " +
       "종신 10년보증 기준이고, 체증형·확정형 등 다른 방식은 금액이 달라집니다. " +
@@ -329,6 +355,9 @@
 
   /* ── 추가납입 비교 ────────────────────────────────────────── */
   function addBars() {
+    var sec = $("#addBars").closest(".act");
+    if (isLump()) { sec.hidden = true; return; }
+    sec.hidden = false;
     var host = $("#addBars"); host.innerHTML = "";
     var wasAdd = S.add;
     S.add = 0; var pA = paidAt(20), fA = fundAt(20);
