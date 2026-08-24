@@ -58,7 +58,8 @@
   }
 
   function interp(tbl, k) {                  // {키: 값} 표 보간 (밖은 양끝 값)
-    var ks = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
+    var ks = Object.keys(tbl).filter(function (x) { return !isNaN(+x); })
+               .map(Number).sort(function (a, b) { return a - b; });
     if (k <= ks[0]) return tbl[ks[0]];
     if (k >= ks[ks.length - 1]) return tbl[ks[ks.length - 1]];
     for (var i = 1; i < ks.length; i++) if (k <= ks[i]) {
@@ -77,7 +78,8 @@
   function refundAt(y) {
     var tbl = isLump() ? (P.refundBySex[S.sex] || P.refundBySex.M)
                        : (REFUND_BY_TERM[S.term] || REFUND_BY_TERM[20]);
-    var ks = Object.keys(tbl).map(Number).sort(function (a, b) { return a - b; });
+    var ks = Object.keys(tbl).filter(function (k) { return !isNaN(+k); })
+                .map(Number).sort(function (a, b) { return a - b; });
     var v = y < ks[0] ? tbl[ks[0]] * (y / ks[0]) : interp(tbl, y);
     if (S.add && !isLump()) v *= interp(ADD_PLAN.mult, y);
     return { v: v, est: ks.indexOf(y) < 0 };
@@ -314,11 +316,17 @@
     saveUrl();
   }
 
+  function termIsEst() {
+    if (isLump()) return false;
+    var tbl = REFUND_BY_TERM[S.term];
+    return !!(tbl && tbl.est);
+  }
+
   /* ── 한눈에 보기 — 연차별 통합 조회표 ─────────────────────── */
   function lookTable() {
     var tb = $("#lookTbl"); tb.innerHTML = "";
     var years = [];
-    if (isLump()) years = Object.keys(P.refundBySex[S.sex] || P.refundBySex.M).map(Number);
+    if (isLump()) years = Object.keys(P.refundBySex[S.sex] || P.refundBySex.M).filter(function (k) { return !isNaN(+k); }).map(Number);
     else { for (var y = 5; y <= 50; y += 5) years.push(y); if (years.indexOf(S.term) < 0) years.push(S.term); }
     years.sort(function (x, y2) { return x - y2; });
     var anyEst = false;
@@ -347,7 +355,12 @@
         : "월 <b>" + U(S.prem) + "</b>(" + krw(S.prem) + ")씩 <b>" + S.term + "년</b> 넣었을 때입니다." +
           (S.add ? " 추가납입 $" + ADD_PLAN.monthly + "도 함께 계산했습니다." : "")) +
       " 위에서 조건을 바꾸면 이 표가 통째로 다시 계산됩니다.";
-    $("#lookNote").innerHTML = "연금은 <b>계약 10년 이상 유지 + 만 45~80세</b>에 개시할 수 있어 그 밖은 비워뒀습니다. " +
+    $("#lookNote").innerHTML = (termIsEst()
+        ? "<b class='warnt'>10년납은 아직 실제 설계서를 받지 못해 이 표가 추정치입니다.</b> " +
+          "15·20년납은 실측이고, 10년납만 그 흐름으로 늘려 잡았습니다. " +
+          "정확한 금액은 상담에서 설계서로 확인해 주세요. "
+        : "") +
+      "연금은 <b>계약 10년 이상 유지 + 만 45~80세</b>에 개시할 수 있어 그 밖은 비워뒀습니다. " +
       "종신 10년보증 기준이고, 체증형·확정형 등 다른 방식은 금액이 달라집니다. " +
       (anyEst ? "'추정'은 실측이 없는 개시 나이라 앞뒤 값으로 늘려 잡은 것입니다. " : "") +
       "공시이율 <b>연 " + S.rate.toFixed(2) + "%</b>가 계속 유지된다는 가정이며, 이율은 매월 바뀝니다.";
