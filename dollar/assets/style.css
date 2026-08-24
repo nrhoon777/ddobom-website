@@ -222,6 +222,9 @@ table.sim .dn{ color:var(--danger); font-weight:700; }
 .way{ display:flex; gap:11px; align-items:center; padding:13px 15px; border-radius:var(--r);
   border:1px solid var(--sand-2); background:var(--cream); text-decoration:none; min-height:56px; transition:.16s; }
 .way:hover{ border-color:var(--teal); }
+.way--kakao{ background:#FEE500; border-color:#F2D200; }
+.way--kakao .way__d{ color:#5A4B00; }
+.way--kakao:hover{ border-color:#191600; }
 .way__t{ font-weight:700; font-size:.92rem; display:block; }
 .way__d{ font-size:.76rem; color:var(--brown); display:block; }
 .fld{ margin-top:12px; }

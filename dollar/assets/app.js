@@ -579,22 +579,44 @@
       "원금 안 줄이는 인출액: 매달 $" + n(safeDraw()) + " (환율 " + n(FX) + "원 기준 " + krw(safeDraw()) + ")\n" +
       "조건 링크: " + location.href;
   }
-  function sms() {
-    location.href = "sms:" + CONFIG.tel.replace(/[^0-9+]/g, "") + "?&body=" +
-      encodeURIComponent(summary() + "\n\n위 조건으로 정확한 설계서 부탁드립니다.");
-  }
-  $("#smsBtn").addEventListener("click", sms);
-  $("#smsWay").addEventListener("click", sms);
   var hasKakao = !!(CONFIG.kakaoUrl && /^https?:\/\//.test(CONFIG.kakaoUrl) &&
                     !/center-pf\.kakao\.com/.test(CONFIG.kakaoUrl));   // 개설 페이지 주소는 채널 링크가 아니다
-  if (hasKakao) { $("#kakaoBtn").href = CONFIG.kakaoUrl; $("#kakaoWay").href = CONFIG.kakaoUrl; }
+  var telDigits = (CONFIG.tel || "").replace(/[^0-9+]/g, "");
+  var hasTel = telDigits.length >= 9;
+
+  function sms() {
+    if (!hasTel) return;
+    location.href = "sms:" + telDigits + "?&body=" +
+      encodeURIComponent(summary() + "\n\n위 조건으로 정확한 설계서 부탁드립니다.");
+  }
+  function openKakao() {
+    if (hasKakao) window.open(CONFIG.kakaoUrl, "_blank", "noopener");
+  }
+
+  if (hasTel) {
+    $("#smsBtn").addEventListener("click", sms);
+    $("#smsWay").addEventListener("click", sms);
+    $("#telWay").href = "tel:" + telDigits;
+    $("#telTxt").textContent = "전화 " + CONFIG.tel;
+  } else {
+    $("#smsBtn").hidden = true;
+    [$("#smsWay"), $("#telWay")].forEach(function (el) {
+      if (el && el.parentNode) el.parentNode.hidden = true;
+    });
+  }
+
+  if (hasKakao) {
+    $("#kakaoBtn").href = CONFIG.kakaoUrl;
+    $("#kakaoWay").href = CONFIG.kakaoUrl;
+    $("#kakaoHdr").href = CONFIG.kakaoUrl;
+    $("#kakaoHdr").hidden = false;
+  }
   else {
     $("#kakaoBtn").hidden = true;
     var kw = $("#kakaoWay"); if (kw && kw.parentNode) kw.parentNode.hidden = true;
   }
-  $("#telWay").href = "tel:" + CONFIG.tel.replace(/[^0-9+]/g, "");
-  $("#telTxt").textContent = "전화 " + CONFIG.tel;
-  $("#ftrContact").textContent = CONFIG.consultant + " · " + CONFIG.tel;
+
+  $("#ftrContact").textContent = CONFIG.consultant + (hasTel ? " · " + CONFIG.tel : "");
 
   $("#leadForm").addEventListener("submit", function (ev) {
     ev.preventDefault();
@@ -607,13 +629,14 @@
     var text = "[상담 신청]\n성함: " + name + "\n연락처: " + phone + "\n통화 가능: " + $("#fTime").value +
       "\n문의: " + ($("#fMemo").value.trim() || "-") + "\n\n" + summary();
     var okMsg = hasKakao
-      ? "신청 내용을 <b>클립보드에 복사</b>했습니다. 카카오톡 상담창에 붙여넣어 보내주시면 그대로 접수됩니다."
-      : "신청 내용을 <b>클립보드에 복사</b>했습니다. 아래 <b>문자로 보내기</b>를 누르면 그대로 담겨 전송됩니다.";
+      ? "신청 내용을 <b>클립보드에 복사</b>했습니다. 열린 <b>카카오톡 오픈채팅방</b>에 붙여넣어 보내주시면 그대로 접수됩니다."
+      : hasTel
+        ? "신청 내용을 <b>클립보드에 복사</b>했습니다. 아래 <b>문자로 보내기</b>를 누르면 그대로 담겨 전송됩니다."
+        : "신청 내용을 <b>클립보드에 복사</b>했습니다.";
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function () {
         say(okMsg, true);
-        if (hasKakao) window.open(CONFIG.kakaoUrl, "_blank", "noopener");
-        else sms();
+        if (hasKakao) openKakao(); else sms();
       }).catch(function () { say("아래 내용을 복사해 보내주세요.<br><br>" + text.replace(/\n/g, "<br>"), true); });
     } else say("아래 내용을 복사해 보내주세요.<br><br>" + text.replace(/\n/g, "<br>"), true);
   });

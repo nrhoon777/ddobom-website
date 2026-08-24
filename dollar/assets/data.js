@@ -11,12 +11,13 @@
 
 var CONFIG = {
   consultant: "이정훈",
-  tel:        "010-9414-4879",
+  /* 전화·문자를 쓰지 않으면 비워두세요. 비우면 그 버튼들이 화면에서 사라집니다. */
+  tel:        "",
   /* 카카오톡 채널을 만들면 여기에 넣으세요 — center-pf.kakao.com 에서 개설한 뒤
      "http://pf.kakao.com/_채널코드/chat" 형식(끝에 /chat 필수).
      오픈프로필 "https://open.kakao.com/me/이름" 도 그대로 넣으면 됩니다.
      비워두면 카톡 버튼이 화면에서 자동으로 사라지고 문자·전화·상담폼만 남습니다. */
-  kakaoUrl:   "",
+  kakaoUrl:   "https://open.kakao.com/o/spsH88P",
   showBrand:  false,
   asOf:       "2026-04-01",
   fx:         { now: 1390, min: 1100, max: 1700 }
