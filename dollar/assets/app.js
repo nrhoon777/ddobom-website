@@ -196,7 +196,9 @@
       { value: 1, label: "월 $" + P.add.monthly + " 더" }
     ], function () { return S.add; }, function (v) { S.add = v; run(); });
     seg($("#rateSeg"), P.rateOptions.map(function (r) {
-      return { value: r, label: r.toFixed(2) + "%" + (r === P.rate ? " <span class='hint'>현재</span>" : "") };
+      var tag = r === P.rate ? " <span class='hint'>현재</span>"
+              : (P.minCash != null && r === P.minCash ? " <span class='hint'>최저 바닥</span>" : "");
+      return { value: r, label: r.toFixed(2) + "%" + tag };
     }), function () { return S.rate; }, function (v) { S.rate = v; run(); });
 
     ["age", "prem", "draw", "fxNow"].forEach(function (id) { paintRange($("#" + id)); });
@@ -235,14 +237,14 @@
         "<td>" + U(deathAt(y)) + "</td>";
       ft.appendChild(tr);
     });
-    $("#fillNote").innerHTML = "5년 시점 환급률이 <b>" + pct(P.refund[5]) +
+    $("#fillNote").innerHTML = COMMON.longBonus + " " + "5년 시점 환급률이 <b>" + pct(P.refund[5]) +
       "</b>입니다. 그 전에 해지하면 낸 돈의 절반 남짓만 돌아옵니다. " +
       "낸 돈을 넘어서는 건 <b>10년 무렵</b>이고, 진짜 힘이 붙는 건 그 뒤입니다.";
 
     addBars(); drawAct(drawM, safe, sf, pd); forkAct(sf, safe); fxChart();
 
     $("#minRateTxt").innerHTML = P.minRate != null
-      ? P.minRate.toFixed(2) + "%"
+      ? "<b>연복리 " + P.minRate.toFixed(2) + "%</b>입니다. 다만 " + COMMON.minCashNote
       : "<b class='warnt'>상품별로 다릅니다</b> <span class='chk'>확인 필요</span>";
     $("#y5Txt").textContent = pct(P.refund[5]);
     $("#reduceTip").innerHTML = COMMON.reduceTip;
@@ -341,7 +343,7 @@
       box.appendChild(wrap);
       $("#forkNote").innerHTML = COMMON.annuityNote + ". 연금으로 바꾸면 <b>사망보험금은 줄거나 종료</b>됩니다. " +
         "<b>더 많이 받는 방법이 따로 있습니다</b> — 연금으로 바꾸지 않고 감액으로 꺼내는 방식인데, " +
-        "계약마다 셈이 달라 <b>상담에서 직접 보여드립니다.</b>";
+        "계약마다 셈이 달라 <b>상담에서 직접 보여드립니다.</b> " + COMMON.annuityCond;
     } else if (S.fork === "cash") {
       $("#forkLead").innerHTML = "중간에 목돈이 필요해지면 <b>해지하지 않고</b> 꺼냅니다. 계약은 그대로 유지됩니다.";
       var g = document.createElement("div"); g.className = "stats stats--3";
