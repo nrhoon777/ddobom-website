@@ -69,10 +69,6 @@
           <p class="ctrl__l" id="addL">추가납입도 하시겠어요?</p>
           <div class="seg" role="group" aria-labelledby="addL" id="addSeg"></div>
         </div>
-        <div>
-          <p class="ctrl__l" id="rateL">공시이율 가정</p>
-          <div class="seg" role="group" aria-labelledby="rateL" id="rateSeg"></div>
-        </div>
       </div>
 
       <p class="uwdesc" id="uwDesc">—</p>
@@ -84,6 +80,27 @@
         <p class="answer__s" id="ansS">—</p>
       </div>
       <p class="asof" id="asOf">—</p>
+    </div>
+  </section>
+
+  <!-- ===== 한눈에 보기 (통합 조회표) ===== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="act rv">
+        <p class="act__n">한눈에 보기</p>
+        <h2 class="act__t serif">몇 살에 얼마가 되는지<br />전부 적어뒀습니다</h2>
+        <p class="act__d" id="lookLead">—</p>
+        <div class="tblwrap">
+          <table class="sim">
+            <thead><tr>
+              <th>나이</th><th>경과</th><th>낸 돈</th><th>해약환급금</th><th>환급률</th>
+              <th>사망보험금</th><th>이때 연금 개시하면</th>
+            </tr></thead>
+            <tbody id="lookTbl"></tbody>
+          </table>
+        </div>
+        <p class="hint" style="margin-top:12px" id="lookNote">—</p>
+      </div>
     </div>
   </section>
 

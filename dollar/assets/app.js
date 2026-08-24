@@ -20,7 +20,7 @@
     var f = PRODUCTS.filter(function (x) { return x.id === id; })[0];
     if (!f) return;
     P = f; S.pid = f.id;
-    if (P.rateOptions.indexOf(S.rate) < 0) S.rate = P.rate;
+    S.rate = P.rate;
   }
 
   /* ── 포맷 ─────────────────────────────────────────────────── */
@@ -81,7 +81,16 @@
   /* 연금 — 전환일시금(그 시점 해약환급금) × 개시 나이별 지급률 */
   function annYears() { return Math.max(S.term, S.annAge - S.age); }
   function annLump() { return fundAt(annYears()); }
-  function annRate() { return interp(ANNUITY_RATE[S.sex] || ANNUITY_RATE.F, S.annAge); }
+  function annRateAt(age) {
+    var tbl = ANNUITY_RATE[S.sex] || ANNUITY_RATE.F;
+    var ks = Object.keys(tbl).map(Number).sort(function (x, y) { return x - y; });
+    var lo = ks[0], hi = ks[ks.length - 1];
+    var slope = (tbl[hi] - tbl[lo]) / (hi - lo);
+    if (age < lo) return { v: Math.max(1, tbl[lo] + slope * (age - lo)), est: true };
+    if (age > hi) return { v: tbl[hi] + slope * (age - hi), est: true };
+    return { v: interp(tbl, age), est: false };   // 실측 범위 안은 보간이라 그대로 쓴다
+  }
+  function annRate() { return annRateAt(S.annAge).v; }
   function annMonthly() { return annLump() * (annRate() / 100) / 12; }
 
   /* 인출 시뮬레이션 — 개시 시점부터 매년 draw*12 를 빼고 나머지는 굴린다 */
@@ -220,11 +229,7 @@
       { value: 0, label: "기본만" },
       { value: 1, label: "월 $" + ADD_PLAN.monthly + " 더" }
     ], function () { return S.add; }, function (v) { S.add = v; run(); });
-    seg($("#rateSeg"), P.rateOptions.map(function (r) {
-      var tag = r === P.rate ? " <span class='hint'>현재</span>"
-              : (P.minCash != null && r === P.minCash ? " <span class='hint'>최저 바닥</span>" : "");
-      return { value: r, label: r.toFixed(2) + "%" + tag };
-    }), function () { return S.rate; }, function (v) { S.rate = v; run(); });
+    S.rate = P.rate;                      // 공시이율은 현재값 하나로 고정 (선택지를 두면 헷갈린다)
 
     ["age", "prem", "draw", "fxNow"].forEach(function (id) { paintRange($("#" + id)); });
     $("#ageOut").textContent = S.age + "세";
@@ -268,7 +273,7 @@
       "</b>입니다. 그 전에 해지하면 낸 돈의 절반 남짓만 돌아옵니다. " +
       "낸 돈을 넘어서는 건 <b>10년 무렵</b>이고, 진짜 힘이 붙는 건 그 뒤입니다.";
 
-    addBars(); drawAct(drawM, safe, sf, pd); forkAct(sf, safe); fxChart();
+    lookTable(); addBars(); drawAct(drawM, safe, sf, pd); forkAct(sf, safe); fxChart();
 
     $("#minRateTxt").innerHTML = P.minRate != null
       ? "<b>연복리 " + P.minRate.toFixed(2) + "%</b>입니다. 다만 " + COMMON.minCashNote
@@ -283,6 +288,43 @@
       "<b class='warnt'>실제 보험료·가입금액·환급금은 심사 결과와 시점에 따라 달라지므로 반드시 설계서로 확인하세요.</b>";
     $("#dockT").textContent = "만 " + startAge() + "세부터 매달 " + U(safe);
     saveUrl();
+  }
+
+  /* ── 한눈에 보기 — 연차별 통합 조회표 ─────────────────────── */
+  function lookTable() {
+    var tb = $("#lookTbl"); tb.innerHTML = "";
+    var years = [];
+    for (var y = 5; y <= 50; y += 5) years.push(y);
+    if (years.indexOf(S.term) < 0) years.push(S.term);
+    years.sort(function (x, y2) { return x - y2; });
+    var anyEst = false;
+    years.forEach(function (y) {
+      var age = S.age + y, r = refundAt(y), f = fundAt(y), pd2 = paidAt(y);
+      var canAnn = age >= 45 && age <= 80 && y >= 10;      // 약관: 10년 이상 유지 + 45~80세
+      var ar = canAnn ? annRateAt(age) : null;
+      var mo = canAnn ? f * (ar.v / 100) / 12 : 0;
+      if (ar && ar.est) anyEst = true;
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td><b>" + age + "세</b>" + (y === S.term ? " <span class='tag'>완납</span>" : "") + "</td>" +
+        "<td>" + y + "년</td>" +
+        "<td>" + U(pd2) + "</td>" +
+        "<td>" + U(f) + "<span class='krw'>" + krw(f) + "</span></td>" +
+        "<td class='" + (r.v >= 100 ? "up" : "dn") + "'>" + pct(r.v) + "</td>" +
+        "<td>" + U(deathAt(y)) + "<span class='krw'>" + krw(deathAt(y)) + "</span></td>" +
+        "<td>" + (canAnn
+          ? "<b>" + U2(mo) + "</b>/월<span class='krw'>" + krw(mo) + (ar.est ? " · 추정" : "") + "</span>"
+          : "<span class='hint'>" + (y < 10 ? "10년 미만" : "개시 불가") + "</span>") + "</td>";
+      tb.appendChild(tr);
+    });
+    $("#lookLead").innerHTML = "<b>" + (S.sex === "M" ? "남성" : "여성") + " 만 " + S.age + "세</b>가 " +
+      "월 <b>" + U(S.prem) + "</b>(" + krw(S.prem) + ")씩 <b>" + S.term + "년</b> 넣었을 때입니다." +
+      (S.add ? " 추가납입 $" + ADD_PLAN.monthly + "도 함께 계산했습니다." : "") +
+      " 위에서 조건을 바꾸면 이 표가 통째로 다시 계산됩니다.";
+    $("#lookNote").innerHTML = "연금은 <b>계약 10년 이상 유지 + 만 45~80세</b>에 개시할 수 있어 그 밖은 비워뒀습니다. " +
+      "종신 10년보증 기준이고, 체증형·확정형 등 다른 방식은 금액이 달라집니다. " +
+      (anyEst ? "'추정'은 실측이 없는 개시 나이라 앞뒤 값으로 늘려 잡은 것입니다. " : "") +
+      "공시이율 <b>연 " + S.rate.toFixed(2) + "%</b>가 계속 유지된다는 가정이며, 이율은 매월 바뀝니다.";
   }
 
   /* ── 추가납입 비교 ────────────────────────────────────────── */
