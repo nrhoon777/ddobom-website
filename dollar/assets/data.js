@@ -10,9 +10,13 @@
 ===================================================================== */
 
 var CONFIG = {
-  consultant: "담당 설계사",
-  tel:        "010-0000-0000",
-  kakaoUrl:   "http://pf.kakao.com/_카카오채널ID/chat",
+  consultant: "이정훈",
+  tel:        "010-9414-4879",
+  /* 카카오톡 채널을 만들면 여기에 넣으세요 — center-pf.kakao.com 에서 개설한 뒤
+     "http://pf.kakao.com/_채널코드/chat" 형식(끝에 /chat 필수).
+     오픈프로필 "https://open.kakao.com/me/이름" 도 그대로 넣으면 됩니다.
+     비워두면 카톡 버튼이 화면에서 자동으로 사라지고 문자·전화·상담폼만 남습니다. */
+  kakaoUrl:   "",
   showBrand:  false,
   asOf:       "2026-04-01",
   fx:         { now: 1390, min: 1100, max: 1700 }
