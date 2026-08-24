@@ -260,3 +260,46 @@ table.sim .dn{ color:var(--danger); font-weight:700; }
 .rv{ opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1); }
 .rv.in{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){ .rv{ opacity:1; transform:none; } }
+
+/* ── 추가납입 비교 막대 ─────────────────────────────────────── */
+.cmpbars{ display:grid; gap:12px; margin-top:18px; }
+.cbar__row{ display:grid; grid-template-columns:88px 1fr; gap:12px; align-items:center; }
+.cbar__k{ font-size:.82rem; color:var(--brown); font-weight:700; line-height:1.4; }
+.cbar__track{ position:relative; height:44px; border-radius:4px; background:var(--sand-2); overflow:hidden; }
+.cbar__fill{ position:absolute; inset:0 auto 0 0; display:flex; align-items:center; justify-content:flex-end;
+  padding:0 12px; border-radius:4px; font-family:var(--mono); font-weight:700; font-size:.9rem;
+  white-space:nowrap; transition:width .5s cubic-bezier(.2,.8,.2,1); }
+.cbar__row--a .cbar__fill{ background:var(--teal-l); color:var(--ink); }
+.cbar__row--b .cbar__fill{ background:linear-gradient(90deg,var(--gold),var(--gold-l)); color:#2A1D06; }
+.cbar__gap{ margin-top:6px; padding:14px 16px; border-radius:4px; font-size:.93rem; line-height:1.62;
+  background:rgba(199,154,62,.12); border:1px solid rgba(199,154,62,.35); }
+.cbar__gap b{ color:var(--brown); }
+
+/* ── 연금 유형 카드 ─────────────────────────────────────────── */
+.anns{ display:grid; gap:10px; margin-top:16px; }
+@media (min-width:640px){ .anns{ grid-template-columns:1fr 1fr; } }
+.ann{ background:var(--cream); border:1px solid var(--sand-2); border-left:3px solid var(--teal);
+  border-radius:2px; padding:15px 16px; text-align:left; width:100%; transition:.16s; }
+.ann:hover{ border-left-color:var(--gold); }
+.ann.on{ border-left-color:var(--gold); background:#FBF7EC; box-shadow:var(--shadow); }
+.ann__t{ font-weight:800; font-size:.95rem; }
+.ann__t small{ font-weight:500; color:var(--brown); margin-left:5px; font-size:.78rem; }
+.ann__v{ font-family:var(--mono); font-weight:700; font-size:1.25rem; color:var(--ink); margin-top:5px; }
+.ann__v small{ font-family:var(--body); font-size:.72rem; color:var(--brown); margin-left:5px; font-weight:500; }
+.ann__d{ font-size:.8rem; color:var(--ink-2); margin-top:6px; line-height:1.55; }
+.ann__x{ font-family:var(--mono); font-size:.74rem; color:var(--teal-d); margin-top:5px; font-weight:700; }
+
+/* ── 환율 뉴스 ──────────────────────────────────────────────── */
+.newsrow{ display:grid; gap:8px; margin-top:16px; }
+.newsit{ display:block; padding:13px 15px; border-radius:4px; text-decoration:none;
+  border:1px solid var(--sand-2); background:var(--cream); transition:.16s; }
+.newsit:hover{ border-color:var(--teal); }
+.newsit__m{ font-family:var(--mono); font-size:.7rem; color:var(--brown); }
+.newsit__t{ display:block; font-size:.88rem; font-weight:700; margin-top:3px; line-height:1.5; }
+.chart .fxline{ fill:none; stroke:var(--teal-l); stroke-width:2.6; stroke-linejoin:round; }
+.chart .fxarea{ fill:url(#fg); }
+.chart .fxnow{ stroke:var(--gold-l); stroke-width:1.6; stroke-dasharray:4 4; }
+
+.uwdesc{ margin-top:16px; padding:11px 15px; border-radius:4px; font-size:.85rem; line-height:1.6;
+  background:rgba(248,243,230,.06); border:1px solid rgba(248,243,230,.16); color:rgba(248,243,230,.78); }
+.uwdesc b{ color:var(--gold-l); }
