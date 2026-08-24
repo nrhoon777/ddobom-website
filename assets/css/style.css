@@ -1054,6 +1054,9 @@ button { font-family: inherit; cursor: pointer; }
 .ch-insta { background: linear-gradient(45deg, #f09433, #e6683c 30%, #dc2743 50%, #cc2366 70%, #bc1888); }
 .ch-youtube { background: #ff0000; }
 .ch-cafe { background: #03c75a; }
+/* 카카오톡 채널 — 브랜드 색(노랑 바탕 + 갈색 심볼) 그대로.
+   다른 채널 칩도 각 서비스 색을 쓰고 있어 결이 맞는다. */
+.ch-kakao { background: #FEE500; color: #3C1E1E; }
 
 /* 푸터 SNS 브랜드 색 */
 .footer__sns .sns-insta:hover { background: #dc2743; }
