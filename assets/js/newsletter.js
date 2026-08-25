@@ -70,6 +70,17 @@
       if (tone) msg.dataset.tone = tone; else msg.removeAttribute("data-tone");
     }
 
+    /* 실패했을 때는 '안 됩니다'로 끝내지 않고, 지금 쓸 수 있는 길을 링크로 준다.
+       링크가 필요해서 여기만 innerHTML을 쓴다 — 넣는 문자열은 아래 고정 문구뿐이다. */
+    function sayFallback() {
+      if (!msg) return;
+      msg.innerHTML =
+        '지금은 신청 접수가 안 됩니다. ' +
+        '<a href="https://cafe.naver.com/iseeuagain" target="_blank" rel="noopener noreferrer">' +
+        '네이버 카페</a>에 메일 주소를 남겨주시면 직접 챙겨드릴게요.';
+      msg.dataset.tone = "err";
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -113,10 +124,18 @@
           say("신청됐습니다. 다음 호가 나오면 보내드릴게요.", "ok");
         })
         .catch(function (err) {
-          /* 규칙이 아직 게시되지 않았거나 네트워크가 막힌 경우.
-             방문자에게 실패로 끝내지 않고 지금 쓸 수 있는 길을 알려 준다. */
-          console.warn("[newsletter]", err && err.code ? err.code : err);
-          say("지금은 신청이 어렵습니다. 네이버 카페로 알려주시면 챙겨드릴게요.", "err");
+          /* 흔한 원인 두 가지 — 운영자가 콘솔에서 한 번 손봐 주면 풀린다.
+             not-found        : Firestore 데이터베이스가 아직 만들어지지 않음
+             permission-denied: firestore.rules가 아직 게시되지 않음
+             그 외에는 네트워크 문제. 어느 쪽이든 방문자는 카페로 안내한다. */
+          var code = (err && err.code) || String(err);
+          console.warn("[newsletter] 저장 실패:", code, err);
+          if (code.indexOf("not-found") > -1) {
+            console.warn("[newsletter] Firebase 콘솔에서 Firestore 데이터베이스를 먼저 만들어야 합니다.");
+          } else if (code.indexOf("permission-denied") > -1) {
+            console.warn("[newsletter] firestore.rules를 콘솔 규칙 탭에 붙여넣고 게시해야 합니다.");
+          }
+          sayFallback();
         })
         .then(function () { btn.disabled = false; });
     });
