@@ -1056,6 +1056,8 @@ button { font-family: inherit; cursor: pointer; }
 .ch-cafe { background: #03c75a; }
 /* 카카오톡 채널 — 브랜드 색(노랑 바탕 + 갈색 심볼) 그대로.
    다른 채널 칩도 각 서비스 색을 쓰고 있어 결이 맞는다. */
+/* 카카오톡 칩 — 채널 주소가 확인되지 않아 마크업은 잠시 내려둔 상태.
+   주소를 받으면 칩만 되살리면 되도록 스타일은 남겨 둔다. */
 .ch-kakao { background: #FEE500; color: #3C1E1E; }
 
 /* 푸터 SNS 브랜드 색 */
